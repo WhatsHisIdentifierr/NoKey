@@ -1,0 +1,2419 @@
+-- sorry bud
+
+
+local vu1 = {
+    cache = {}
+}
+local function vu9()
+    local vu2 = game:GetService("ReplicatedStorage")
+    local vu3 = nil
+    pcall(function()
+        vu3 = vu2:WaitForChild("Shared", 10):WaitForChild("Packages", 10):WaitForChild("Knit", 10):WaitForChild("Services", 10):WaitForChild("CodeService", 10):WaitForChild("RF", 10):WaitForChild("RedeemCode", 10)
+    end)
+    local vu4 = {
+        "100KLIKES",
+        "40KLIKES",
+        "20KLIKES",
+        "15KLIKES",
+        "10KLIKES",
+        "5KLIKES",
+        "BETARELEASE!",
+        "POSTRELEASEQNA",
+        "100K!",
+        "200K!"
+    }
+    return function()
+        if vu3 then
+            local v5, v6, v7 = ipairs(vu4)
+            while true do
+                local vu8
+                v7, vu8 = v5(v6, v7)
+                if v7 == nil then
+                    break
+                end
+                task.spawn(function()
+                    vu3:InvokeServer(vu8)
+                end)
+                task.wait(0.2)
+            end
+        end
+    end
+end
+function vu1.a()
+    local v10 = vu1.cache.a
+    if not v10 then
+        v10 = {
+            c = vu9()
+        }
+        vu1.cache.a = v10
+    end
+    return v10.c
+end
+local function vu43()
+    local vu11 = game:GetService("TweenService")
+    local vu12 = game:GetService("RunService")
+    local vu13 = game:GetService("Players")
+    local vu14 = {}
+    local vu15 = nil
+    local vu16 = 0
+    local vu17 = nil
+    local function vu18()
+        if not vu17 then
+            vu17 = Instance.new("Part")
+            vu17.Name = "TweenPlatform"
+            vu17.Size = Vector3.new(6, 1, 6)
+            vu17.Transparency = 1
+            vu17.Anchored = true
+            vu17.CanCollide = true
+            vu17.CastShadow = false
+        end
+        return vu17
+    end
+    local function vu25()
+        local v19 = vu13.LocalPlayer.Character
+        if v19 then
+            local v20, v21, v22 = pairs(v19:GetDescendants())
+            while true do
+                local v23
+                v22, v23 = v20(v21, v22)
+                if v22 == nil then
+                    break
+                end
+                if v23:IsA("BasePart") and v23.CanCollide == true then
+                    v23.CanCollide = false
+                end
+            end
+            local v24 = v19:FindFirstChild("HumanoidRootPart")
+            if v24 and (vu17 and vu17.Parent) then
+                vu17.CFrame = v24.CFrame * CFrame.new(0, - 3.5, 0)
+            end
+        end
+    end
+    local function vu30(p26)
+        if not p26:FindFirstChild("HazeBodyVelocity") then
+            local v27 = Instance.new("BodyVelocity")
+            v27.Name = "HazeBodyVelocity"
+            v27.Velocity = Vector3.zero
+            v27.MaxForce = Vector3.new(9000000000, 9000000000, 9000000000)
+            v27.Parent = p26
+        end
+        if not p26:FindFirstChild("HazeBodyAngularVelocity") then
+            local v28 = Instance.new("BodyAngularVelocity")
+            v28.Name = "HazeBodyAngularVelocity"
+            v28.AngularVelocity = Vector3.zero
+            v28.MaxTorque = Vector3.new(9000000000, 9000000000, 9000000000)
+            v28.Parent = p26
+        end
+        local v29 = p26.Parent:FindFirstChild("Humanoid")
+        if v29 then
+            v29.PlatformStand = true
+        end
+    end
+    local function vu35(p31)
+        local v32 = p31:FindFirstChild("HazeBodyVelocity")
+        if v32 then
+            v32:Destroy()
+        end
+        local v33 = p31:FindFirstChild("HazeBodyAngularVelocity")
+        if v33 then
+            v33:Destroy()
+        end
+        local v34 = p31.Parent:FindFirstChild("Humanoid")
+        if v34 then
+            v34.PlatformStand = false
+        end
+    end
+    function vu14.EnableNoclip()
+        if not vu15 then
+            vu15 = vu12.Stepped:Connect(vu25)
+        end
+        vu18().Parent = workspace
+    end
+    function vu14.DisableNoclip()
+        if vu15 and vu16 <= 0 then
+            vu15:Disconnect()
+            vu15 = nil
+            if vu17 then
+                vu17.Parent = nil
+            end
+        end
+    end
+    function vu14.TweenMove(pu36, p37, p38)
+        if pu36 then
+            local v39 = p38 or 24
+            local v40 = (pu36.Position - p37.Position).Magnitude
+            if v40 < 5 then
+                pu36.CFrame = p37
+                return 0
+            end
+            local v41 = v40 / v39
+            vu16 = vu16 + 1
+            vu14.EnableNoclip()
+            vu30(pu36)
+            local v42 = vu11:Create(pu36, TweenInfo.new(v41, Enum.EasingStyle.Linear), {
+                CFrame = p37
+            })
+            v42.Completed:Connect(function()
+                vu16 = vu16 - 1
+                vu14.DisableNoclip()
+                if vu16 <= 0 and pu36 then
+                    vu35(pu36)
+                end
+            end)
+            v42:Play()
+            return v41
+        end
+    end
+    return vu14
+end
+function vu1.b()
+    local v44 = vu1.cache.b
+    if not v44 then
+        v44 = {
+            c = vu43()
+        }
+        vu1.cache.b = v44
+    end
+    return v44.c
+end
+local function vu145()
+    local vu45 = game:GetService("ReplicatedStorage")
+    local vu46 = game:GetService("RunService")
+    local vu47 = vu1.b()
+    local vu48 = nil
+    pcall(function()
+        vu48 = vu45:WaitForChild("Shared", 10):WaitForChild("Packages", 10):WaitForChild("Knit", 10):WaitForChild("Services", 10):WaitForChild("ToolService", 10):WaitForChild("RF", 10):WaitForChild("ToolActivated", 10)
+    end)
+    return function(pu49, pu50, pu51)
+        local function v67()
+            local v52 = {}
+            local v53 = {}
+            local v54 = workspace:FindFirstChild("Rocks")
+            if v54 then
+                local v55, v56, v57 = ipairs(v54:GetChildren())
+                while true do
+                    local v58
+                    v57, v58 = v55(v56, v57)
+                    if v57 == nil then
+                        break
+                    end
+                    local v59, v60, v61 = ipairs(v58:GetChildren())
+                    while true do
+                        local v62
+                        v61, v62 = v59(v60, v61)
+                        if v61 == nil then
+                            break
+                        end
+                        if v62.Name ~= "SpawnLocation" then
+                            if v62:IsA("Model") and (v62:FindFirstChild("Hitbox") and not v53[v62.Name]) then
+                                v53[v62.Name] = true
+                                table.insert(v52, v62.Name)
+                            end
+                        else
+                            local v63, v64, v65 = ipairs(v62:GetChildren())
+                            while true do
+                                local v66
+                                v65, v66 = v63(v64, v65)
+                                if v65 == nil then
+                                    break
+                                end
+                                if v66:IsA("Model") and (v66:FindFirstChild("Hitbox") and not v53[v66.Name]) then
+                                    v53[v66.Name] = true
+                                    table.insert(v52, v66.Name)
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+            table.sort(v52)
+            return v52
+        end
+        if pu51 then
+            pu51.GetRockTypes = v67
+        end
+        local vu68 = 0
+        local function vu80()
+            local v69 = {}
+            local v70 = workspace:FindFirstChild("Rocks")
+            if not v70 then
+                return v69
+            end
+            local v71, v72, v73 = ipairs(v70:GetDescendants())
+            while true do
+                local v74
+                v73, v74 = v71(v72, v73)
+                if v73 == nil then
+                    break
+                end
+                if v74.Name == "Hitbox" and v74:IsA("BasePart") then
+                    local v75 = v74.Parent
+                    if v75 then
+                        v75 = v74.Parent.Name
+                    end
+                    local v76
+                    if pu49.MineTargets and v75 then
+                        v76 = pu49.MineTargets[v75]
+                    else
+                        v76 = false
+                    end
+                    if not v76 and (pu49.MineTarget and v75) then
+                        v76 = v75 == pu49.MineTarget
+                    end
+                    if v76 then
+                        local v77 = v74.Parent:FindFirstChild("infoFrame")
+                        local v78 = v77 and v77:FindFirstChild("Frame") and v77.Frame:FindFirstChild("rockHP")
+                        if v78 then
+                            v78 = v77.Frame.rockHP.Text
+                        end
+                        if v78 then
+                            local v79 = tonumber(v78:gsub(",", ""):match("^(%d+)"))
+                            if v79 and 0 < v79 then
+                                table.insert(v69, v74)
+                            end
+                        else
+                            table.insert(v69, v74)
+                        end
+                    end
+                end
+            end
+            return v69
+        end
+        local function vu101(p81, p82)
+            local v83 = pu50.Character
+            if not (v83 and v83:FindFirstChild("HumanoidRootPart")) then
+                return nil
+            end
+            local v84 = v83.HumanoidRootPart
+            local v85, v86, v87 = ipairs(vu80())
+            local v88 = p81 or 15
+            local v89 = nil
+            while true do
+                local v90
+                v87, v90 = v85(v86, v87)
+                if v87 == nil then
+                    break
+                end
+                if v90 ~= p82 then
+                    local v91 = (v90.Position - v84.Position).Magnitude
+                    if v91 < v88 then
+                        v89 = v90
+                        v88 = v91
+                    end
+                end
+            end
+            if not v89 then
+                if os.clock() - vu68 > 60 then
+                    if pu51 and pu51.Notify then
+                        pu51.Notify("Auto Mine", "Searching for rocks...", 5)
+                    end
+                    vu68 = os.clock()
+                end
+                local v92 = workspace:FindFirstChild("Proximity")
+                if v92 then
+                    local v93, v94, v95 = ipairs(v92:GetChildren())
+                    local v96 = {}
+                    while true do
+                        local v97
+                        v95, v97 = v93(v94, v95)
+                        if v95 == nil then
+                            break
+                        end
+                        if v97:IsA("Model") and v97.PrimaryPart then
+                            table.insert(v96, v97.PrimaryPart.CFrame)
+                        elseif v97:IsA("BasePart") then
+                            table.insert(v96, v97.CFrame)
+                        end
+                    end
+                    if # v96 > 0 then
+                        local v98 = v83:FindFirstChild("HumanoidRootPart")
+                        if v98 then
+                            local v99 = v96[math.random(1, # v96)]
+                            local v100 = vu47.TweenMove(v98, v99 + Vector3.new(0, - 10, 0))
+                            task.wait(1 + v100)
+                        end
+                    end
+                end
+            end
+            return v89
+        end
+        local vu102 = nil
+        local vu103 = 0
+        local vu104 = nil
+        local vu105 = 0
+        local vu106 = false
+        local vu107 = 0
+        local vu108 = nil
+        local vu109 = 0
+        vu46.Heartbeat:Connect(function()
+            local v110 = pu50.Character
+            local v111
+            if v110 then
+                v111 = v110:FindFirstChild("HumanoidRootPart")
+            else
+                v111 = v110
+            end
+            if v110 then
+                v110 = v110:FindFirstChild("Humanoid")
+            end
+            if pu49.AutoMine and (vu102 and (vu102.Parent and (v111 and v110))) then
+                if v110.Health < vu105 and vu105 - v110.Health >= 5 then
+                    vu106 = true
+                    vu107 = os.clock()
+                end
+                vu105 = v110.Health
+                if vu106 and os.clock() - vu107 > 3 then
+                    vu106 = false
+                end
+                local v112 = vu102.Position
+                local v113 = v112 - Vector3.new(0, 5, 0)
+                local v114 = false
+                if pu49.MineLavaCheck then
+                    if not (vu104 and vu104.Parent) then
+                        local v115 = workspace:FindFirstChild("Assets")
+                        if v115 then
+                            v115 = v115:FindFirstChild("Cave Area [2]")
+                        end
+                        if v115 then
+                            v115 = v115:FindFirstChild("Lava")
+                        end
+                        vu104 = v115
+                    end
+                    if vu104 and vu104:IsA("BasePart") then
+                        local v116 = vu104.CFrame:PointToObjectSpace(v113)
+                        local v117 = vu104.Size
+                        v114 = math.abs(v116.X) <= v117.X / 2 and (math.abs(v116.Y) <= v117.Y / 2 and math.abs(v116.Z) <= v117.Z / 2) and true or v114
+                    end
+                    v114 = vu106 and true or v114
+                end
+                if v114 then
+                    v113 = v112 + Vector3.new(5, 0, 0)
+                end
+                if (vu47.TweenMove(v111, CFrame.lookAt(v113, v112)) or 0) > 0 then
+                    vu109 = os.clock()
+                end
+            elseif v110 then
+                vu105 = v110.Health
+            end
+        end)
+        task.spawn(function()
+            while true do
+                while true do
+                    task.wait(0.1)
+                    if pu51.ConsumingPotion then
+                        while pu51.ConsumingPotion do
+                            task.wait(0.1)
+                        end
+                    end
+                    local v118 = pu50.Character
+                    local v119
+                    if v118 then
+                        v119 = v118:FindFirstChild("HumanoidRootPart")
+                    else
+                        v119 = v118
+                    end
+                    if pu49.AutoMine and (vu48 and (v119 and v118:FindFirstChild("Humanoid"))) then
+                        break
+                    end
+                    vu102 = nil
+                end
+                local v120 = v118:FindFirstChildWhichIsA("Tool")
+                local v121
+                if v120 and v120.Name:lower():match("pickaxe") then
+                    v121 = v120
+                end
+                local v122, v123, v124 = ipairs(pu50.Backpack:GetChildren())
+                while true do
+                    v124, v121 = v122(v123, v124)
+                    if v124 == nil then
+                        v121 = v120
+                    end
+                    if v121:IsA("Tool") and v121.Name:lower():match("pickaxe") then
+                        v118.Humanoid:EquipTool(v121)
+                    end
+                end
+                local v125 = false
+                if vu102 and vu102.Parent then
+                    local v126 = vu102.Parent
+                    if v126 then
+                        v126 = vu102.Parent.Name
+                    end
+                    local v127
+                    if pu49.MineTargets and v126 then
+                        v127 = pu49.MineTargets[v126]
+                    else
+                        v127 = false
+                    end
+                    if not v127 and (pu49.MineTarget and v126) then
+                        v127 = v126 == pu49.MineTarget
+                    end
+                    if v127 then
+                        local v128 = vu102.Parent:FindFirstChild("infoFrame")
+                        local v129 = v128 and v128:FindFirstChild("Frame") and v128.Frame:FindFirstChild("rockHP")
+                        if v129 then
+                            v129 = v128.Frame.rockHP.Text
+                        end
+                        if v129 then
+                            local v130 = tonumber(v129:match("^(%d+)"))
+                            v125 = v130 and 0 < v130 and true or v125
+                        else
+                            v125 = true
+                        end
+                    end
+                end
+                if not v125 then
+                    vu102 = nil
+                end
+                local v131 = not vu102 and vu101(500)
+                if v131 then
+                    vu102 = v131
+                    local v132 = vu47.TweenMove(v119, CFrame.lookAt(v131.Position, v131.Position)) or 0
+                    vu103 = os.clock() + 0.5 + v132
+                    vu108 = nil
+                    vu109 = os.clock() + v132
+                end
+                local v133 = vu102
+                if v121 and (v133 and (v118.Humanoid.Health > 0 and v133.Parent)) then
+                    local v134 = v133.Parent:FindFirstChild("infoFrame")
+                    local v135 = v134 and v134:FindFirstChild("Frame") and v134.Frame:FindFirstChild("rockHP")
+                    if v135 then
+                        v135 = v134.Frame.rockHP.Text
+                    end
+                    if v135 then
+                        v135 = tonumber(v135:gsub(",", ""):match("^(%d+)"))
+                    end
+                    if v135 then
+                        if vu108 then
+                            if v135 >= vu108 then
+                                if os.clock() - vu109 > 8 and os.clock() > vu103 + 2 then
+                                    local v136 = vu101(500, v133)
+                                    if v136 then
+                                        vu102 = v136
+                                        local v137 = vu47.TweenMove(v119, CFrame.lookAt(v136.Position, v136.Position)) or 0
+                                        vu103 = os.clock() + 0.5 + v137
+                                        vu108 = nil
+                                        vu109 = os.clock() + v137
+                                        v133 = vu102
+                                    else
+                                        vu109 = os.clock()
+                                    end
+                                end
+                            else
+                                vu108 = v135
+                                vu109 = os.clock()
+                            end
+                        else
+                            vu108 = v135
+                            vu109 = os.clock()
+                        end
+                    end
+                    if vu103 < os.clock() and (v119.Position - v133.Position).Magnitude <= 15 then
+                        vu48:InvokeServer("Pickaxe")
+                    end
+                    task.wait(0.1)
+                    local v138 = false
+                    if game:GetService("Players").LocalPlayer.PlayerGui.Notifications.Screen.NotificationsFrame:FindFirstChild("TextFrame") then
+                        local v139, v140, v141 = ipairs(game:GetService("Players").LocalPlayer.PlayerGui.Notifications.Screen.NotificationsFrame:GetChildren())
+                        while true do
+                            local v142
+                            v141, v142 = v139(v140, v141)
+                            if v141 == nil then
+                                break
+                            end
+                            if v142.Name == "TextFrame" and v142:FindFirstChild("TextFrame") and v142.TextFrame.TextLabel.Text:match("Someone") then
+                                v142:Destroy()
+                                v138 = true
+                            end
+                        end
+                    end
+                    local v143 = v138 and vu101(500, v133)
+                    if v143 then
+                        vu102 = v143
+                        local v144 = vu47.TweenMove(v119, CFrame.lookAt(v143.Position, v143.Position)) or 0
+                        vu103 = os.clock() + 0.5 + v144
+                        vu108 = nil
+                        vu109 = os.clock() + v144
+                    end
+                elseif not (v133 and v133.Parent) then
+                    vu102 = nil
+                end
+            end
+        end)
+    end
+end
+function vu1.c()
+    local v146 = vu1.cache.c
+    if not v146 then
+        v146 = {
+            c = vu145()
+        }
+        vu1.cache.c = v146
+    end
+    return v146.c
+end
+local function vu152()
+    local vu147 = game:GetService("ReplicatedStorage")
+    local vu148 = nil
+    pcall(function()
+        vu148 = vu147:WaitForChild("Shared", 10):WaitForChild("Packages", 10):WaitForChild("Knit", 10):WaitForChild("Services", 10):WaitForChild("CharacterService", 10):WaitForChild("RF", 10):WaitForChild("Run", 10)
+    end)
+    return function(pu149, pu150, _)
+        task.spawn(function()
+            while true do
+                repeat
+                    task.wait(0.1)
+                until pu149.AutoRun and vu148
+                local v151 = pu150.Character
+                if v151 and (v151:FindFirstChild("Humanoid") and v151.Humanoid.Health > 0) then
+                    vu148:InvokeServer()
+                end
+            end
+        end)
+    end
+end
+function vu1.d()
+    local v153 = vu1.cache.d
+    if not v153 then
+        v153 = {
+            c = vu152()
+        }
+        vu1.cache.d = v153
+    end
+    return v153.c
+end
+local function vu237()
+    local v154 = game:GetService("ReplicatedStorage")
+    local vu155 = game:GetService("RunService")
+    local vu156 = vu1.b()
+    local v157 = v154:WaitForChild("Shared", 10):WaitForChild("Packages", 10):WaitForChild("Knit", 10):WaitForChild("Services", 10):WaitForChild("ToolService", 10)
+    local vu158 = v157:WaitForChild("RF", 10):WaitForChild("ToolActivated", 10)
+    local vu159 = v157:WaitForChild("RF", 10):WaitForChild("StartBlock", 10)
+    local vu160 = v157:WaitForChild("RF", 10):WaitForChild("StopBlock", 10)
+    return function(pu161, pu162, pu163)
+        local vu164 = {}
+        local function v174()
+            local v165 = {}
+            local v166 = {}
+            local v167 = workspace:FindFirstChild("Living")
+            local v168 = game:GetService("Players")
+            if v167 then
+                local v169, v170, v171 = ipairs(v167:GetChildren())
+                while true do
+                    local v172
+                    v171, v172 = v169(v170, v171)
+                    if v171 == nil then
+                        break
+                    end
+                    if v172:IsA("Model") and (v172:FindFirstChild("Humanoid") and not (v168:GetPlayerFromCharacter(v172) or v172:FindFirstChild("RaceFolder"))) then
+                        local v173 = v172.Name:gsub("%d+$", ""):match("^%s*(.-)%s*$")
+                        if not v166[v173] then
+                            v166[v173] = true
+                            table.insert(v165, v173)
+                        end
+                    end
+                end
+            end
+            table.sort(v165)
+            return v165
+        end
+        if pu163 then
+            pu163.GetMobTypes = v174
+        end
+        local function vu183()
+            local v175 = {}
+            local v176 = workspace:FindFirstChild("Living")
+            if not v176 then
+                return v175
+            end
+            local v177 = game:GetService("Players")
+            local v178, v179, v180 = ipairs(v176:GetChildren())
+            while true do
+                local v181
+                v180, v181 = v178(v179, v180)
+                if v180 == nil then
+                    break
+                end
+                if v181:IsA("Model") and v181:FindFirstChild("Humanoid") then
+                    local v182 = v181.Name:gsub("%d+$", ""):match("^%s*(.-)%s*$")
+                    if pu161.AttackTargets and (pu161.AttackTargets[v182] and (not v177:GetPlayerFromCharacter(v181) and (not v181:FindFirstChild("RaceFolder") and (v181.Humanoid.Health > 0 and v181:FindFirstChild("HumanoidRootPart"))))) then
+                        table.insert(v175, v181)
+                    end
+                end
+            end
+            return v175
+        end
+        local function vu196(p184)
+            local v185 = pu162.Character
+            if not (v185 and v185:FindFirstChild("HumanoidRootPart")) then
+                return nil
+            end
+            local v186 = v185.HumanoidRootPart
+            local v187, v188, v189 = ipairs(vu183())
+            local v190 = p184 or 100
+            local v191 = nil
+            while true do
+                local v192
+                v189, v192 = v187(v188, v189)
+                if v189 == nil then
+                    break
+                end
+                local v193 = false
+                if vu164[v192] then
+                    if os.clock() - vu164[v192] <= 10 then
+                        v193 = true
+                    else
+                        vu164[v192] = nil
+                    end
+                end
+                if not v193 then
+                    local v194 = v192:FindFirstChild("HumanoidRootPart")
+                    if v194 then
+                        local v195 = (v194.Position - v186.Position).Magnitude
+                        if v195 < v190 then
+                            v191 = v192
+                            v190 = v195
+                        end
+                    end
+                end
+            end
+            return v191
+        end
+        local vu197 = nil
+        local vu198 = false
+        local vu199 = 0
+        local vu200 = 0
+        local vu201 = 0
+        local vu202 = nil
+        local vu203 = 0
+        local vu204 = false
+        local vu205 = 0
+        vu155.Heartbeat:Connect(function()
+            local v206 = pu162.Character
+            local v207
+            if v206 then
+                v207 = v206:FindFirstChild("HumanoidRootPart")
+            else
+                v207 = v206
+            end
+            if v206 then
+                v206 = v206:FindFirstChild("Humanoid")
+            end
+            if pu161.AutoAttack and (vu197 and (vu197.Parent and (v207 and v206))) then
+                if v206.Health < vu203 and vu203 - v206.Health >= 5 then
+                    vu204 = true
+                    vu205 = os.clock()
+                end
+                vu203 = v206.Health
+                if vu204 and os.clock() - vu205 > 3 then
+                    vu204 = false
+                end
+                local v208 = vu197:FindFirstChild("HumanoidRootPart")
+                if v208 then
+                    local v209 = v208.Position - Vector3.new(0, 6, 0)
+                    local v210 = false
+                    if pu161.AttackLavaCheck then
+                        if not (vu202 and vu202.Parent) then
+                            local v211 = workspace:FindFirstChild("Assets")
+                            if v211 then
+                                v211 = v211:FindFirstChild("Cave Area [2]")
+                            end
+                            if v211 then
+                                v211 = v211:FindFirstChild("Lava")
+                            end
+                            vu202 = v211
+                        end
+                        if vu202 and vu202:IsA("BasePart") then
+                            local v212 = vu202.CFrame:PointToObjectSpace(v209)
+                            local v213 = vu202.Size
+                            v210 = math.abs(v212.X) <= v213.X / 2 and (math.abs(v212.Y) <= v213.Y / 2 and math.abs(v212.Z) <= v213.Z / 2) and true or v210
+                        end
+                        v210 = vu204 and true or v210
+                    end
+                    if v210 then
+                        v209 = (v208.CFrame * CFrame.new(0, 0, 3)).Position
+                    end
+                    if (vu156.TweenMove(v207, CFrame.lookAt(v209, v208.Position)) or 0) > 0 then
+                        vu201 = vu201 + vu155.Heartbeat:Wait()
+                        vu201 = os.clock()
+                    end
+                end
+            elseif v206 then
+                vu203 = v206.Health
+            end
+        end)
+        task.spawn(function()
+            while true do
+                while true do
+                    task.wait(0.1)
+                    if pu163.ConsumingPotion then
+                        while pu163.ConsumingPotion do
+                            task.wait(0.1)
+                        end
+                    end
+                    local v214 = pu162.Character
+                    local v215
+                    if v214 then
+                        v215 = v214:FindFirstChild("HumanoidRootPart")
+                    else
+                        v215 = v214
+                    end
+                    if pu161.AutoAttack and (vu158 and (v215 and v214:FindFirstChild("Humanoid"))) then
+                        break
+                    end
+                    vu197 = nil
+                    if vu198 then
+                        pcall(function()
+                            vu160:InvokeServer()
+                        end)
+                        vu198 = false
+                    end
+                end
+                v214:FindFirstChildWhichIsA("Tool")
+                local v216 = v214:FindFirstChildWhichIsA("Tool")
+                local v217
+                if v216 and v216.Name:lower():match("weapon") then
+                    v217 = v216
+                end
+                local v218, v219, v220 = ipairs(pu162.Backpack:GetChildren())
+                while true do
+                    v220, v217 = v218(v219, v220)
+                    if v220 == nil then
+                        v217 = v216
+                    end
+                    if v217:IsA("Tool") and v217.Name:lower():match("weapon") then
+                        v214.Humanoid:EquipTool(v217)
+                    end
+                end
+                local v221 = false
+                if vu197 and vu197.Parent and vu197:FindFirstChild("Humanoid") then
+                    local v222 = vu197.Name:gsub("%d+$", "")
+                    v221 = vu197.Humanoid.Health > 0 and (pu161.AttackTargets and pu161.AttackTargets[v222]) and true or v221
+                end
+                if not v221 then
+                    vu197 = nil
+                    if vu198 then
+                        vu160:InvokeServer()
+                        vu198 = false
+                    end
+                end
+                if not vu197 then
+                    vu197 = vu196(500)
+                    if vu197 and vu197:FindFirstChild("Humanoid") then
+                        vu200 = vu197.Humanoid.Health
+                        vu201 = os.clock()
+                    end
+                    if not vu197 then
+                        if os.clock() - vu199 > 60 then
+                            if pu163 and pu163.Notify then
+                                pu163.Notify("Auto Attack", "Searching for mobs...", 5)
+                            end
+                            vu199 = os.clock()
+                        end
+                        local v223 = workspace:FindFirstChild("Proximity")
+                        if v223 then
+                            local v224, v225, v226 = ipairs(v223:GetChildren())
+                            local v227 = {}
+                            while true do
+                                local v228
+                                v226, v228 = v224(v225, v226)
+                                if v226 == nil then
+                                    break
+                                end
+                                if v228:IsA("Model") and v228.PrimaryPart then
+                                    table.insert(v227, v228.PrimaryPart.CFrame)
+                                elseif v228:IsA("BasePart") then
+                                    table.insert(v227, v228.CFrame)
+                                end
+                            end
+                            if # v227 > 0 then
+                                local v229 = v214:FindFirstChild("HumanoidRootPart")
+                                if v229 then
+                                    local v230 = v227[math.random(1, # v227)]
+                                    local v231 = vu156.TweenMove(v229, v230 + Vector3.new(0, - 10, 0))
+                                    task.wait(1 + v231)
+                                end
+                            end
+                        end
+                    end
+                end
+                if vu197 and vu197.Parent and vu197:FindFirstChild("Humanoid") then
+                    local v232 = vu197.Humanoid.Health
+                    if v232 < vu200 then
+                        vu201 = os.clock()
+                    end
+                    if os.clock() - vu201 > 15 then
+                        if pu163 and pu163.Notify then
+                            pu163.Notify("Auto Attack", "Target stuck/glitched. Skipping...", 2)
+                        end
+                        vu164[vu197] = os.clock()
+                        vu197 = nil
+                    end
+                    vu200 = v232
+                end
+                local v233 = vu197
+                if v217 and (v233 and (v214.Humanoid.Health > 0 and v233.Parent)) then
+                    local v234 = false
+                    if pu161.AutoParry then
+                        local v235 = v233:FindFirstChild("Status")
+                        if v235 then
+                            v235 = v235:FindFirstChild("Attacking")
+                        end
+                        v234 = v235 and v235.Value == true and true or v234
+                    end
+                    if v234 then
+                        if not vu198 then
+                            vu159:InvokeServer()
+                            vu198 = true
+                        end
+                    else
+                        if vu198 then
+                            vu160:InvokeServer()
+                            vu198 = false
+                        end
+                        local v236 = v233:FindFirstChild("HumanoidRootPart")
+                        if v236 and (v215.Position - v236.Position).Magnitude <= 15 then
+                            vu158:InvokeServer("Weapon")
+                        end
+                    end
+                elseif not (v233 and v233.Parent) then
+                    vu197 = nil
+                    if vu198 then
+                        vu160:InvokeServer()
+                        vu198 = false
+                    end
+                end
+            end
+        end)
+    end
+end
+function vu1.e()
+    local v238 = vu1.cache.e
+    if not v238 then
+        v238 = {
+            c = vu237()
+        }
+        vu1.cache.e = v238
+    end
+    return v238.c
+end
+local function vu315()
+    local vu239 = game:GetService("ReplicatedStorage")
+    local vu240 = game:GetService("RunService")
+    local vu241 = game:GetService("TweenService")
+    local vu242 = game:GetService("Players")
+    local vu243 = game:GetService("Workspace")
+    local vu244 = {
+        Colors = {
+            Background = Color3.fromRGB(15, 15, 20),
+            Accent = Color3.fromRGB(255, 85, 85),
+            TextMain = Color3.fromRGB(255, 255, 255),
+            TextSub = Color3.fromRGB(180, 180, 190),
+            Stroke = Color3.fromRGB(60, 60, 70),
+            Curtain = Color3.fromRGB(0, 0, 0)
+        },
+        Font = {
+            Bold = Enum.Font.GothamBold,
+            Medium = Enum.Font.GothamMedium,
+            Regular = Enum.Font.Gotham
+        }
+    }
+    local function vu266()
+        local v245 = game:GetService("CoreGui")
+        local v246 = vu242.LocalPlayer:WaitForChild("PlayerGui")
+        local vu247 = Instance.new("ScreenGui")
+        vu247.Name = "HazeForge_ModernUI"
+        vu247.IgnoreGuiInset = true
+        vu247.DisplayOrder = 10005
+        vu247.ResetOnSpawn = false
+        vu247.Parent = vu240:IsStudio() and v246 and v246 or v245
+        local vu248 = Instance.new("UIScale")
+        vu248.Parent = vu247
+        local function v250()
+            local v249 = vu243.CurrentCamera.ViewportSize
+            vu248.Scale = math.clamp(v249.Y / 900, 0.6, 1.5)
+        end
+        vu243.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(v250)
+        v250()
+        local vu251 = Instance.new("TextButton")
+        vu251.Name = "InputBlocker"
+        vu251.Text = ""
+        vu251.AutoButtonColor = false
+        vu251.Size = UDim2.fromScale(1, 1)
+        vu251.Position = UDim2.new(0, 0, 0, 0)
+        vu251.BackgroundColor3 = vu244.Colors.Curtain
+        vu251.BackgroundTransparency = 1
+        vu251.BorderSizePixel = 0
+        vu251.Active = true
+        vu251.Modal = true
+        vu251.ZIndex = 100
+        vu251.Parent = vu247
+        local vu252 = Instance.new("Frame")
+        vu252.Name = "Card"
+        vu252.Size = UDim2.new(0, 400, 0, 220)
+        vu252.Position = UDim2.fromScale(0.5, 1.2)
+        vu252.AnchorPoint = Vector2.new(0.5, 0.5)
+        vu252.BackgroundColor3 = vu244.Colors.Background
+        vu252.BackgroundTransparency = 0.1
+        vu252.BorderSizePixel = 0
+        vu252.ZIndex = 101
+        vu252.Parent = vu247
+        Instance.new("UICorner", vu252).CornerRadius = UDim.new(0, 16)
+        local v253 = Instance.new("UIStroke", vu252)
+        v253.Color = vu244.Colors.Stroke
+        v253.Thickness = 1.5
+        v253.Transparency = 0.5
+        local v254 = Instance.new("UIGradient", vu252)
+        v254.Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(20, 20, 25)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(10, 10, 12))
+        })
+        v254.Rotation = 45
+        local v255 = Instance.new("TextLabel")
+        v255.Text = "AUTO FORGE"
+        v255.Font = vu244.Font.Bold
+        v255.TextSize = 24
+        v255.TextColor3 = vu244.Colors.TextMain
+        v255.BackgroundTransparency = 1
+        v255.Size = UDim2.new(1, 0, 0, 40)
+        v255.Position = UDim2.new(0, 0, 0, 15)
+        v255.ZIndex = 102
+        v255.Parent = vu252
+        local v256 = Instance.new("TextLabel")
+        v256.Text = "Haze Hub Utility"
+        v256.Font = vu244.Font.Medium
+        v256.TextSize = 14
+        v256.TextColor3 = vu244.Colors.Accent
+        v256.BackgroundTransparency = 1
+        v256.Size = UDim2.new(1, 0, 0, 20)
+        v256.Position = UDim2.new(0, 0, 0, 42)
+        v256.ZIndex = 102
+        v256.Parent = vu252
+        local vu257 = Instance.new("TextLabel")
+        vu257.Text = "Initializing..."
+        vu257.Font = vu244.Font.Regular
+        vu257.TextSize = 16
+        vu257.TextColor3 = vu244.Colors.TextSub
+        vu257.BackgroundTransparency = 1
+        vu257.Size = UDim2.new(0.9, 0, 0, 30)
+        vu257.Position = UDim2.fromScale(0.5, 0.45)
+        vu257.AnchorPoint = Vector2.new(0.5, 0.5)
+        vu257.TextWrapped = true
+        vu257.ZIndex = 102
+        vu257.Parent = vu252
+        local v258 = Instance.new("Frame")
+        v258.Size = UDim2.new(0.85, 0, 0, 6)
+        v258.Position = UDim2.fromScale(0.5, 0.75)
+        v258.AnchorPoint = Vector2.new(0.5, 0.5)
+        v258.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+        v258.BorderSizePixel = 0
+        v258.ZIndex = 102
+        v258.Parent = vu252
+        Instance.new("UICorner", v258).CornerRadius = UDim.new(1, 0)
+        local vu259 = Instance.new("Frame")
+        vu259.Size = UDim2.new(0, 0, 1, 0)
+        vu259.BackgroundColor3 = vu244.Colors.Accent
+        vu259.BorderSizePixel = 0
+        vu259.ZIndex = 103
+        vu259.Parent = v258
+        Instance.new("UICorner", vu259).CornerRadius = UDim.new(1, 0)
+        local v260 = Instance.new("ImageLabel")
+        v260.Image = "rbxassetid://7013828739"
+        v260.ImageColor3 = vu244.Colors.Accent
+        v260.ImageTransparency = 0.6
+        v260.BackgroundTransparency = 1
+        v260.Size = UDim2.new(1, 40, 3, 0)
+        v260.Position = UDim2.new(0.5, 0, 0.5, 0)
+        v260.AnchorPoint = Vector2.new(0.5, 0.5)
+        v260.ScaleType = Enum.ScaleType.Slice
+        v260.SliceCenter = Rect.new(50, 50, 462, 462)
+        v260.ZIndex = 103
+        v260.Parent = vu259
+        local v265 = {
+            Show = function(_)
+                vu241:Create(vu251, TweenInfo.new(0.5), {
+                    BackgroundTransparency = 0
+                }):Play()
+                vu241:Create(vu252, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+                    Position = UDim2.fromScale(0.5, 0.5)
+                }):Play()
+            end,
+            SetStatus = function(_, p261, p262)
+                local v263 = vu241:Create(vu257, TweenInfo.new(0.15), {
+                    TextTransparency = 1,
+                    Position = UDim2.fromScale(0.5, 0.42)
+                })
+                v263:Play()
+                v263.Completed:Wait()
+                vu257.Text = p261
+                vu257.Position = UDim2.fromScale(0.5, 0.48)
+                vu241:Create(vu257, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                    TextTransparency = 0,
+                    Position = UDim2.fromScale(0.5, 0.45)
+                }):Play()
+                if p262 then
+                    vu241:Create(vu259, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
+                        Size = UDim2.new(math.clamp(p262, 0, 1), 0, 1, 0)
+                    }):Play()
+                end
+            end,
+            Destroy = function(_)
+                vu241:Create(vu251, TweenInfo.new(0.3), {
+                    BackgroundTransparency = 1
+                }):Play()
+                local v264 = vu241:Create(vu252, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.In), {
+                    Position = UDim2.fromScale(0.5, 1.2)
+                })
+                v264:Play()
+                v264.Completed:Wait()
+                vu247:Destroy()
+            end
+        }
+        v265:Show()
+        return v265
+    end
+    local v267 = vu239
+    vu239.WaitForChild(v267, "Shared", 10):WaitForChild("Packages", 10):WaitForChild("Knit", 10):WaitForChild("Services", 10):WaitForChild("ForgeService", 10):WaitForChild("RF", 10):WaitForChild("ChangeSequence", 10)
+    local function vu294(pu268, p269, p270)
+        local v271 = vu239:WaitForChild("Shared"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services")
+        local v272 = v271:WaitForChild("ForgeService"):WaitForChild("RF")
+        local v273 = v271:WaitForChild("ProximityService"):WaitForChild("RF")
+        local vu274 = v272:WaitForChild("ChangeSequence")
+        local vu275 = v272:WaitForChild("StartForge")
+        local vu276 = v273:WaitForChild("Forge")
+        local vu277 = vu243:WaitForChild("Proximity"):WaitForChild("Forge")
+        if vu274 and (vu275 and (vu276 and vu277)) then
+            local vu278 = p269 or "Weapon"
+            local vu279 = vu266()
+            local v290, v291 = pcall(function()
+                vu279:SetStatus("Connecting to Forge...", 0.1)
+                vu276:InvokeServer(vu277)
+                task.wait(0.1)
+                vu279:SetStatus("Igniting Furnace...", 0.2)
+                vu275:InvokeServer(vu277)
+                task.wait(0.1)
+                vu279:SetStatus("Melting Ores...", 0.35)
+                local v280 = {
+                    "Melt",
+                    {
+                        FastForge = false,
+                        ItemType = vu278,
+                        Ores = pu268
+                    }
+                }
+                vu274:InvokeServer(unpack(v280))
+                vu279:SetStatus("Smelting in process...", 0.45)
+                task.wait(2)
+                vu279:SetStatus("Preparing to pour...", 0.55)
+                task.wait(2)
+                vu279:SetStatus("Pouring Molten Metal...", 0.65)
+                local v281 = vu274
+                local v282 = v281.InvokeServer
+                local v283 = {
+                    ClientTime = vu243:GetServerTimeNow()
+                }
+                v282(v281, "Pour", v283)
+                task.wait(0.3)
+                vu279:SetStatus("Hammering & Shaping...", 0.8)
+                local v284 = vu274
+                local v285 = v284.InvokeServer
+                local v286 = {
+                    ClientTime = vu243:GetServerTimeNow()
+                }
+                v285(v284, "Hammer", v286)
+                task.wait(0.3)
+                vu279:SetStatus("Cooling Blade...", 0.9)
+                task.spawn(function()
+                    local v287 = vu274
+                    local v288 = v287.InvokeServer
+                    local v289 = {
+                        ClientTime = vu243:GetServerTimeNow()
+                    }
+                    v288(v287, "Water", v289)
+                end)
+                task.wait(1)
+                vu279:SetStatus("Finalizing Item!", 1)
+                vu274:InvokeServer("Showcase", {})
+                task.wait(0.5)
+            end)
+            if v290 then
+                if p270 then
+                    p270("Forge", "Forge Complete!", 5)
+                end
+            else
+                local v292 = vu279
+                vu279.SetStatus(v292, "Failed: " .. tostring(v291), 0)
+                task.wait(2)
+                if p270 then
+                    p270("Forge", "Instant Forge failed", 5)
+                end
+            end
+            local v293 = vu279
+            vu279.Destroy(v293)
+        elseif p270 then
+            p270("Error", "Failed to find necessary remotes or Forge model.", 5)
+        end
+    end
+    local function vu313()
+        local v295 = vu242.LocalPlayer
+        if not v295 then
+            return {}
+        end
+        local v296 = v295:FindFirstChild("PlayerGui")
+        if not v296 then
+            return {}
+        end
+        local v297 = v296:FindFirstChild("Forge")
+        if not v297 then
+            return {}
+        end
+        local v298 = v297:FindFirstChild("OreSelect")
+        if not v298 then
+            return {}
+        end
+        local v299 = v298:FindFirstChild("OresFrame")
+        if not v299 then
+            return {}
+        end
+        local v300 = v299:FindFirstChild("Frame")
+        if not v300 then
+            return {}
+        end
+        local v301 = v300:FindFirstChild("Background")
+        if not v301 then
+            return {}
+        end
+        local v302 = v301:GetChildren()
+        local v303, v304, v305 = ipairs(v302)
+        local v306 = {}
+        while true do
+            local v307
+            v305, v307 = v303(v304, v305)
+            if v305 == nil then
+                break
+            end
+            local v308 = v307:FindFirstChild("Main")
+            if v308 then
+                v308 = v308:FindFirstChild("Quantity")
+            end
+            if v308 then
+                local v309 = nil
+                if v308:IsA("TextLabel") or (v308:IsA("TextBox") or v308:IsA("TextButton")) then
+                    v309 = v308.Text
+                else
+                    local v310 = v308:FindFirstChild("Text")
+                    if v310 and (v310:IsA("TextLabel") or (v310:IsA("TextBox") or v310:IsA("TextButton"))) then
+                        v309 = v310.Text
+                    end
+                end
+                if v309 then
+                    local v311 = v307.Name
+                    local v312 = tonumber(v309:match("%d+"))
+                    if v312 then
+                        v306[v311] = v312
+                    end
+                end
+            end
+        end
+        return v306
+    end
+    return function(_, _, p314)
+        if p314 then
+            p314.InstantForge = vu294
+            p314.GetAvailableOres = vu313
+        end
+    end
+end
+function vu1.f()
+    local v316 = vu1.cache.f
+    if not v316 then
+        v316 = {
+            c = vu315()
+        }
+        vu1.cache.f = v316
+    end
+    return v316.c
+end
+local function vu338()
+    local vu317 = game:GetService("UserInputService")
+    local vu318 = game:GetService("RunService")
+    game:GetService("Players")
+    local vu319 = vu1.b()
+    return function(pu320, pu321, _)
+        local vu322 = pu321:GetMouse()
+        vu317.InputBegan:Connect(function(p323, p324)
+            if not p324 then
+                if pu320.ClickTeleport and p323.UserInputType == Enum.UserInputType.MouseButton1 and vu317:IsKeyDown(Enum.KeyCode.LeftControl) then
+                    local v325 = pu321.Character
+                    if v325 then
+                        v325 = v325:FindFirstChild("HumanoidRootPart")
+                    end
+                    if v325 and vu322.Hit then
+                        vu319.TweenMove(v325, CFrame.new(vu322.Hit.Position + Vector3.new(0, 3, 0)))
+                    end
+                end
+            end
+        end)
+        local vu326 = nil
+        local vu327 = nil
+        local vu328 = 50
+        local vu329 = false
+        local function vu331()
+            vu329 = false
+            if vu326 then
+                vu326:Destroy()
+                vu326 = nil
+            end
+            if vu327 then
+                vu327:Destroy()
+                vu327 = nil
+            end
+            local v330 = pu321.Character
+            if v330 then
+                v330 = v330:FindFirstChild("Humanoid")
+            end
+            if v330 then
+                v330.PlatformStand = false
+            end
+        end
+        local function vu337()
+            local vu332 = pu321.Character
+            local v333
+            if vu332 then
+                v333 = vu332:FindFirstChild("HumanoidRootPart")
+            else
+                v333 = vu332
+            end
+            local v334
+            if vu332 then
+                v334 = vu332:FindFirstChild("Humanoid")
+            else
+                v334 = vu332
+            end
+            if v333 and v334 then
+                vu329 = true
+                v334.PlatformStand = true
+                vu326 = Instance.new("BodyGyro", v333)
+                vu326.P = 90000
+                vu326.maxTorque = Vector3.new(9000000000, 9000000000, 9000000000)
+                vu326.cframe = v333.CFrame
+                vu327 = Instance.new("BodyVelocity", v333)
+                vu327.velocity = Vector3.new(0, 0, 0)
+                vu327.maxForce = Vector3.new(9000000000, 9000000000, 9000000000)
+                task.spawn(function()
+                    while vu329 and vu332.Parent do
+                        local v335 = workspace.CurrentCamera
+                        local v336 = Vector3.new()
+                        if vu317:IsKeyDown(Enum.KeyCode.W) then
+                            v336 = v336 + v335.CFrame.LookVector
+                        end
+                        if vu317:IsKeyDown(Enum.KeyCode.S) then
+                            v336 = v336 - v335.CFrame.LookVector
+                        end
+                        if vu317:IsKeyDown(Enum.KeyCode.A) then
+                            v336 = v336 - v335.CFrame.RightVector
+                        end
+                        if vu317:IsKeyDown(Enum.KeyCode.D) then
+                            v336 = v336 + v335.CFrame.RightVector
+                        end
+                        if v336.Magnitude <= 0 then
+                            vu327.velocity = Vector3.new(0, 0, 0)
+                        else
+                            vu327.velocity = v336.Unit * vu328
+                        end
+                        vu326.cframe = v335.CFrame
+                        vu318.RenderStepped:Wait()
+                    end
+                    vu331()
+                end)
+            end
+        end
+        task.spawn(function()
+            while true do
+                while true do
+                    task.wait(0.2)
+                    if not pu320.InfiniteFly then
+                        break
+                    end
+                    if not vu329 and pu321.Character and pu321.Character:FindFirstChild("HumanoidRootPart") then
+                        vu337()
+                    end
+                end
+                if vu329 then
+                    vu331()
+                end
+            end
+        end)
+        pu321.CharacterAdded:Connect(function()
+            if vu329 then
+                vu331()
+            end
+        end)
+    end
+end
+function vu1.g()
+    local v339 = vu1.cache.g
+    if not v339 then
+        v339 = {
+            c = vu338()
+        }
+        vu1.cache.g = v339
+    end
+    return v339.c
+end
+local function vu354()
+    game:GetService("Players")
+    return function(pu340, pu341, _)
+        local vu342 = nil
+        local vu343 = nil
+        local vu344 = false
+        local function vu350()
+            if not vu344 then
+                vu344 = true
+                local function vu346()
+                    if vu344 then
+                        local v345 = pu341.Character
+                        if v345 then
+                            v345 = v345:FindFirstChild("Humanoid")
+                        end
+                        if v345 and (pu340.WalkSpeed and (pu340.WalkSpeed > 16 and v345.WalkSpeed ~= pu340.WalkSpeed)) then
+                            v345.WalkSpeed = pu340.WalkSpeed
+                        end
+                    end
+                end
+                local function v349(p347)
+                    local v348 = p347:WaitForChild("Humanoid", 10)
+                    if v348 then
+                        vu346()
+                        if vu343 then
+                            vu343:Disconnect()
+                        end
+                        vu343 = v348:GetPropertyChangedSignal("WalkSpeed"):Connect(vu346)
+                    end
+                end
+                if pu341.Character then
+                    v349(pu341.Character)
+                end
+                if vu342 then
+                    vu342:Disconnect()
+                end
+                vu342 = pu341.CharacterAdded:Connect(v349)
+            end
+        end
+        local function vu352()
+            vu344 = false
+            if vu343 then
+                vu343:Disconnect()
+                vu343 = nil
+            end
+            if vu342 then
+                vu342:Disconnect()
+                vu342 = nil
+            end
+            local v351 = pu341.Character
+            if v351 then
+                v351 = v351:FindFirstChild("Humanoid")
+            end
+            if v351 then
+                v351.WalkSpeed = 16
+            end
+        end
+        task.spawn(function()
+            while true do
+                while true do
+                    task.wait(0.5)
+                    if pu340.WalkSpeed and pu340.WalkSpeed > 16 then
+                        break
+                    end
+                    if vu344 then
+                        vu352()
+                    end
+                end
+                if not vu344 then
+                    vu350()
+                end
+                if vu344 then
+                    local v353 = pu341.Character
+                    if v353 then
+                        v353 = v353:FindFirstChild("Humanoid")
+                    end
+                    if v353 and v353.WalkSpeed ~= pu340.WalkSpeed then
+                        v353.WalkSpeed = pu340.WalkSpeed
+                    end
+                end
+            end
+        end)
+    end
+end
+function vu1.h()
+    local v355 = vu1.cache.h
+    if not v355 then
+        v355 = {
+            c = vu354()
+        }
+        vu1.cache.h = v355
+    end
+    return v355.c
+end
+local function vu415()
+    local vu356 = game:GetService("ReplicatedStorage")
+    local vu357 = nil
+    local vu358 = nil
+    pcall(function()
+        local v359 = vu356:WaitForChild("Shared", 10):WaitForChild("Packages", 10):WaitForChild("Knit", 10):WaitForChild("Services", 10)
+        local v360 = v359:WaitForChild("DialogueService", 10)
+        local v361 = v359:WaitForChild("ProximityService", 10)
+        vu357 = v360:WaitForChild("RF", 10):WaitForChild("RunCommand", 10)
+        vu358 = v361:WaitForChild("RF", 10):WaitForChild("ForceDialogue", 10)
+    end)
+    local function vu377(p362)
+        local v363 = p362:FindFirstChild("PlayerGui")
+        local v364 = {}
+        local v365 = v363 and v363:FindFirstChild("Menu") and (v363.Menu:FindFirstChild("Frame") and v363.Menu.Frame:FindFirstChild("Frame") and (v363.Menu.Frame.Frame:FindFirstChild("Menus") and v363.Menu.Frame.Frame.Menus:FindFirstChild("Stash")))
+        if v365 then
+            v365 = v363.Menu.Frame.Frame.Menus.Stash:FindFirstChild("Background")
+        end
+        if v365 then
+            local v366, v367, v368 = ipairs(v365:GetChildren())
+            while true do
+                local v369
+                v368, v369 = v366(v367, v368)
+                if v368 == nil then
+                    break
+                end
+                local v370 = v369:FindFirstChild("Main")
+                if v370 then
+                    local v371 = v370:FindFirstChild("ItemName")
+                    local v372 = v370:FindFirstChild("Quantity")
+                    if v371 and (v371:IsA("TextLabel") and (v372 and v372:IsA("TextLabel"))) then
+                        local v373 = v371.Text:match("^%s*(.-)%s*$")
+                        local v374 = v372.Text
+                        if v373 and (v373 ~= "" and not (v373:match("Totem") or v373:match("Portal"))) then
+                            local v375 = (v374 == nil or (v374 == "" or (v374 == " " or v374 == 0))) and "1" or v374
+                            local v376 = tonumber(v375:match("%d+")) or 1
+                            if v376 >= 1 then
+                                v364[v373] = v376
+                            end
+                        end
+                    end
+                end
+            end
+        end
+        return v364
+    end
+    local vu378 = nil
+    local vu379 = {}
+    local function vu383(p380, p381)
+        if vu357 then
+            local vu382 = {
+                "SellConfirm",
+                {
+                    Basket = {
+                        [p380] = tonumber(p381)
+                    }
+                }
+            }
+            pcall(function()
+                vu357:InvokeServer(unpack(vu382))
+            end)
+        end
+    end
+    return function(pu384, pu385, pu386)
+        if pu386 then
+            pu386.GetInventory = vu377
+            pu386.SellItem = vu383
+        end
+        local vu387 = false
+        local function vu388()
+            if not vu378 then
+                vu378 = workspace:WaitForChild("Proximity", 5):WaitForChild("Greedy Cey", 5)
+            end
+            return vu378
+        end
+        task.spawn(function()
+            while true do
+                task.wait(2)
+                local v389 = vu388()
+                local v390 = false
+                if pu384.AutoSellItems then
+                    local v391, v392, v393 = pairs(pu384.AutoSellItems)
+                    while true do
+                        local v394
+                        v393, v394 = v391(v392, v393)
+                        if v393 == nil then
+                            break
+                        end
+                        if v394 then
+                            v390 = true
+                            break
+                        end
+                    end
+                end
+                if v390 and (not vu387 and (vu358 and v389)) then
+                    vu358:InvokeServer(v389, "SellConfirmMisc")
+                    vu387 = true
+                    if pu386.Notify then
+                        pu386.Notify("Auto Sell", "Please press \'Deal\' on the menu to enable selling.", 8)
+                    end
+                end
+                if not pu384.AutoSellItems then
+                end
+                local v395 = vu377(pu385)
+                local v396 = os.clock()
+                local v397, v398, v399 = pairs(pu384.AutoSellItems)
+                local v400 = false
+                while true do
+                    local v401, v402 = v397(v398, v399)
+                    if v401 == nil then
+                        break
+                    end
+                    if v402 then
+                        local v403 = v395[v401]
+                        if v403 and (0 < v403 and not vu379[v401]) then
+                            vu379[v401] = {
+                                quantity = v403,
+                                lastChangeTime = v396
+                            }
+                        end
+                        if v403 and (0 < v403 and vu379[v401]) then
+                            if vu379[v401].quantity == v403 then
+                                v400 = v396 - vu379[v401].lastChangeTime > 8 and true or v400
+                            else
+                                vu379[v401].quantity = v403
+                                vu379[v401].lastChangeTime = v396
+                            end
+                        end
+                        if (not v403 or v403 <= 0) and vu379[v401] then
+                            vu379[v401] = nil
+                        end
+                        if v403 == 1 then
+                            local v404 = pu385:FindFirstChild("PlayerGui") and pu385.PlayerGui:FindFirstChild("Menu") and (pu385.PlayerGui.Menu:FindFirstChild("Frame") and pu385.PlayerGui.Menu.Frame:FindFirstChild("Frame") and (pu385.PlayerGui.Menu.Frame.Frame:FindFirstChild("Menus") and pu385.PlayerGui.Menu.Frame.Frame.Menus:FindFirstChild("Stash")))
+                            if v404 then
+                                v404 = pu385.PlayerGui.Menu.Frame.Frame.Menus.Stash:FindFirstChild("Background")
+                            end
+                            if v404 then
+                                local v405, v406, v407 = ipairs(v404:GetChildren())
+                                v399 = v401
+                                while true do
+                                    local v408
+                                    v407, v408 = v405(v406, v407)
+                                    if v407 == nil then
+                                        break
+                                    end
+                                    local v409 = v408:FindFirstChild("Main")
+                                    if v409 then
+                                        local v410 = v409:FindFirstChild("ItemName")
+                                        if v410 and v410:IsA("TextLabel") and v410.Text:match("^%s*(.-)%s*$") == v401 then
+                                            v401 = v408.Name
+                                        end
+                                    end
+                                end
+                            else
+                                v399 = v401
+                            end
+                        else
+                            v399 = v401
+                        end
+                        if v403 and 0 < v403 then
+                            vu383(v401, v403)
+                        end
+                    else
+                        v399 = v401
+                    end
+                end
+                if v400 and (v389 and vu358) then
+                    vu387 = false
+                    vu358:InvokeServer(v389, "SellConfirmMisc")
+                    local v411, v412, v413 = pairs(vu379)
+                    while true do
+                        local v414
+                        v413, v414 = v411(v412, v413)
+                        if v413 == nil then
+                            break
+                        end
+                        if v414 then
+                            v414.lastChangeTime = v396
+                        end
+                    end
+                    if pu386.Notify then
+                        pu386.Notify("Auto Sell", "Re-initialized sell dialogue (stuck items detected).", 5)
+                    end
+                end
+            end
+        end)
+    end
+end
+function vu1.i()
+    local v416 = vu1.cache.i
+    if not v416 then
+        v416 = {
+            c = vu415()
+        }
+        vu1.cache.i = v416
+    end
+    return v416.c
+end
+local function vu435()
+    local vu417 = game:GetService("HttpService")
+    local vu418 = game:GetService("TeleportService")
+    return function(_, pu419, pu420)
+        local function v434()
+            local v421 = game.PlaceId
+            local v422 = game.JobId
+            if pu420.Notify then
+                pu420.Notify("Server Hop", "Scanning servers for Place: " .. tostring(v421), 2)
+            end
+            local v423 = {}
+            local vu424 = "https://games.roblox.com/v1/games/" .. tostring(v421) .. "/servers/Public?sortOrder=Asc&limit=100&excludeFullGames=true"
+            local v425, v426 = pcall(function()
+                return game:HttpGet(vu424)
+            end)
+            if v425 then
+                local v427 = vu417:JSONDecode(v426)
+                if v427 and v427.data then
+                    local v428 = next
+                    local v429 = v427.data
+                    local v430 = nil
+                    while true do
+                        local v431
+                        v430, v431 = v428(v429, v430)
+                        if v430 == nil then
+                            break
+                        end
+                        if type(v431) == "table" and (tonumber(v431.playing) and (tonumber(v431.maxPlayers) and (v431.playing < v431.maxPlayers and v431.id ~= v422))) then
+                            table.insert(v423, v431.id)
+                        end
+                    end
+                end
+                if # v423 <= 0 then
+                    if pu420.Notify then
+                        pu420.Notify("Server Hop", "No suitable servers found.", 3)
+                    end
+                else
+                    local v432 = math.min(5, # v423)
+                    local v433 = v423[math.random(1, v432)]
+                    if pu420.Notify then
+                        pu420.Notify("Server Hop", "Found server! Teleporting...", 3)
+                    end
+                    vu418:TeleportToPlaceInstance(v421, v433, pu419)
+                end
+            elseif pu420.Notify then
+                pu420.Notify("Error", "Failed to fetch servers API.", 3)
+            end
+        end
+        if pu420 then
+            pu420.ServerHopLow = v434
+        end
+    end
+end
+function vu1.j()
+    local v436 = vu1.cache.j
+    if not v436 then
+        v436 = {
+            c = vu435()
+        }
+        vu1.cache.j = v436
+    end
+    return v436.c
+end
+local function vu466()
+    local v437 = game:GetService("ReplicatedStorage")
+    game:GetService("RunService")
+    local vu438 = game:GetService("Workspace")
+    game:GetService("Players")
+    local vu439 = v437:WaitForChild("Shared"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("ProximityService"):WaitForChild("RF"):WaitForChild("Purchase")
+    local function vu450(p440, p441, p442)
+        if p440.Character then
+            local v443 = p440.Character
+            local v444 = v443:FindFirstChild("Humanoid")
+            if v444 and v444.Health > 0 then
+                if string.find(p441, "HealthPotion") and v444.Health >= v444.MaxHealth * 0.5 then
+                    return
+                else
+                    local v445 = p440:FindFirstChild("PlayerGui")
+                    if v445 then
+                        v445 = v445:FindFirstChild("Hotbar")
+                    end
+                    if v445 then
+                        v445 = v445:FindFirstChild("Perks")
+                    end
+                    if not (v445 and v445:FindFirstChild(p441)) then
+                        local v446 = p440.Backpack:FindFirstChild(p441) or v443:FindFirstChild(p441)
+                        if not v446 then
+                            local vu447 = {
+                                p441,
+                                1
+                            }
+                            pcall(function()
+                                vu439:InvokeServer(unpack(vu447))
+                            end)
+                            v446 = p440.Backpack:WaitForChild(p441, 2)
+                        end
+                        p442.ConsumingPotion = true
+                        task.wait(1)
+                        if v446 then
+                            if v446.Parent ~= v443 then
+                                v444:EquipTool(v446)
+                                task.wait(0.2)
+                            end
+                            local v448 = v443:FindFirstChild(p441)
+                            if v448 then
+                                v448:Activate()
+                            end
+                            local vu449 = {
+                                p441
+                            }
+                            pcall(function()
+                                game:GetService("ReplicatedStorage"):WaitForChild("Shared"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("ToolService"):WaitForChild("RF"):WaitForChild("ToolActivated"):InvokeServer(unpack(vu449))
+                            end)
+                            task.wait(1)
+                        end
+                    end
+                end
+            else
+                return
+            end
+        else
+            return
+        end
+    end
+    local function vu458()
+        local v451 = {}
+        local v452 = vu438:FindFirstChild("Proximity")
+        if not v452 then
+            return v451
+        end
+        local v453, v454, v455 = ipairs(v452:GetChildren())
+        local v456 = 0
+        while true do
+            local v457
+            v455, v457 = v453(v454, v455)
+            if v455 == nil then
+                break
+            end
+            if v457.Name:match("Potion") then
+                v451[v457.Name] = true
+            end
+            v456 = v456 + 1
+        end
+        return v451
+    end
+    return function(pu459, pu460, pu461)
+        if pu461 then
+            pu461.GetPotionList = vu458
+        else
+            warn("[DEBUG] Logic: Helper table is missing!")
+        end
+        task.spawn(function()
+            while true do
+                if pu459 and pu459.AutoPotions then
+                    local v462, v463, v464 = pairs(pu459.AutoPotions)
+                    while true do
+                        local v465
+                        v464, v465 = v462(v463, v464)
+                        if v464 == nil then
+                            break
+                        end
+                        if v465 then
+                            task.wait(0.1)
+                            vu450(pu460, v464, pu461)
+                            task.wait(2)
+                            pu461.ConsumingPotion = false
+                        end
+                    end
+                end
+                task.wait(1)
+            end
+        end)
+    end
+end
+function vu1.k()
+    local v467 = vu1.cache.k
+    if not v467 then
+        v467 = {
+            c = vu466()
+        }
+        vu1.cache.k = v467
+    end
+    return v467.c
+end
+repeat
+    task.wait(0.1)
+until game:IsLoaded()
+if game.GameId == 7671049560 then
+    if _G.HazePrivate then
+        warn("[Haze] UI already initialized")
+        return nil
+    else
+        local vu468 = game.Players.LocalPlayer
+        local vu469 = loadstring(game:HttpGet("https://haze.wtf/api/ui"))()
+        task.wait(0.5)
+        if vu469 and (vu469.GetStatus and _G.HazePrivate) then
+            local v470 = tick()
+            while not vu469.GetStatus().verified and tick() - v470 < 10 do
+                task.wait(0.1)
+            end
+            if vu469.GetStatus().verified then
+                local v471 = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name or "Game Title"
+                local vu472 = vu469.new("Haze Script", v471, nil)
+                local vu473 = "TheForge"
+                local vu474 = vu469.InitializeConfig(vu473, {
+                    AutoRun = false,
+                    AutoMine = false,
+                    MineLavaCheck = true,
+                    MineTargets = {
+                        Pebble = true
+                    },
+                    AutoAttack = false,
+                    AttackLavaCheck = true,
+                    AutoParry = false,
+                    AttackTargets = {},
+                    ForgeItemType = "Weapon",
+                    InfiniteFly = false,
+                    ClickTeleport = false,
+                    WalkSpeed = 16,
+                    AutoSellItems = {}
+                })
+                if vu474.AttackTarget and type(vu474.AttackTarget) == "string" then
+                    if not vu474.AttackTargets then
+                        vu474.AttackTargets = {}
+                    end
+                    local v475, v476, v477 = pairs(vu474.AttackTargets)
+                    local v478 = 0
+                    while true do
+                        v477 = v475(v476, v477)
+                        if v477 == nil then
+                            break
+                        end
+                        v478 = v478 + 1
+                    end
+                    if v478 == 0 and vu474.AttackTarget ~= "" then
+                        vu474.AttackTargets[vu474.AttackTarget] = true
+                    end
+                    vu474.AttackTarget = nil
+                    vu469.SaveConfig(vu473)
+                end
+                if vu474.MineTarget and type(vu474.MineTarget) == "string" then
+                    if not vu474.MineTargets then
+                        vu474.MineTargets = {}
+                    end
+                    local v479, v480, v481 = pairs(vu474.MineTargets)
+                    local v482 = 0
+                    while true do
+                        v481 = v479(v480, v481)
+                        if v481 == nil then
+                            break
+                        end
+                        v482 = v482 + 1
+                    end
+                    if v482 == 0 and vu474.MineTarget ~= "" then
+                        vu474.MineTargets[vu474.MineTarget] = true
+                    end
+                    vu474.MineTarget = nil
+                    vu469.SaveConfig(vu473)
+                end
+                local function vu485(p483, p484)
+                    vu469.UpdateConfig(vu473, p483, p484)
+                end
+                local vu486 = {}
+                game:GetService("ReplicatedStorage")
+                local vu487 = {}
+                local vu488 = vu1.a()
+                local vu489 = vu1.b()
+                function vu487.Notify(...)
+                    if vu472 then
+                        vu472:Notify(...)
+                    end
+                end
+                vu1.c()(vu474, vu468, vu487)
+                vu1.d()(vu474, vu468, vu487)
+                vu1.e()(vu474, vu468, vu487)
+                vu1.f()(vu474, vu468, vu487)
+                vu1.g()(vu474, vu468, vu487)
+                vu1.h()(vu474, vu468, vu487)
+                vu1.i()(vu474, vu468, vu487)
+                vu1.j()(vu474, vu468, vu487)
+                vu1.k()(vu474, vu468, vu487)
+                local vu490 = nil
+                local v491 = vu472
+                local v492 = vu472.AddTab(v491, "Main", "rbxassetid://6026568198")
+                local v493 = vu472
+                local v494 = vu472.AddTab(v493, "Combat", "rbxassetid://4391741881")
+                local vu495 = v492:AddSection("Farming")
+                local v496 = vu495
+                vu495.AddToggle(v496, "Auto Mine", vu474.AutoMine, function(p497)
+                    vu485("AutoMine", p497)
+                end)
+                local v498 = vu495
+                vu495.AddCheckmark(v498, "Mine Lava Check", vu474.MineLavaCheck, function(p499)
+                    vu485("MineLavaCheck", p499)
+                end)
+                local vu500 = {}
+                local vu501 = {}
+                local function vu512()
+                    if vu487.GetRockTypes then
+                        local v502 = vu487.GetRockTypes()
+                        local v503, v504, v505 = ipairs(v502)
+                        while true do
+                            local vu506
+                            v505, vu506 = v503(v504, v505)
+                            if v505 == nil then
+                                break
+                            end
+                            if not vu501[vu506] then
+                                vu501[vu506] = true
+                                local v507 = vu495
+                                local v508 = v507.AddCheckmark
+                                local v509 = "Target: " .. vu506
+                                local v510
+                                if vu474.MineTargets then
+                                    v510 = vu474.MineTargets[vu506] or false
+                                else
+                                    v510 = false
+                                end
+                                vu500[vu506] = v508(v507, v509, v510, function(p511)
+                                    if not vu474.MineTargets then
+                                        vu474.MineTargets = {}
+                                    end
+                                    vu474.MineTargets[vu506] = p511
+                                    vu485("MineTargets", vu474.MineTargets)
+                                end)
+                            end
+                        end
+                    end
+                end
+                task.spawn(function()
+                    while true do
+                        vu512()
+                        task.wait(5)
+                    end
+                end)
+                local vu513 = v494:AddSection("Combat")
+                local v514 = vu513
+                vu513.AddToggle(v514, "Auto Attack", vu474.AutoAttack, function(p515)
+                    vu485("AutoAttack", p515)
+                    if p515 and vu490 then
+                        vu490:Set(false)
+                    end
+                end)
+                local v516 = vu513
+                vu513.AddCheckmark(v516, "Attack Lava Check", vu474.AttackLavaCheck, function(p517)
+                    vu485("AttackLavaCheck", p517)
+                end)
+                local v518 = vu513
+                vu513.AddCheckmark(v518, "Auto Block", vu474.AutoParry, function(p519)
+                    vu485("AutoParry", p519)
+                end)
+                local vu520 = {}
+                local function vu527()
+                    if vu487.GetMobTypes then
+                        local v521 = vu487.GetMobTypes()
+                        local v522, v523, v524 = ipairs(v521)
+                        while true do
+                            local vu525
+                            v524, vu525 = v522(v523, v524)
+                            if v524 == nil then
+                                break
+                            end
+                            if not vu520[vu525] then
+                                vu520[vu525] = true
+                                if vu474.AttackTargets[vu525] == nil then
+                                    vu474.AttackTargets[vu525] = false
+                                end
+                                vu513:AddCheckmark("Target: " .. vu525, vu474.AttackTargets[vu525], function(p526)
+                                    vu474.AttackTargets[vu525] = p526
+                                    vu485("AttackTargets", vu474.AttackTargets)
+                                end)
+                            end
+                        end
+                    end
+                end
+                task.spawn(function()
+                    while true do
+                        vu527()
+                        task.wait(5)
+                    end
+                end)
+                local v528 = vu472
+                local v529 = vu472.AddTab(v528, "Forge", "rbxassetid://9158926514")
+                local v530 = vu472
+                local vu531 = vu472.AddTab(v530, "Shop", "rbxassetid://11385395241"):AddSection("Auto Sell")
+                local v532 = vu531
+                vu531.SetDescription(v532, "Automatically sells selected items when they appear in your inventory.")
+                local vu533 = {}
+                task.spawn(function()
+                    while true do
+                        local v534 = {}
+                        if vu474.AutoSellItems then
+                            local v535, v536, v537 = pairs(vu474.AutoSellItems)
+                            while true do
+                                local v538
+                                v537, v538 = v535(v536, v537)
+                                if v537 == nil then
+                                    break
+                                end
+                                if v538 then
+                                    v534[v537] = true
+                                end
+                            end
+                        end
+                        if vu487.GetInventory then
+                            local v539 = vu487.GetInventory(vu468)
+                            local v540, v541, v542 = pairs(v539)
+                            while true do
+                                local v543
+                                v542, v543 = v540(v541, v542)
+                                if v542 == nil then
+                                    break
+                                end
+                                v534[v542] = true
+                            end
+                        end
+                        local v544, v545, v546 = pairs(v534)
+                        local v547 = {}
+                        local v548
+                        v546, v548 = v544(v545, v546)
+                        if v546 ~= nil then
+                            table.insert(v547, v546)
+                        end
+                        table.sort(v547)
+                        local v549, v550, v551 = ipairs(v547)
+                        local vu552
+                        v551, vu552 = v549(v550, v551)
+                        if v551 ~= nil then
+                            if not vu533[vu552] then
+                                vu533[vu552] = true
+                                if vu474.AutoSellItems[vu552] == nil then
+                                    vu474.AutoSellItems[vu552] = false
+                                end
+                                vu531:AddCheckmark("Sell All " .. vu552, vu474.AutoSellItems[vu552], function(p553)
+                                    vu474.AutoSellItems[vu552] = p553
+                                    vu485("AutoSellItems", vu474.AutoSellItems)
+                                end)
+                            end
+                        end
+                        task.wait(5)
+                    end
+                end)
+                local vu554 = v529:AddSection("Instant Forge")
+                vu554:SetDescription("\226\154\160\239\184\143 WARNING: If you use Instant Forge, you MUST quit and reopen the game before using the forge manually! \226\154\160\239\184\143\n\nSelect ore quantities and forge instantly.")
+                vu554:AddButton("Instant Forge", function()
+                    if vu487.InstantForge then
+                        local v555, v556, v557 = pairs(vu486)
+                        local v558 = {}
+                        local v559 = 0
+                        local v560 = 0
+                        while true do
+                            local v561
+                            v557, v561 = v555(v556, v557)
+                            if v557 == nil then
+                                break
+                            end
+                            if v561 > 0 then
+                                v558[v557] = v561
+                                v559 = v559 + v561
+                                v560 = v560 + 1
+                            end
+                        end
+                        if v559 < 3 then
+                            vu472:Notify("Error", "You must select at least 3 ores!", 3)
+                            return
+                        end
+                        if v560 > 4 then
+                            vu472:Notify("Error", "Too many ore types! Max 4 allowed.", 3)
+                            return
+                        end
+                        vu487.InstantForge(v558, vu474.ForgeItemType, function(p562, p563, p564)
+                            vu472:Notify(p562, p563, p564)
+                        end)
+                    end
+                end)
+                local v565, v566, v567 = ipairs({
+                    "Weapon",
+                    "Armor"
+                })
+                local vu568 = vu486
+                local vu569 = vu487
+                local vu570 = vu485
+                local vu571 = {}
+                while true do
+                    local v572, vu573 = v565(v566, v567)
+                    if v572 == nil then
+                        break
+                    end
+                    v567 = v572
+                    local vu574 = nil
+                    local v580 = vu554:AddCheckmark("Type: " .. vu573, vu474.ForgeItemType == vu573, function(p575)
+                        if p575 then
+                            vu570("ForgeItemType", vu573)
+                            local v576, v577, v578 = pairs(vu571)
+                            while true do
+                                local v579
+                                v578, v579 = v576(v577, v578)
+                                if v578 == nil then
+                                    break
+                                end
+                                if v578 ~= vu573 and v579 then
+                                    v579:Set(false)
+                                end
+                            end
+                        elseif vu474.ForgeItemType == vu573 and vu574 then
+                            vu574:Set(true)
+                        end
+                    end)
+                    vu571[vu573] = v580
+                end
+                task.spawn(function()
+                    local v581 = {}
+                    local v582 = not vu569.GetAvailableOres and {} or vu569.GetAvailableOres()
+                    local v583, v584, v585 = pairs(v582)
+                    local v586 = {}
+                    local v587 = {}
+                    table.insert(v586, v585)
+                    local v588
+                    v585, v588 = v583(v584, v585)
+                    if v585 ~= nil then
+                    else
+                    end
+                    table.sort(v586)
+                    local v589, v590, v591 = ipairs(v586)
+                    v587[vu597] = true
+                    local v592 = v582[vu597]
+                    local v593 = v581[vu597]
+                    if v593 then
+                        local v594 = vu568[vu597] or 0
+                        if v592 < v594 then
+                            v594 = v592
+                        end
+                        if v594 ~= vu568[vu597] then
+                            vu568[vu597] = v594
+                        end
+                        v593:Set(v594, 0, v592)
+                    else
+                        local v595 = vu568[vu597] or 0
+                        if v592 < v595 then
+                            v595 = v592
+                        end
+                        v581[vu597] = vu554:AddSlider(vu597, 0, v592, v595, function(p596)
+                            vu568[vu597] = p596
+                        end)
+                    end
+                    local vu597
+                    v591, vu597 = v589(v590, v591)
+                    if v591 ~= nil then
+                    else
+                    end
+                    local v598, v599, v600 = pairs(v581)
+                    local v601
+                    v600, v601 = v598(v599, v600)
+                    if v600 ~= nil then
+                        if not v587[v600] then
+                            if v601.Destroy then
+                                v601.Destroy()
+                            end
+                            v581[v600] = nil
+                            vu568[v600] = 0
+                        end
+                    end
+                    task.wait(1)
+                end)
+                local vu602 = vu472:AddTab("Potions", "rbxassetid://84856291507870"):AddSection("Auto Potions")
+                vu602:SetDescription("Automatically buys and consumes potions.")
+                if not vu474.AutoPotions then
+                    vu474.AutoPotions = {}
+                end
+                local vu603 = {}
+                task.spawn(function()
+                    while true do
+                        if vu569 then
+                            if vu569.GetPotionList then
+                                local v604 = vu569.GetPotionList()
+                                local v605, v606, v607 = pairs(v604)
+                                local v608 = 0
+                                while true do
+                                    v607 = v605(v606, v607)
+                                    if v607 == nil then
+                                        break
+                                    end
+                                    v608 = v608 + 1
+                                end
+                                local v609, v610, v611 = pairs(v604)
+                                local v612 = {}
+                                while true do
+                                    local v613
+                                    v611, v613 = v609(v610, v611)
+                                    if v611 == nil then
+                                        break
+                                    end
+                                    table.insert(v612, v611)
+                                end
+                                table.sort(v612)
+                                local v614, v615, v616 = ipairs(v612)
+                                while true do
+                                    local vu617
+                                    v616, vu617 = v614(v615, v616)
+                                    if v616 == nil then
+                                        break
+                                    end
+                                    if not vu603[vu617] then
+                                        vu603[vu617] = true
+                                        if vu474.AutoPotions[vu617] == nil then
+                                            vu474.AutoPotions[vu617] = false
+                                        end
+                                        vu602:AddCheckmark("Auto " .. vu617, vu474.AutoPotions[vu617], function(p618)
+                                            vu474.AutoPotions[vu617] = p618
+                                            if vu570 then
+                                                vu570("AutoPotions", vu474.AutoPotions)
+                                            end
+                                        end)
+                                    end
+                                end
+                            end
+                            warn("[DEBUG] UI: Helper.GetPotionList is NIL. ")
+                        else
+                            warn("[DEBUG] UI: Helper table is NIL.")
+                        end
+                        task.wait(5)
+                    end
+                end)
+                local v619 = v492:AddSection("Player")
+                vu490 = v619:AddToggle("Auto Run", vu474.AutoRun, function(p620)
+                    vu570("AutoRun", p620)
+                end)
+                v619:AddToggle("Infinite Fly", vu474.InfiniteFly, function(p621)
+                    vu570("InfiniteFly", p621)
+                end)
+                v619:AddToggle("Click TP (Ctrl + Click)", vu474.ClickTeleport, function(p622)
+                    vu570("ClickTeleport", p622)
+                end)
+                v619:AddSlider("Walk Speed", 16, 100, vu474.WalkSpeed, function(p623)
+                    vu570("WalkSpeed", p623)
+                end)
+                v619:AddButton("Server Hop (Low)", function()
+                    if vu569.ServerHopLow then
+                        vu569.ServerHopLow()
+                    end
+                end)
+                v492:AddSection("Codes"):AddButton("Claim All Codes", function()
+                    if vu488 then
+                        vu488()
+                        vu472:Notify("Codes", "Attempting to claim all codes...", 3)
+                    end
+                end)
+                local vu624 = vu472:AddTab("Teleport", "rbxassetid://114223315914239"):AddSection("Locations");
+                (function()
+                    local v625 = workspace:FindFirstChild("Proximity")
+                    if v625 then
+                        local v626 = v625:GetChildren()
+                        table.sort(v626, function(p627, p628)
+                            return p627.Name < p628.Name
+                        end)
+                        local v629, v630, v631 = ipairs(v626)
+                        while true do
+                            local vu632
+                            v631, vu632 = v629(v630, v631)
+                            if v631 == nil then
+                                break
+                            end
+                            if vu632:IsA("Model") or vu632:IsA("BasePart") then
+                                vu624:AddButton(vu632.Name, function()
+                                    local v633 = vu468.Character
+                                    if v633 then
+                                        v633 = v633:FindFirstChild("HumanoidRootPart")
+                                    end
+                                    local v634 = nil
+                                    if vu632:IsA("Model") then
+                                        if vu632.PrimaryPart then
+                                            v634 = vu632.PrimaryPart.CFrame
+                                        else
+                                            v634 = vu632:GetPivot()
+                                        end
+                                    elseif vu632:IsA("BasePart") then
+                                        v634 = vu632.CFrame
+                                    end
+                                    if v633 and v634 then
+                                        vu489.TweenMove(v633, v634 + Vector3.new(0, 3, 0))
+                                    end
+                                end)
+                            end
+                        end
+                    else
+                        vu624:AddButton("No Proximity Folder Found", function()
+                        end)
+                    end
+                end)()
+                local vu635 = {}
+                vu469.SetGameDataCallback(function()
+                    local v636 = vu468:FindFirstChild("PlayerGui")
+                    local v637 = 0
+                    local v638 = 0
+                    local v639 = {}
+                    if v636 then
+                        local v640 = v636:FindFirstChild("Main") and (v636.Main:FindFirstChild("Screen") and v636.Main.Screen:FindFirstChild("Hud"))
+                        if v640 then
+                            v640 = v636.Main.Screen.Hud:FindFirstChild("Level")
+                        end
+                        v637 = v640 and v640:IsA("TextLabel") and (tonumber(v640.Text:match("%d+")) or 0) or v637
+                        local v641 = v636:FindFirstChild("Main") and (v636.Main:FindFirstChild("Screen") and v636.Main.Screen:FindFirstChild("Hud"))
+                        if v641 then
+                            v641 = v636.Main.Screen.Hud:FindFirstChild("Gold")
+                        end
+                        if v641 and v641:IsA("TextLabel") then
+                            local v642 = v641.Text:gsub("[$,]", "")
+                            v638 = tonumber(v642) or v641.Text
+                        end
+                        local v643 = v636:FindFirstChild("Menu") and (v636.Menu:FindFirstChild("Frame") and v636.Menu.Frame:FindFirstChild("Frame") and (v636.Menu.Frame.Frame:FindFirstChild("Menus") and v636.Menu.Frame.Frame.Menus:FindFirstChild("Stash")))
+                        if v643 then
+                            v643 = v636.Menu.Frame.Frame.Menus.Stash:FindFirstChild("Background")
+                        end
+                        if v643 then
+                            local v644, v645, v646 = ipairs(v643:GetChildren())
+                            while true do
+                                local v647
+                                v646, v647 = v644(v645, v646)
+                                if v646 == nil then
+                                    break
+                                end
+                                local v648 = v647:FindFirstChild("Main")
+                                if v648 then
+                                    local v649 = v648:FindFirstChild("ItemName")
+                                    local v650 = v648:FindFirstChild("Quantity")
+                                    if v649 and (v649:IsA("TextLabel") and (v650 and v650:IsA("TextLabel"))) then
+                                        local v651 = v649.Text
+                                        local v652 = v650.Text
+                                        if v651 and (v651 ~= "" and (v652 and v652 ~= "")) then
+                                            v639[v651] = tonumber(v652:match("%d+")) or v652
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                    local v653, v654, v655 = pairs(vu474)
+                    while true do
+                        local v656
+                        v655, v656 = v653(v654, v655)
+                        if v655 == nil then
+                            break
+                        end
+                        vu635[v655] = vu474[v655]
+                    end
+                    return {
+                        level = v637,
+                        gold = v638,
+                        inventory = v639,
+                        timestamp = os.time(),
+                        features = vu635
+                    }
+                end)
+            else
+                warn("[Haze] Failed to verify library!")
+            end
+        else
+            warn("[Haze] Failed to load library!")
+            return
+        end
+    end
+else
+    warn("[Haze] \226\157\140 Not in the correct game!")
+    return
+end

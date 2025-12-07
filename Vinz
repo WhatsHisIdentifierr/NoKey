@@ -1,0 +1,2355 @@
+local genv = getgenv()
+local fenv = getfenv()
+local _ = require == require
+local _7 = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
+fenv.WindUI = _7
+local _call9 = game:GetService("Players")
+local _call11 = game:GetService("RunService")
+local _call13 = game:GetService("UserInputService")
+local _call15 = game:GetService("HttpService")
+local _call17 = game:GetService("GuiService")
+local _call19 = game:GetService("TeleportService")
+local _call21 = game:GetService("ReplicatedStorage")
+local _call23 = game:GetService("Workspace")
+local _call25 = game:GetService("Lighting")
+local _LocalPlayer28 = game:GetService("Players").LocalPlayer
+local _call30 = game:GetService("VirtualUser")
+fenv.Players = _call9
+fenv.RunService = _call11
+fenv.UserInputService = _call13
+fenv.HttpService = _call15
+fenv.GuiService = _call17
+fenv.TeleportService = _call19
+fenv.ReplicatedStorage = _call21
+fenv.Workspace = _call23
+fenv.Lighting = _call25
+fenv.LocalPlayer = _LocalPlayer28
+fenv.VirtualUser = _call30
+fenv.ItemUtility = nil
+fenv.Replion = nil
+fenv.DataService = nil
+local _callrequire33 = require(_call21.Shared.ItemUtility)
+fenv.ItemUtility = _callrequire33
+local _callrequire36 = require(_call21.Packages.Replion)
+fenv.Replion = _callrequire36
+local _call39 = _callrequire36.Client:WaitReplion("Data")
+fenv.DataService = _call39
+local _ = _LocalPlayer28.CameraMaxZoomDistance
+local _ = _LocalPlayer28.CameraMinZoomDistance
+task.spawn(function(...)
+    for _47, _47_2 in pairs(_call23:GetDescendants()) do
+        _47_2:IsA("ParticleEmitter")
+        _47_2.Enabled = false
+        _47_2:IsA("Texture")
+        _47_2.Transparency = 1
+    end
+    _call11.RenderStepped:Connect(function(...)
+        local _ = _LocalPlayer28.Character
+        _LocalPlayer28.Character:FindFirstChild("HumanoidRootPart")
+        local _HumanoidRootPart61 = _LocalPlayer28.Character.HumanoidRootPart
+        _HumanoidRootPart61.Velocity = (_HumanoidRootPart61.Velocity * 0.95)
+    end)
+    task.spawn(function(...)
+        task.wait(5)
+        local _ = workspace.DistributedGameTime - tick()
+        error("line 3: attempt to compare number < table")
+    end)
+    hookfunction(_LocalPlayer28.Kick, function(...)
+    end)
+    hookmetamethod(game, "__index", function(...)
+        local _74_vararg1 = ...
+        local _ = _74_vararg1 == _LocalPlayer28
+        error("line 3: attempt to call a nil value")
+    end)
+    hookmetamethod(game, "__namecall", function(...)
+        local _77_vararg1 = ...
+        local _ = _77_vararg1 == _LocalPlayer28
+        error("line 3: attempt to call a nil value")
+    end)
+    print("VinzHub: Anti Kick Activated")
+    getconnections(_LocalPlayer28.Idled)
+    for _84, _84_2 in pairs(getconnections(_LocalPlayer28.Idled)) do
+        local _ = _84_2.Disable
+        _84_2:Disable()
+    end
+    _LocalPlayer28.Idled:Connect(function(...)
+        _call30:CaptureController()
+        _call30.ClickButton2(_call30, Vector2.new())
+    end)
+    print("VinzHub: Anti AFK Activated")
+end)
+fenv.FishingController = nil
+fenv.originalGetPower = nil
+local _callrequire103 = require(_call21:WaitForChild("Controllers"):WaitForChild("FishingController"))
+fenv.FishingController = _callrequire103
+local _callrequire108 = require(_call21:WaitForChild("Shared"):WaitForChild("Constants"))
+_callrequire108.FishingCooldownTime = 0
+local _getPower109 = _callrequire103._getPower
+fenv.originalGetPower = _getPower109
+_callrequire103.OnCooldown = function(...)
+    return false
+end
+print("[VinzHub Bypass] SUCCESS")
+fenv.AutoFishingController = nil
+fenv.Replion_Legit = nil
+local _callrequire117 = require(_call21:WaitForChild("Controllers"):WaitForChild("AutoFishingController"))
+fenv.AutoFishingController = _callrequire117
+local _callrequire122 = require(_call21:WaitForChild("Packages"):WaitForChild("Replion"))
+fenv.Replion_Legit = _callrequire122
+_callrequire117.AutoFishingStateChanged = function(...)
+    _callrequire117.AutoFishingStateChanged(true)
+end
+_callrequire103.FishingRodStarted = function(...)
+    local _132_vararg1, _132_vararg2, _132_vararg3 = ...
+    _callrequire103.FishingRodStarted(_132_vararg1, _132_vararg2, _132_vararg3)
+end
+_callrequire103.FishingStopped = function(...)
+    local _136_vararg1, _136_vararg2 = ...
+    _callrequire103.FishingStopped(_136_vararg1, _136_vararg2)
+end
+fenv.applyExtremeFPSBoost = function(...)
+    _call25.GlobalShadows = false
+    _call25.FogEnd = 2500
+    _call25.Brightness = 1.5
+    _call25.Ambient = Color3.new(0.7, 0.7, 0.7)
+    _call25.EnvironmentSpecularScale = 0
+    _call25.EnvironmentDiffuseScale = 0
+    _call25.Technology = Enum.Technology.Compatibility
+    local _CurrentCamera143 = _call23.CurrentCamera
+    for _146, _146_2 in ipairs(_call25:GetChildren()) do
+        _146_2:IsA("PostProcessingEffect")
+        _146_2:Destroy()
+    end
+    for _153, _153_2 in ipairs(_CurrentCamera143:GetChildren()) do
+        _153_2:IsA("PostProcessingEffect")
+        _153_2:Destroy()
+    end
+    local _settings158 = fenv.settings
+    local _Rendering160 = _settings158().Rendering
+    _Rendering160.QualityLevel = Enum.QualityLevel.Level01
+    local _call164 = _call23:FindFirstChildOfClass("Terrain")
+    _call164.WaterWaveSize = 0
+    _call164.WaterWaveSpeed = 0
+    _call164.WaterReflectance = 0
+    _call164.WaterTransparency = 1
+    _call164:FindFirstChildOfClass("Clouds"):Destroy()
+    for _171, _171_2 in ipairs(_call23:GetDescendants()) do
+        _171_2:IsA("Light")
+        _171_2:Destroy()
+    end
+    for _178, _178_2 in ipairs(_call9:GetPlayers()) do
+        local _ = _178_2.Character
+        local _Character180 = _178_2.Character
+        _Character180:WaitForChild("Humanoid", 5)
+        for _185, _185_2 in ipairs(_Character180:GetChildren()) do
+            _185_2:IsA("Clothing")
+            _185_2:Destroy()
+        end
+        _178_2.CharacterAdded:Connect(function(...)
+            local _193_vararg1 = ...
+            _193_vararg1:WaitForChild("Humanoid", 5)
+            for _198, _198_2 in ipairs(_193_vararg1:GetChildren()) do
+                _198_2:IsA("Clothing")
+                _198_2:Destroy()
+            end
+        end)
+    end
+    _call9.PlayerAdded:Connect(function(...)
+        local _206_vararg1 = ...
+        _206_vararg1.CharacterAdded:Connect(function(...)
+            local _210_vararg1 = ...
+            _210_vararg1:WaitForChild("Humanoid", 5)
+            for _215, _215_2 in ipairs(_210_vararg1:GetChildren()) do
+                _215_2:IsA("Clothing")
+                _215_2:Destroy()
+            end
+        end)
+    end)
+end
+fenv.getInventoryFish = function(...)
+    local _call222 = _call39:GetExpect({
+        [1] = "Inventory",
+        [2] = "Items",
+    })
+    for _223, _223_2 in pairs(_call222) do
+        local _ = _callrequire33.GetItemDataFromItemType("Items", _223_2.Id).Data.Type
+    end
+    return {}
+end
+fenv.Config = {
+    AutoSell = false,
+    Disable3DRendering = false,
+    AntiStuckDetector = false,
+    InfiniteZoom = false,
+    HideUsername = false,
+    FPSBoost = false,
+    WebhookActive = false,
+    SelectedWeather = {},
+    WalkSpeed = 16,
+    SelectedEventName = "Shark Hunt",
+    AutoEventTeleport = false,
+    AutoGhostfin = false,
+    TeleportAndFreeze = false,
+    WalkOnWater = false,
+    WebhookURL = "",
+    AutoSellFishCount = 50,
+    FreezeAtSavedPos = false,
+    AutoLegitFish = false,
+    AutoFishV1 = false,
+    InfiniteJump = false,
+    JumpPower = 50,
+    AutoSellDelay = 5,
+    AutoSellByCountEnabled = false,
+    Noclip = false,
+    WebhookRarityFilter = {},
+    AutoFishV2_Cast = false,
+}
+fenv.CONFIG_FILE = "VinzHub/VinzHub_Config.json"
+fenv.AREA_FILE = "VinzHub/VinzHub_LastArea.txt"
+fenv.SAVED_POS_FILE = "VinzHub/VinzHub_SavedPosition.json"
+fenv.SaveConfig = function(...)
+    makefolder("VinzHub")
+    local _call232 = _call15:JSONEncode({
+        AutoSell = false,
+        Disable3DRendering = false,
+        AntiStuckDetector = false,
+        AutoEventTeleport = false,
+        HideUsername = false,
+        FPSBoost = false,
+        WebhookActive = false,
+        WebhookRarityFilter = {},
+        WalkSpeed = 16,
+        Noclip = false,
+        TeleportAndFreeze = false,
+        AutoGhostfin = false,
+        JumpPower = 50,
+        WalkOnWater = false,
+        InfiniteJump = false,
+        AutoSellFishCount = 50,
+        AutoLegitFish = false,
+        FreezeAtSavedPos = false,
+        AutoFishV1 = false,
+        WebhookURL = "",
+        SelectedWeather = {},
+        SelectedEventName = "Shark Hunt",
+        AutoSellByCountEnabled = false,
+        AutoSellDelay = 5,
+        InfiniteZoom = false,
+        AutoFishV2_Cast = false,
+    })
+    writefile("VinzHub/VinzHub_Config.json", _call232)
+end
+fenv.SaveLastArea = function(...)
+    local _233_vararg1 = ...
+    makefolder("VinzHub")
+    writefile("VinzHub/VinzHub_LastArea.txt", _233_vararg1)
+end
+fenv.LoadConfig = function(...)
+    local _call238 = _call15:JSONDecode(_call232)
+    local _ = _call238.AutoSell
+    local _ = _call238.AutoSell
+    local _ = _call238.Disable3DRendering
+    local _ = _call238.Disable3DRendering
+    local _ = _call238.AntiStuckDetector
+    local _ = _call238.AntiStuckDetector
+    local _ = _call238.InfiniteZoom
+    local _ = _call238.InfiniteZoom
+    local _ = _call238.HideUsername
+    local _ = _call238.HideUsername
+    local _ = _call238.FPSBoost
+    local _ = _call238.FPSBoost
+    local _ = _call238.WebhookActive
+    local _ = _call238.WebhookActive
+    local _ = _call238.SelectedWeather
+    local _ = _call238.SelectedWeather
+    local _ = _call238.WalkSpeed
+    local _ = _call238.WalkSpeed
+    local _ = _call238.SelectedEventName
+    local _ = _call238.SelectedEventName
+    local _ = _call238.AutoEventTeleport
+    local _ = _call238.AutoEventTeleport
+    local _ = _call238.AutoGhostfin
+    local _ = _call238.AutoGhostfin
+    local _ = _call238.TeleportAndFreeze
+    local _ = _call238.TeleportAndFreeze
+    local _ = _call238.WalkOnWater
+    local _ = _call238.WalkOnWater
+    local _ = _call238.WebhookURL
+    local _ = _call238.WebhookURL
+    local _ = _call238.AutoSellFishCount
+    local _ = _call238.AutoSellFishCount
+    local _ = _call238.FreezeAtSavedPos
+    local _ = _call238.FreezeAtSavedPos
+    local _ = _call238.AutoLegitFish
+    local _ = _call238.AutoLegitFish
+    local _ = _call238.AutoFishV1
+    local _ = _call238.AutoFishV1
+    local _ = _call238.InfiniteJump
+    local _ = _call238.InfiniteJump
+    local _ = _call238.JumpPower
+    local _ = _call238.JumpPower
+    local _ = _call238.AutoSellDelay
+    local _ = _call238.AutoSellDelay
+    local _ = _call238.AutoSellByCountEnabled
+    local _ = _call238.AutoSellByCountEnabled
+    local _ = _call238.Noclip
+    local _ = _call238.Noclip
+    local _ = _call238.WebhookRarityFilter
+    local _ = _call238.WebhookRarityFilter
+    local _ = _call238.AutoFishV2_Cast
+    local _ = _call238.AutoFishV2_Cast
+end
+fenv.LoadLastArea = function(...)
+    _233_vararg1:gsub("%s*", "")
+    return _233_vararg1
+end
+if not isfile("VinzHub/VinzHub_Config.json") then
+    makefolder("VinzHub")
+    local defaultConfig = _call15:JSONEncode({
+        AutoSell = false,
+        Disable3DRendering = false,
+        AntiStuckDetector = false,
+        AutoEventTeleport = false,
+        HideUsername = false,
+        FPSBoost = false,
+        WebhookActive = false,
+        WebhookRarityFilter = {},
+        WalkSpeed = 16,
+        Noclip = false,
+        TeleportAndFreeze = false,
+        AutoGhostfin = false,
+        JumpPower = 50,
+        WalkOnWater = false,
+        InfiniteJump = false,
+        AutoSellFishCount = 50,
+        AutoLegitFish = false,
+        FreezeAtSavedPos = false,
+        AutoFishV1 = false,
+        WebhookURL = "",
+        SelectedWeather = {},
+        SelectedEventName = "Shark Hunt",
+        AutoSellByCountEnabled = false,
+        AutoSellDelay = 5,
+        InfiniteZoom = false,
+        AutoFishV2_Cast = false,
+    })
+    writefile("VinzHub/VinzHub_Config.json", defaultConfig)
+end
+
+local configData = readfile("VinzHub/VinzHub_Config.json")
+local _call297 = _call15:JSONDecode(configData)
+local _ = _call297.AutoSell
+local _AutoSell299 = _call297.AutoSell
+local _ = _call297.Disable3DRendering
+local _Disable3DRendering301 = _call297.Disable3DRendering
+local _ = _call297.AntiStuckDetector
+local _AntiStuckDetector303 = _call297.AntiStuckDetector
+local _ = _call297.InfiniteZoom
+local _InfiniteZoom305 = _call297.InfiniteZoom
+local _ = _call297.HideUsername
+local _HideUsername307 = _call297.HideUsername
+local _ = _call297.FPSBoost
+local _FPSBoost309 = _call297.FPSBoost
+local _ = _call297.WebhookActive
+local _WebhookActive311 = _call297.WebhookActive
+local _ = _call297.SelectedWeather
+local _SelectedWeather313 = _call297.SelectedWeather
+local _ = _call297.WalkSpeed
+local _ = _call297.SelectedEventName
+local _SelectedEventName317 = _call297.SelectedEventName
+local _ = _call297.AutoEventTeleport
+local _AutoEventTeleport319 = _call297.AutoEventTeleport
+local _ = _call297.AutoGhostfin
+local _AutoGhostfin321 = _call297.AutoGhostfin
+local _ = _call297.TeleportAndFreeze
+local _TeleportAndFreeze323 = _call297.TeleportAndFreeze
+local _ = _call297.WalkOnWater
+local _WalkOnWater325 = _call297.WalkOnWater
+local _ = _call297.WebhookURL
+local _WebhookURL327 = _call297.WebhookURL
+local _ = _call297.AutoSellFishCount
+local _AutoSellFishCount329 = _call297.AutoSellFishCount
+local _ = _call297.FreezeAtSavedPos
+local _FreezeAtSavedPos331 = _call297.FreezeAtSavedPos
+local _ = _call297.AutoLegitFish
+local _ = _call297.AutoLegitFish
+local _ = _call297.AutoFishV1
+local _AutoFishV1335 = _call297.AutoFishV1
+local _ = _call297.InfiniteJump
+local _InfiniteJump337 = _call297.InfiniteJump
+local _ = _call297.JumpPower
+local _JumpPower339 = _call297.JumpPower
+local _ = _call297.AutoSellDelay
+local _AutoSellDelay341 = _call297.AutoSellDelay
+local _ = _call297.AutoSellByCountEnabled
+local _AutoSellByCountEnabled343 = _call297.AutoSellByCountEnabled
+local _ = _call297.Noclip
+local _Noclip345 = _call297.Noclip
+local _ = _call297.WebhookRarityFilter
+local _WebhookRarityFilter347 = _call297.WebhookRarityFilter
+local _ = _call297.AutoFishV2_Cast
+local _AutoFishV2_Cast349 = _call297.AutoFishV2_Cast
+fenv.freezeAtAreaConnection = nil
+fenv.freezeAtSavedPosConnection = nil
+fenv.ghostfinFreezeConnection = nil
+fenv.enchantFreezeConnection = nil
+fenv.secondEnchantFreezeConnection = nil
+fenv.elementRodFreezeConnection = nil
+fenv.stopAllFreezes = function(...)
+    local _freezeAtAreaConnection354 = fenv.freezeAtAreaConnection
+    _freezeAtAreaConnection354:Disconnect()
+    fenv.freezeAtAreaConnection = nil
+    local _freezeAtSavedPosConnection357 = fenv.freezeAtSavedPosConnection
+    _freezeAtSavedPosConnection357:Disconnect()
+    fenv.freezeAtSavedPosConnection = nil
+    local _ghostfinFreezeConnection360 = fenv.ghostfinFreezeConnection
+    _ghostfinFreezeConnection360:Disconnect()
+    fenv.ghostfinFreezeConnection = nil
+    local _enchantFreezeConnection363 = fenv.enchantFreezeConnection
+    _enchantFreezeConnection363:Disconnect()
+    fenv.enchantFreezeConnection = nil
+    local _secondEnchantFreezeConnection366 = fenv.secondEnchantFreezeConnection
+    _secondEnchantFreezeConnection366:Disconnect()
+    fenv.secondEnchantFreezeConnection = nil
+    local _elementRodFreezeConnection369 = fenv.elementRodFreezeConnection
+    _elementRodFreezeConnection369:Disconnect()
+    fenv.elementRodFreezeConnection = nil
+end
+fenv.createGenericFreezeFunction = function(...)
+    local _372_vararg1, _372_vararg2 = ...
+    return function(...)
+        local _373_vararg1 = ...
+        _372_vararg1()
+        _372_vararg1():Disconnect()
+        _372_vararg2(nil)
+        local _call381 = _LocalPlayer28.Character:FindFirstChild("HumanoidRootPart")
+        _call381.CFrame = CFrame.new(_373_vararg1)
+        local _call386 = _call11.Heartbeat:Connect(function(...)
+            local _ = _LocalPlayer28.Character
+            local _call391 = _LocalPlayer28.Character:FindFirstChild("HumanoidRootPart")
+            _call391.CFrame = CFrame.new(_373_vararg1)
+        end)
+        _372_vararg2(_call386)
+    end, function(...)
+        _372_vararg1()
+        _372_vararg1():Disconnect()
+        _372_vararg2(nil)
+    end
+end
+fenv.startFreezeAtArea = function(...)
+    local _401_vararg1 = ...
+    _freezeAtAreaConnection354:Disconnect()
+    fenv.freezeAtAreaConnection = nil
+    local _call406 = _LocalPlayer28.Character:FindFirstChild("HumanoidRootPart")
+    _call406.CFrame = CFrame.new(_401_vararg1)
+    local _call411 = _call11.Heartbeat:Connect(function(...)
+        local _ = _LocalPlayer28.Character
+        local _call416 = _LocalPlayer28.Character:FindFirstChild("HumanoidRootPart")
+        _call416.CFrame = CFrame.new(_401_vararg1)
+    end)
+    fenv.freezeAtAreaConnection = _call411
+end
+fenv.stopFreezeAtArea = function(...)
+    _call411:Disconnect()
+    fenv.freezeAtAreaConnection = nil
+end
+fenv.startFreezeAtSavedPos = function(...)
+    local _422_vararg1 = ...
+    _freezeAtSavedPosConnection357:Disconnect()
+    fenv.freezeAtSavedPosConnection = nil
+    local _call427 = _LocalPlayer28.Character:FindFirstChild("HumanoidRootPart")
+    _call427.CFrame = CFrame.new(_422_vararg1)
+    local _call432 = _call11.Heartbeat:Connect(function(...)
+        local _ = _LocalPlayer28.Character
+        local _call437 = _LocalPlayer28.Character:FindFirstChild("HumanoidRootPart")
+        _call437.CFrame = CFrame.new(_422_vararg1)
+    end)
+    fenv.freezeAtSavedPosConnection = _call432
+end
+fenv.stopFreezeAtSavedPos = function(...)
+    _call432:Disconnect()
+    fenv.freezeAtSavedPosConnection = nil
+end
+fenv.startGhostfinFreeze = function(...)
+    local _443_vararg1 = ...
+    _ghostfinFreezeConnection360:Disconnect()
+    fenv.ghostfinFreezeConnection = nil
+    local _call448 = _LocalPlayer28.Character:FindFirstChild("HumanoidRootPart")
+    _call448.CFrame = CFrame.new(_443_vararg1)
+    local _call453 = _call11.Heartbeat:Connect(function(...)
+        local _ = _LocalPlayer28.Character
+        local _call458 = _LocalPlayer28.Character:FindFirstChild("HumanoidRootPart")
+        _call458.CFrame = CFrame.new(_443_vararg1)
+    end)
+    fenv.ghostfinFreezeConnection = _call453
+end
+fenv.stopGhostfinFreeze = function(...)
+    _call453:Disconnect()
+    fenv.ghostfinFreezeConnection = nil
+end
+fenv.startEnchantFreeze = function(...)
+    local _464_vararg1 = ...
+    _enchantFreezeConnection363:Disconnect()
+    fenv.enchantFreezeConnection = nil
+    local _call469 = _LocalPlayer28.Character:FindFirstChild("HumanoidRootPart")
+    _call469.CFrame = CFrame.new(_464_vararg1)
+    local _call474 = _call11.Heartbeat:Connect(function(...)
+        local _ = _LocalPlayer28.Character
+        local _call479 = _LocalPlayer28.Character:FindFirstChild("HumanoidRootPart")
+        _call479.CFrame = CFrame.new(_464_vararg1)
+    end)
+    fenv.enchantFreezeConnection = _call474
+end
+fenv.stopEnchantFreeze = function(...)
+    _call474:Disconnect()
+    fenv.enchantFreezeConnection = nil
+end
+fenv.startSecondEnchantFreeze = function(...)
+    local _485_vararg1 = ...
+    _secondEnchantFreezeConnection366:Disconnect()
+    fenv.secondEnchantFreezeConnection = nil
+    local _call490 = _LocalPlayer28.Character:FindFirstChild("HumanoidRootPart")
+    _call490.CFrame = CFrame.new(_485_vararg1)
+    local _call495 = _call11.Heartbeat:Connect(function(...)
+        local _ = _LocalPlayer28.Character
+        local _call500 = _LocalPlayer28.Character:FindFirstChild("HumanoidRootPart")
+        _call500.CFrame = CFrame.new(_485_vararg1)
+    end)
+    fenv.secondEnchantFreezeConnection = _call495
+end
+fenv.stopSecondEnchantFreeze = function(...)
+    _call495:Disconnect()
+    fenv.secondEnchantFreezeConnection = nil
+end
+fenv.startElementRodFreeze = function(...)
+    local _506_vararg1 = ...
+    _elementRodFreezeConnection369:Disconnect()
+    fenv.elementRodFreezeConnection = nil
+    local _call511 = _LocalPlayer28.Character:FindFirstChild("HumanoidRootPart")
+    _call511.CFrame = CFrame.new(_506_vararg1)
+    local _call516 = _call11.Heartbeat:Connect(function(...)
+        local _ = _LocalPlayer28.Character
+        local _call521 = _LocalPlayer28.Character:FindFirstChild("HumanoidRootPart")
+        _call521.CFrame = CFrame.new(_506_vararg1)
+    end)
+    fenv.elementRodFreezeConnection = _call516
+end
+fenv.stopElementRodFreeze = function(...)
+    _call516:Disconnect()
+    fenv.elementRodFreezeConnection = nil
+end
+local _call532 = _7:CreateWindow({
+    ToggleKey = Enum.KeyCode.G,
+    Title = "VinzHub - Fish It",
+    Transparent = true,
+    Theme = "Dark",
+    Author = "dsc.gg/vinzhub",
+    Icon = "rbxassetid://126326782677020",
+    Size = UDim2.fromOffset(580, 350),
+})
+fenv.Window = _call532
+local _call534 = Instance.new("ScreenGui")
+fenv.toggleButtonGui = _call534
+_call534.Name = "VinzHub_ToggleButton"
+_call534.ResetOnSpawn = false
+_call534.DisplayOrder = 100
+_call534.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+local _call541 = Instance.new("ImageButton")
+fenv.toggleButton = _call541
+_call541.Name = "ToggleButton"
+_call541.Image = "rbxassetid://113106006236822"
+_call541.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+_call541.Size = UDim2.fromOffset(50, 50)
+_call541.AnchorPoint = Vector2.new(1, 0.5)
+_call541.Position = UDim2.new(1, - 15, 0.5, 0)
+_call541.Parent = _call534
+local _call551 = Instance.new("UICorner")
+fenv.corner = _call551
+_call551.CornerRadius = UDim.new(0, 8)
+_call551.Parent = _call541
+local _call555 = Instance.new("UIStroke")
+fenv.stroke = _call555
+_call555.Color = Color3.fromRGB(50, 150, 255)
+_call555.Thickness = 2
+_call555.Parent = _call541
+fenv.isDragging = false
+fenv.dragStart = nil
+fenv.startPos = nil
+_call541.InputBegan:Connect(function(...)
+    local _561_vararg1 = ...
+    local _ = _561_vararg1.UserInputType == Enum.UserInputType.MouseButton1
+    local _ = _561_vararg1.UserInputType == Enum.UserInputType.Touch
+end)
+_call541.InputChanged:Connect(function(...)
+    local _573_vararg1 = ...
+    local _ = fenv.isDragging
+    local _ = _573_vararg1.UserInputType == Enum.UserInputType.MouseMovement
+    local _ = _573_vararg1.UserInputType == Enum.UserInputType.Touch
+end)
+_call541.MouseButton1Click:Connect(function(...)
+    _call532:Toggle()
+end)
+_7:Notify({
+    Icon = "info",
+    Duration = 7,
+    Content = "Press [G] to open/close the menu.",
+    Title = "VinzHub Loaded",
+})
+fenv.fishDB = {}
+fenv.tierToRarity = {
+    [1] = "Common",
+    [2] = "Uncommon",
+    [3] = "Rare",
+    [4] = "Epic",
+    [5] = "Legendary",
+    [6] = "Mythic",
+    [7] = "SECRET",
+}
+fenv.rarityToEmoji = {
+    Legendary = "\xF0\x9F\x9F\xA0",
+    SECRET = "\xE2\x9C\xA8",
+    Common = "\xE2\x9A\xAA",
+    Epic = "\xF0\x9F\x9F\xA3",
+    Mythic = "\xF0\x9F\x94\xB4",
+    Uncommon = "\xF0\x9F\x9F\xA2",
+    Rare = "\xF0\x9F\x94\xB5",
+}
+fenv.rarityNamesForFilter = {}
+fenv.knownFishUUIDs = {}
+local _request592 = http.request
+fenv.req = _request592
+fenv.enchantDB = {}
+fenv.enchantListForDropdown = {}
+fenv.shopRods = {}
+fenv.shopBaits = {}
+fenv.shopBoats = {}
+fenv.sortedRods = {}
+fenv.sortedBaits = {}
+fenv.shortenNumber = function(...)
+    return "N/A"
+end
+fenv.formatTime = function(...)
+    local _594_vararg1 = ...
+    local _596, _596_2, _596_3 = math.floor((_594_vararg1 / 3600))
+    local _599, _599_2, _599_3 = math.floor(((_594_vararg1 % 3600) / 60))
+    local _601, _601_2, _601_3 = string.format("%02i Hours, %02i Minutes, %02i Seconds", _596, _599, (_594_vararg1 % 60))
+    return _601, _601_2, _601_3
+end
+fenv.MarketItemData = nil
+fenv.getMarketDataFromId = function(...)
+    local _602_vararg1 = ...
+    for _604, _604_2 in ipairs(fenv.MarketItemData) do
+        local _ = _604_2.Id == _602_vararg1
+    end
+    return nil
+end
+fenv.getSortedKeys = function(...)
+    local _607_vararg1 = ...
+    for _608, _608_2 in pairs(_607_vararg1) do
+    end
+    return {
+        [1] = _608,
+    }
+end
+fenv.buildFishDatabase = function(...)
+    for _613, _613_2 in pairs(require(_call21:WaitForChild("Items"))) do
+        local _ = _613_2.Data
+        local _ = _613_2.Data.Type
+    end
+end
+fenv.buildShopDatabase = function(...)
+    fenv.shopRods = {}
+    fenv.shopBaits = {}
+    fenv.shopBoats = {}
+    fenv.sortedRods = {}
+    fenv.sortedBaits = {}
+    for _621, _621_2 in pairs(require(_call21:WaitForChild("Items"))) do
+        local _ = _621_2.Data
+        local _ = _621_2.Price
+        local _ = _621_2.Data.Type
+    end
+    for _629, _629_2 in pairs(require(_call21:WaitForChild("Baits"))) do
+        local _ = _629_2.Data
+        local _ = _629_2.Price
+        local _ = _629_2.Data.Name
+        local _ = _629_2.Data.Id
+        local _ = _629_2.Price
+        local _ = _629_2.Data.Id
+    end
+    string.format("%s (%s)", _629_2.Data.Name, "N/A")
+    for _645, _645_2 in pairs(require(_call21:WaitForChild("Boats"))) do
+        local _ = _645_2.Data
+        local _ = _645_2.Price
+        local _ = _645_2.Data.Name
+        local _ = _645_2.Data.Id
+        local _ = _645_2.Price
+        string.format("%s (%s)", _645_2.Data.Name, "N/A")
+        local _ = _645_2.Data.Id
+    end
+end
+fenv.buildEnchantDatabase = function(...)
+    for _661, _661_2 in pairs(require(_call21.Enchants)) do
+        local _ = _661_2.Data
+        local _ = _661_2.Data.Id
+        local _ = _661_2.Data.Name
+        local _ = _661_2.Data.Id
+        local _ = _661_2.Data.Name
+        local _ = _661_2.Data.Name
+    end
+end
+fenv.getPlayerCoins = function(...)
+    local _676, _676_2, _676_3 = string.format("%d", _call39:Get("Coins"))
+    return _676:reverse():gsub("(%d%d%d)", "%1,"):reverse():gsub("^,", "")
+end
+fenv.getThumbnailURL = function(...)
+    local _685_vararg1 = ...
+    local _688, _688_2, _688_3 = string.format("https://thumbnails.roblox.com/v1/assets?assetIds=%s&type=Asset&size=420x420&format=Png", _685_vararg1:match("rbxassetid://(%d+)"))
+    local _call692 = _call15:JSONDecode(game:HttpGet(_688))
+    local _ = _call692.data
+    local _ = _call692.data[1]
+    return _call692.data[1].imageUrl
+end
+fenv.sendNewFishWebhook = function(...)
+    local _699_vararg1 = ...
+    _WebhookURL327:match("discord.com/api/webhooks")
+    local _ = _699_vararg1.Id
+end
+fenv.sendTestWebhook = function(...)
+    _WebhookURL327:match("discord.com/api/webhooks")
+    local _call707 = _call15:JSONEncode({
+        username = "VinzHub Tester",
+        embeds = {
+            [1] = {
+                color = 65280,
+                description = "Connection from Roblox to Discord is working.",
+                title = "\xE2\x9C\x85 Webhook Test Successful!",
+            },
+        },
+    })
+    _request592({
+        Body = _call707,
+        Url = _WebhookURL327,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json",
+        },
+    })
+end
+task.spawn(function(...)
+    _call17.ErrorMessageChanged:Connect(function(...)
+        task.wait(3)
+        _call19:Teleport(game.PlaceId, _LocalPlayer28)
+    end)
+end)
+local _call720 = _call532:Tab({
+    Title = "Info",
+    Icon = "info",
+})
+fenv.infoTab = _call720
+_call720:Paragraph({
+    Title = "Need Help?",
+})
+_call720:Button({
+    Title = "Join Discord Server!",
+    Callback = function(...)
+        setclipboard("dsc.gg/vinzhub")
+        _7:Notify({
+            Icon = "clipboard-check",
+            Content = "dsc.gg/vinzhub",
+            Title = "Link Copied!",
+        })
+    end,
+})
+local _call730 = _call532:Tab({
+    Title = "Player",
+    Icon = "user",
+})
+fenv.localPlayerTab = _call730
+fenv.resetCharacterInPlace = function(...)
+    local _Character732 = _LocalPlayer28.Character
+    _Character732:FindFirstChild("HumanoidRootPart")
+    local _ = _Character732:FindFirstChildOfClass("Humanoid").Health
+    error("line 3: attempt to compare number < table")
+end
+fenv.infiniteJump = _InfiniteJump337
+_call13.JumpRequest:Connect(function(...)
+    local _ = _LocalPlayer28.Character
+    _LocalPlayer28.Character:FindFirstChildOfClass("Humanoid")
+    _LocalPlayer28.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+end)
+_call730:Section({
+    Title = "Movement",
+})
+_call730:Slider({
+    Value = {
+        Max = 500,
+        Default = _call297.WalkSpeed,
+        Min = 16,
+    },
+    Title = "WalkSpeed",
+    Callback = function(...)
+        local _756_vararg1 = ...
+        local _Humanoid758 = _LocalPlayer28.Character.Humanoid
+        _Humanoid758.WalkSpeed = _756_vararg1
+        makefolder("VinzHub")
+        local _call761 = _call15:JSONEncode({
+            AutoSell = _AutoSell299,
+            Disable3DRendering = _Disable3DRendering301,
+            AntiStuckDetector = _AntiStuckDetector303,
+            HideUsername = _HideUsername307,
+            FPSBoost = _FPSBoost309,
+            WebhookActive = _WebhookActive311,
+            WebhookRarityFilter = _WebhookRarityFilter347,
+            WalkSpeed = _756_vararg1,
+            Noclip = _Noclip345,
+            TeleportAndFreeze = _TeleportAndFreeze323,
+            AutoGhostfin = _AutoGhostfin321,
+            JumpPower = _JumpPower339,
+            WalkOnWater = _WalkOnWater325,
+            InfiniteJump = _InfiniteJump337,
+            AutoSellFishCount = _AutoSellFishCount329,
+            AutoLegitFish = _AutoFishV2_Cast349,
+            FreezeAtSavedPos = _FreezeAtSavedPos331,
+            AutoFishV1 = _AutoFishV1335,
+            WebhookURL = _WebhookURL327,
+            SelectedWeather = _SelectedWeather313,
+            SelectedEventName = _SelectedEventName317,
+            AutoSellByCountEnabled = _AutoSellByCountEnabled343,
+            AutoSellDelay = _AutoSellDelay341,
+            InfiniteZoom = _InfiniteZoom305,
+            AutoEventTeleport = _AutoEventTeleport319,
+        })
+        writefile("VinzHub/VinzHub_Config.json", _call761)
+    end,
+})
+_call730:Slider({
+    Value = {
+        Max = 500,
+        Default = _JumpPower339,
+        Min = 50,
+    },
+    Title = "JumpPower",
+    Callback = function(...)
+        local _764_vararg1 = ...
+        local _Humanoid766 = _LocalPlayer28.Character.Humanoid
+        _Humanoid766.JumpPower = _764_vararg1
+        makefolder("VinzHub")
+        local _call769 = _call15:JSONEncode({
+            AutoSell = _AutoSell299,
+            Disable3DRendering = _Disable3DRendering301,
+            AntiStuckDetector = _AntiStuckDetector303,
+            HideUsername = _HideUsername307,
+            FPSBoost = _FPSBoost309,
+            WebhookActive = _WebhookActive311,
+            WebhookRarityFilter = _WebhookRarityFilter347,
+            WalkSpeed = _756_vararg1,
+            Noclip = _Noclip345,
+            TeleportAndFreeze = _TeleportAndFreeze323,
+            AutoGhostfin = _AutoGhostfin321,
+            JumpPower = _764_vararg1,
+            WalkOnWater = _WalkOnWater325,
+            InfiniteJump = _InfiniteJump337,
+            AutoSellFishCount = _AutoSellFishCount329,
+            AutoLegitFish = _AutoFishV2_Cast349,
+            FreezeAtSavedPos = _FreezeAtSavedPos331,
+            AutoFishV1 = _AutoFishV1335,
+            WebhookURL = _WebhookURL327,
+            SelectedWeather = _SelectedWeather313,
+            SelectedEventName = _SelectedEventName317,
+            AutoSellByCountEnabled = _AutoSellByCountEnabled343,
+            AutoSellDelay = _AutoSellDelay341,
+            InfiniteZoom = _InfiniteZoom305,
+            AutoEventTeleport = _AutoEventTeleport319,
+        })
+        writefile("VinzHub/VinzHub_Config.json", _call769)
+    end,
+})
+_call730:Button({
+    Title = "Reset Speed & Jump",
+    Callback = function(...)
+        local _Humanoid774 = _LocalPlayer28.Character.Humanoid
+        _Humanoid774.WalkSpeed = 16
+        local _Humanoid776 = _LocalPlayer28.Character.Humanoid
+        _Humanoid776.JumpPower = 50
+        makefolder("VinzHub")
+        local _call779 = _call15:JSONEncode({
+            AutoSell = _AutoSell299,
+            Disable3DRendering = _Disable3DRendering301,
+            AntiStuckDetector = _AntiStuckDetector303,
+            HideUsername = _HideUsername307,
+            FPSBoost = _FPSBoost309,
+            WebhookActive = _WebhookActive311,
+            WebhookRarityFilter = _WebhookRarityFilter347,
+            WalkSpeed = 16,
+            Noclip = _Noclip345,
+            TeleportAndFreeze = _TeleportAndFreeze323,
+            AutoGhostfin = _AutoGhostfin321,
+            JumpPower = 50,
+            WalkOnWater = _WalkOnWater325,
+            InfiniteJump = _InfiniteJump337,
+            AutoSellFishCount = _AutoSellFishCount329,
+            AutoLegitFish = _AutoFishV2_Cast349,
+            FreezeAtSavedPos = _FreezeAtSavedPos331,
+            AutoFishV1 = _AutoFishV1335,
+            WebhookURL = _WebhookURL327,
+            SelectedWeather = _SelectedWeather313,
+            SelectedEventName = _SelectedEventName317,
+            AutoSellByCountEnabled = _AutoSellByCountEnabled343,
+            AutoSellDelay = _AutoSellDelay341,
+            InfiniteZoom = _InfiniteZoom305,
+            AutoEventTeleport = _AutoEventTeleport319,
+        })
+        writefile("VinzHub/VinzHub_Config.json", _call779)
+    end,
+})
+_call730:Section({
+    Title = "Modes",
+})
+_call730:Toggle({
+    Value = _InfiniteJump337,
+    Title = "Infinite Jump",
+    Callback = function(...)
+        local _784_vararg1 = ...
+        fenv.infiniteJump = _784_vararg1
+        makefolder("VinzHub")
+        local _call787 = _call15:JSONEncode({
+            AutoSell = _AutoSell299,
+            Disable3DRendering = _Disable3DRendering301,
+            AntiStuckDetector = _AntiStuckDetector303,
+            HideUsername = _HideUsername307,
+            FPSBoost = _FPSBoost309,
+            WebhookActive = _WebhookActive311,
+            WebhookRarityFilter = _WebhookRarityFilter347,
+            WalkSpeed = 16,
+            Noclip = _Noclip345,
+            TeleportAndFreeze = _TeleportAndFreeze323,
+            AutoGhostfin = _AutoGhostfin321,
+            JumpPower = 50,
+            WalkOnWater = _WalkOnWater325,
+            InfiniteJump = _784_vararg1,
+            AutoSellFishCount = _AutoSellFishCount329,
+            AutoLegitFish = _AutoFishV2_Cast349,
+            FreezeAtSavedPos = _FreezeAtSavedPos331,
+            AutoFishV1 = _AutoFishV1335,
+            WebhookURL = _WebhookURL327,
+            SelectedWeather = _SelectedWeather313,
+            SelectedEventName = _SelectedEventName317,
+            AutoSellByCountEnabled = _AutoSellByCountEnabled343,
+            AutoSellDelay = _AutoSellDelay341,
+            InfiniteZoom = _InfiniteZoom305,
+            AutoEventTeleport = _AutoEventTeleport319,
+        })
+        writefile("VinzHub/VinzHub_Config.json", _call787)
+    end,
+})
+fenv.noclipConnection = nil
+_call730:Toggle({
+    Value = _Noclip345,
+    Title = "Noclip",
+    Callback = function(...)
+        local _790_vararg1 = ...
+        makefolder("VinzHub")
+        local _call793 = _call15:JSONEncode({
+            AutoSell = _AutoSell299,
+            Disable3DRendering = _Disable3DRendering301,
+            AntiStuckDetector = _AntiStuckDetector303,
+            HideUsername = _HideUsername307,
+            FPSBoost = _FPSBoost309,
+            WebhookActive = _WebhookActive311,
+            WebhookRarityFilter = _WebhookRarityFilter347,
+            WalkSpeed = 16,
+            Noclip = _790_vararg1,
+            TeleportAndFreeze = _TeleportAndFreeze323,
+            AutoGhostfin = _AutoGhostfin321,
+            JumpPower = 50,
+            WalkOnWater = _WalkOnWater325,
+            InfiniteJump = _784_vararg1,
+            AutoSellFishCount = _AutoSellFishCount329,
+            AutoLegitFish = _AutoFishV2_Cast349,
+            FreezeAtSavedPos = _FreezeAtSavedPos331,
+            AutoFishV1 = _AutoFishV1335,
+            WebhookURL = _WebhookURL327,
+            SelectedWeather = _SelectedWeather313,
+            SelectedEventName = _SelectedEventName317,
+            AutoSellByCountEnabled = _AutoSellByCountEnabled343,
+            AutoSellDelay = _AutoSellDelay341,
+            InfiniteZoom = _InfiniteZoom305,
+            AutoEventTeleport = _AutoEventTeleport319,
+        })
+        writefile("VinzHub/VinzHub_Config.json", _call793)
+        local _call796 = _call11.Stepped:Connect(function(...)
+            for _801, _801_2 in ipairs(_LocalPlayer28.Character:GetDescendants()) do
+                _801_2:IsA("BasePart")
+                local _ = _801_2.CanCollide
+                _801_2.CanCollide = false
+            end
+        end)
+        fenv.noclipConnection = _call796
+    end,
+})
+_call730:Toggle({
+    Value = _WalkOnWater325,
+    Title = "Walk On Water",
+    Callback = function(...)
+        local _807_vararg1 = ...
+        makefolder("VinzHub")
+        local _call810 = _call15:JSONEncode({
+            AutoSell = _AutoSell299,
+            Disable3DRendering = _Disable3DRendering301,
+            AntiStuckDetector = _AntiStuckDetector303,
+            HideUsername = _HideUsername307,
+            FPSBoost = _FPSBoost309,
+            WebhookActive = _WebhookActive311,
+            WebhookRarityFilter = _WebhookRarityFilter347,
+            WalkSpeed = 16,
+            Noclip = _790_vararg1,
+            TeleportAndFreeze = _TeleportAndFreeze323,
+            AutoGhostfin = _AutoGhostfin321,
+            JumpPower = 50,
+            WalkOnWater = _807_vararg1,
+            InfiniteJump = _784_vararg1,
+            AutoSellFishCount = _AutoSellFishCount329,
+            AutoLegitFish = _AutoFishV2_Cast349,
+            FreezeAtSavedPos = _FreezeAtSavedPos331,
+            AutoFishV1 = _AutoFishV1335,
+            WebhookURL = _WebhookURL327,
+            SelectedWeather = _SelectedWeather313,
+            SelectedEventName = _SelectedEventName317,
+            AutoSellByCountEnabled = _AutoSellByCountEnabled343,
+            AutoSellDelay = _AutoSellDelay341,
+            InfiniteZoom = _InfiniteZoom305,
+            AutoEventTeleport = _AutoEventTeleport319,
+        })
+        writefile("VinzHub/VinzHub_Config.json", _call810)
+    end,
+})
+_call730:Toggle({
+    Value = _InfiniteZoom305,
+    Title = "Infinite Zoom",
+    Callback = function(...)
+        local _813_vararg1 = ...
+        makefolder("VinzHub")
+        local _call816 = _call15:JSONEncode({
+            AutoSell = _AutoSell299,
+            Disable3DRendering = _Disable3DRendering301,
+            AntiStuckDetector = _AntiStuckDetector303,
+            HideUsername = _HideUsername307,
+            FPSBoost = _FPSBoost309,
+            WebhookActive = _WebhookActive311,
+            WebhookRarityFilter = _WebhookRarityFilter347,
+            WalkSpeed = 16,
+            Noclip = _790_vararg1,
+            TeleportAndFreeze = _TeleportAndFreeze323,
+            AutoGhostfin = _AutoGhostfin321,
+            JumpPower = 50,
+            WalkOnWater = _807_vararg1,
+            InfiniteJump = _784_vararg1,
+            AutoSellFishCount = _AutoSellFishCount329,
+            AutoLegitFish = _AutoFishV2_Cast349,
+            FreezeAtSavedPos = _FreezeAtSavedPos331,
+            AutoFishV1 = _AutoFishV1335,
+            WebhookURL = _WebhookURL327,
+            SelectedWeather = _SelectedWeather313,
+            SelectedEventName = _SelectedEventName317,
+            AutoSellByCountEnabled = _AutoSellByCountEnabled343,
+            AutoSellDelay = _AutoSellDelay341,
+            InfiniteZoom = _813_vararg1,
+            AutoEventTeleport = _AutoEventTeleport319,
+        })
+        writefile("VinzHub/VinzHub_Config.json", _call816)
+        _LocalPlayer28.CameraMaxZoomDistance = 99999
+        _LocalPlayer28.CameraMinZoomDistance = 0.5
+        _7:Notify({
+            Icon = "zoom-in",
+            Content = "Enabled",
+            Title = "Infinite Zoom",
+        })
+    end,
+})
+_call730:Section({
+    Title = "Rendering",
+})
+_call730:Toggle({
+    Value = _FPSBoost309,
+    Title = "FPS Boost",
+    Callback = function(...)
+        local _823_vararg1 = ...
+        makefolder("VinzHub")
+        local _call826 = _call15:JSONEncode({
+            AutoSell = _AutoSell299,
+            Disable3DRendering = _Disable3DRendering301,
+            AntiStuckDetector = _AntiStuckDetector303,
+            HideUsername = _HideUsername307,
+            FPSBoost = _823_vararg1,
+            WebhookActive = _WebhookActive311,
+            WebhookRarityFilter = _WebhookRarityFilter347,
+            WalkSpeed = 16,
+            Noclip = _790_vararg1,
+            TeleportAndFreeze = _TeleportAndFreeze323,
+            AutoGhostfin = _AutoGhostfin321,
+            JumpPower = 50,
+            WalkOnWater = _807_vararg1,
+            InfiniteJump = _784_vararg1,
+            AutoSellFishCount = _AutoSellFishCount329,
+            AutoLegitFish = _AutoFishV2_Cast349,
+            FreezeAtSavedPos = _FreezeAtSavedPos331,
+            AutoFishV1 = _AutoFishV1335,
+            WebhookURL = _WebhookURL327,
+            SelectedWeather = _SelectedWeather313,
+            SelectedEventName = _SelectedEventName317,
+            AutoSellByCountEnabled = _AutoSellByCountEnabled343,
+            AutoSellDelay = _AutoSellDelay341,
+            InfiniteZoom = _813_vararg1,
+            AutoEventTeleport = _AutoEventTeleport319,
+        })
+        writefile("VinzHub/VinzHub_Config.json", _call826)
+        _call25.GlobalShadows = false
+        _call25.FogEnd = 2500
+        _call25.Brightness = 1.5
+        _call25.Ambient = Color3.new(0.7, 0.7, 0.7)
+        _call25.EnvironmentSpecularScale = 0
+        _call25.EnvironmentDiffuseScale = 0
+        _call25.Technology = Enum.Technology.Compatibility
+        local _CurrentCamera831 = _call23.CurrentCamera
+        for _834, _834_2 in ipairs(_call25:GetChildren()) do
+            _834_2:IsA("PostProcessingEffect")
+            _834_2:Destroy()
+        end
+        for _841, _841_2 in ipairs(_CurrentCamera831:GetChildren()) do
+            _841_2:IsA("PostProcessingEffect")
+            _841_2:Destroy()
+        end
+        local _Rendering847 = _settings158().Rendering
+        _Rendering847.QualityLevel = Enum.QualityLevel.Level01
+        local _call851 = _call23:FindFirstChildOfClass("Terrain")
+        _call851.WaterWaveSize = 0
+        _call851.WaterWaveSpeed = 0
+        _call851.WaterReflectance = 0
+        _call851.WaterTransparency = 1
+        _call851:FindFirstChildOfClass("Clouds"):Destroy()
+        for _858, _858_2 in ipairs(_call23:GetDescendants()) do
+            _858_2:IsA("Light")
+            _858_2:Destroy()
+        end
+        for _865, _865_2 in ipairs(_call9:GetPlayers()) do
+            local _ = _865_2.Character
+            local _Character867 = _865_2.Character
+            _Character867:WaitForChild("Humanoid", 5)
+            for _872, _872_2 in ipairs(_Character867:GetChildren()) do
+                _872_2:IsA("Clothing")
+                _872_2:Destroy()
+            end
+            _865_2.CharacterAdded:Connect(function(...)
+                local _880_vararg1 = ...
+                _880_vararg1:WaitForChild("Humanoid", 5)
+                for _885, _885_2 in ipairs(_880_vararg1:GetChildren()) do
+                    _885_2:IsA("Clothing")
+                    _885_2:Destroy()
+                end
+            end)
+        end
+        _call9.PlayerAdded:Connect(function(...)
+            local _893_vararg1 = ...
+            _893_vararg1.CharacterAdded:Connect(function(...)
+                local _897_vararg1 = ...
+                _897_vararg1:WaitForChild("Humanoid", 5)
+                for _902, _902_2 in ipairs(_897_vararg1:GetChildren()) do
+                    _902_2:IsA("Clothing")
+                    _902_2:Destroy()
+                end
+            end)
+        end)
+    end,
+})
+_call730:Toggle({
+    Value = _Disable3DRendering301,
+    Title = "Disable 3D Rendering",
+    Callback = function(...)
+        local _909_vararg1 = ...
+        makefolder("VinzHub")
+        local _call912 = _call15:JSONEncode({
+            AutoSell = _AutoSell299,
+            Disable3DRendering = _909_vararg1,
+            AntiStuckDetector = _AntiStuckDetector303,
+            HideUsername = _HideUsername307,
+            FPSBoost = _823_vararg1,
+            WebhookActive = _WebhookActive311,
+            WebhookRarityFilter = _WebhookRarityFilter347,
+            WalkSpeed = 16,
+            Noclip = _790_vararg1,
+            TeleportAndFreeze = _TeleportAndFreeze323,
+            AutoGhostfin = _AutoGhostfin321,
+            JumpPower = 50,
+            WalkOnWater = _807_vararg1,
+            InfiniteJump = _784_vararg1,
+            AutoSellFishCount = _AutoSellFishCount329,
+            AutoLegitFish = _AutoFishV2_Cast349,
+            FreezeAtSavedPos = _FreezeAtSavedPos331,
+            AutoFishV1 = _AutoFishV1335,
+            WebhookURL = _WebhookURL327,
+            SelectedWeather = _SelectedWeather313,
+            SelectedEventName = _SelectedEventName317,
+            AutoSellByCountEnabled = _AutoSellByCountEnabled343,
+            AutoSellDelay = _AutoSellDelay341,
+            InfiniteZoom = _813_vararg1,
+            AutoEventTeleport = _AutoEventTeleport319,
+        })
+        writefile("VinzHub/VinzHub_Config.json", _call912)
+        _call11.Set3dRenderingEnabled(_call11, false)
+    end,
+})
+
+_call730:Section({
+    Title = "Identity",
+})
+_call730:Toggle({
+    Value = _HideUsername307,
+    Callback = function(...)
+        local _1118_vararg1 = ...
+        makefolder("VinzHub")
+        local _call1121 = _call15:JSONEncode({
+            AutoSell = _AutoSell299,
+            Disable3DRendering = _909_vararg1,
+            AntiStuckDetector = _AntiStuckDetector303,
+            HideUsername = _1118_vararg1,
+            FPSBoost = _823_vararg1,
+            WebhookActive = _WebhookActive311,
+            WebhookRarityFilter = _WebhookRarityFilter347,
+            WalkSpeed = 16,
+            Noclip = _790_vararg1,
+            TeleportAndFreeze = _TeleportAndFreeze323,
+            AutoGhostfin = _AutoGhostfin321,
+            JumpPower = 50,
+            WalkOnWater = _807_vararg1,
+            InfiniteJump = _784_vararg1,
+            AutoSellFishCount = _AutoSellFishCount329,
+            AutoLegitFish = _AutoFishV2_Cast349,
+            FreezeAtSavedPos = _FreezeAtSavedPos331,
+            AutoFishV1 = _AutoFishV1335,
+            WebhookURL = _WebhookURL327,
+            SelectedWeather = _SelectedWeather313,
+            SelectedEventName = _SelectedEventName317,
+            AutoSellByCountEnabled = _AutoSellByCountEnabled343,
+            AutoSellDelay = _AutoSellDelay341,
+            InfiniteZoom = _813_vararg1,
+            AutoEventTeleport = _AutoEventTeleport319,
+        })
+        writefile("VinzHub/VinzHub_Config.json", _call1121)
+        genv.Config = {
+            Headless = false,
+            FakeDisplayName = "dsc.gg/vinzhub ",
+            FakeId = 1,
+            FakeName = "dsc.gg/vinzhub",
+        }
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/CF-Trail/NameHider/main/MainScript.lua"))()
+        _7:Notify({
+            Icon = "info",
+            Content = "Activated! Rejoin to disable.",
+            Title = "Username Hider",
+        })
+    end,
+    Title = "Hide Username",
+    Desc = "Rejoin to disable.",
+})
+_call730:Button({
+    Title = "Reset Character in Place",
+    Callback = function(...)
+        local _Character1131 = _LocalPlayer28.Character
+        _Character1131:FindFirstChild("HumanoidRootPart")
+        local _ = _Character1131:FindFirstChildOfClass("Humanoid").Health
+        error("line 3: attempt to compare number < table")
+    end,
+})
+_call730:Section({
+    Title = "External",
+})
+_call730:Button({
+    Title = "Fly GUI",
+    Callback = function(...)
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
+    end,
+})
+local _call1147 = _call532:Tab({
+    Title = "Farm",
+    Icon = "anchor",
+})
+fenv.fishingTab = _call1147
+local _call1155 = _call21:WaitForChild("Packages"):WaitForChild("_Index"):WaitForChild("sleitnick_net@0.2.0"):WaitForChild("net")
+fenv.NetService = _call1155
+fenv.chargeRod = nil
+fenv.startMinigame = nil
+fenv.completeFishing = nil
+fenv.equipTool = nil
+fenv.FishCaughtEvent = nil
+fenv.cancelFishing = nil
+fenv.REEquipItem = nil
+fenv.RERollEnchant = nil
+fenv.REActivateEnchantingAltar = nil
+fenv.RFCreateTranscendedStone = nil
+fenv.REActivateSecondEnchantingAltar = nil
+fenv.purchaseRodRemote = nil
+fenv.purchaseBaitRemote = nil
+fenv.purchaseBoatRemote = nil
+fenv.sellAllItems = nil
+fenv.RFSpecialDialogueEvent = nil
+fenv.StringLibrary = nil
+fenv.merchantData = nil
+fenv.RFPurchaseMarketItem = nil
+fenv.chargeRod = _call1155:WaitForChild("RF/ChargeFishingRod")
+fenv.startMinigame = _call1155:WaitForChild("RF/RequestFishingMinigameStarted")
+fenv.completeFishing = _call1155:WaitForChild("RE/FishingCompleted")
+local _call1163 = _call1155:WaitForChild("RE/EquipToolFromHotbar")
+fenv.equipTool = _call1163
+fenv.FishCaughtEvent = _call1155:WaitForChild("RE/FishCaught")
+fenv.cancelFishing = _call1155:WaitForChild("RF/CancelFishingInputs")
+fenv.REEquipItem = _call1155:WaitForChild("RE/EquipItem")
+fenv.RERollEnchant = _call1155:WaitForChild("RE/RollEnchant")
+fenv.REActivateEnchantingAltar = _call1155:WaitForChild("RE/ActivateEnchantingAltar")
+fenv.RFCreateTranscendedStone = _call1155:WaitForChild("RF/CreateTranscendedStone")
+fenv.REActivateSecondEnchantingAltar = _call1155:WaitForChild("RE/ActivateSecondEnchantingAltar")
+fenv.purchaseRodRemote = _call1155:WaitForChild("RF/PurchaseFishingRod")
+fenv.purchaseBaitRemote = _call1155:WaitForChild("RF/PurchaseBait")
+fenv.purchaseBoatRemote = _call1155:WaitForChild("RF/PurchaseBoat")
+local _call1185 = _call1155:WaitForChild("RF/SellAllItems")
+fenv.sellAllItems = _call1185
+fenv.RFSpecialDialogueEvent = _call1155:WaitForChild("RF/SpecialDialogueEvent")
+fenv.MarketItemData = require(_call21.Shared.MarketItemData)
+fenv.StringLibrary = require(_call21.Shared.StringLibrary)
+fenv.merchantData = _callrequire36.Client:WaitReplion("Merchant")
+fenv.RFPurchaseMarketItem = _call1155:WaitForChild("RF/PurchaseMarketItem")
+fenv.isAutoFarmV2_Cast = nil
+fenv.fishCaughtSignal = Instance.new("BoolValue")
+fenv.legitToggleLama = nil
+fenv.fishingAreas = {
+    ["Hourglass Diamond Lever"] = Vector3.new(1484.61, 8.45, - 861.01),
+    ["Crescent Lever"] = Vector3.new(1419.75, 31.2, 78.57),
+    ["Crystal Falls"] = Vector3.new(- 2026.99, - 440, 7428.29),
+    ["Treasure Room"] = Vector3.new(- 3581.6, - 279.07, - 1589.65),
+    ["Second Enchant Altar"] = Vector3.new(1480.08, 127.62, - 589.82),
+    ["Crater Island"] = Vector3.new(998.03, 2.86, 5151.17),
+    ["Sacred Temple"] = Vector3.new(1451.41, - 22.13, - 635.65),
+    ["Lost Isle"] = Vector3.new(- 3734.67, 5.34, - 1082.63),
+    ["Enchant Room"] = Vector3.new(3255.67, - 1301.53, 1371.79),
+    Volcano = Vector3.new(- 541.52, 17.32, 121.67),
+    ["Underground Cellar"] = Vector3.new(2135.45, - 91.2, - 699.33),
+    ["Diamond Lever"] = Vector3.new(1818.93, 8.45, - 284.11),
+    ["Ocean (for Element)"] = Vector3.new(4675.87, 5.21, - 554.69),
+    ["Esoteric Island"] = Vector3.new(2164.47, 3.22, 1242.39),
+    Kohana = Vector3.new(- 661.68, 3.05, 714.14),
+    ["Tropical Island"] = Vector3.new(- 2152.61, 2.32, 3671.72),
+    ["Hallow Island"] = Vector3.new(2130.01, 79.66, 3337.25),
+    ["Coral Refs"] = Vector3.new(- 3181.39, 2.52, 2104.35),
+    ["Ancient Jungle"] = Vector3.new(1275.1, 3.91, - 334.75),
+    ["Sisyphus Statue"] = Vector3.new(- 3729.25, - 135.07, - 885.64),
+    ["Weather Machine"] = Vector3.new(- 1523.23, 8.47, 1771.99),
+    ["Arrow Lever"] = Vector3.new(898.38, 8.45, - 362.28),
+    ["Fisherman Island"] = Vector3.new(74.03, 9.53, 2705.23),
+}
+fenv.savedPosition = nil
+fenv.loadPositionFromFile = function(...)
+    return nil
+end
+fenv.savedPosition = nil
+_call1147:Section({
+    Title = "Auto Fishing",
+})
+local _call1251 = _call1147:Toggle({
+    Value = _AutoFishV2_Cast349,
+    Callback = function(...)
+        local _1252_vararg1 = ...
+        makefolder("VinzHub")
+        local _call1255 = _call15:JSONEncode({
+            AutoSell = _AutoSell299,
+            Disable3DRendering = _909_vararg1,
+            AntiStuckDetector = _AntiStuckDetector303,
+            HideUsername = _1118_vararg1,
+            FPSBoost = _823_vararg1,
+            WebhookActive = _WebhookActive311,
+            WebhookRarityFilter = _WebhookRarityFilter347,
+            WalkSpeed = 16,
+            Noclip = _790_vararg1,
+            TeleportAndFreeze = _TeleportAndFreeze323,
+            AutoGhostfin = _AutoGhostfin321,
+            JumpPower = 50,
+            WalkOnWater = _807_vararg1,
+            InfiniteJump = _784_vararg1,
+            AutoSellFishCount = _AutoSellFishCount329,
+            AutoLegitFish = _1252_vararg1,
+            FreezeAtSavedPos = _FreezeAtSavedPos331,
+            AutoFishV1 = _AutoFishV1335,
+            WebhookURL = _WebhookURL327,
+            SelectedWeather = _SelectedWeather313,
+            SelectedEventName = _SelectedEventName317,
+            AutoSellByCountEnabled = _AutoSellByCountEnabled343,
+            AutoSellDelay = _AutoSellDelay341,
+            InfiniteZoom = _813_vararg1,
+            AutoEventTeleport = _AutoEventTeleport319,
+        })
+        writefile("VinzHub/VinzHub_Config.json", _call1255)
+        _callrequire122.Client:WaitReplion("Data"):GetExpect("AutoFishing")
+        task.spawn(function(...)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            _call1163:FireServer(1)
+            task.wait(1.5)
+            error("internal 542: <25ms: infinitelooperror>")
+        end)
+    end,
+    Title = "Auto Fishing Legit",
+    Desc = "Virtualize Auto Clicker",
+})
+fenv.legitToggleLama = _call1251
+_call1147:Divider()
+_call1147:Section({
+    Title = "Fishing Area & Position",
+})
+fenv.areaNames = {}
+fenv.savePositionToFile = function(...)
+    local _1747_vararg1 = ...
+    makefolder("VinzHub")
+    local _call1753 = _call15:JSONEncode({
+        y = _1747_vararg1.Y,
+        x = _1747_vararg1.X,
+        z = _1747_vararg1.Z,
+    })
+    writefile("VinzHub/VinzHub_SavedPosition.json", _call1753)
+end
+fenv.teleportTo = function(...)
+    local _1754_vararg1 = ...
+    local _ = _LocalPlayer28.Character
+    local _call1758 = _LocalPlayer28.Character:FindFirstChild("HumanoidRootPart")
+    _call1758.CFrame = CFrame.new(_1754_vararg1)
+end
+fenv.freezeAtAreaToggle = nil
+fenv.freezeAtSavedPosToggle = nil
+local _1762, _1762_2, _1762_3 = table.find({
+    [1] = "Ancient Jungle",
+    [2] = "Arrow Lever",
+    [3] = "Coral Refs",
+    [4] = "Crater Island",
+    [5] = "Crescent Lever",
+    [6] = "Crystal Falls",
+    [7] = "Diamond Lever",
+    [8] = "Enchant Room",
+    [9] = "Esoteric Island",
+    [10] = "Fisherman Island",
+    [11] = "Hallow Island",
+    [12] = "Hourglass Diamond Lever",
+    [13] = "Kohana",
+    [14] = "Lost Isle",
+    [15] = "Ocean (for Element)",
+    [16] = "Sacred Temple",
+    [17] = "Second Enchant Altar",
+    [18] = "Sisyphus Statue",
+    [19] = "Treasure Room",
+    [20] = "Tropical Island",
+    [21] = "Underground Cellar",
+    [22] = "Volcano",
+    [23] = "Weather Machine",
+}, _233_vararg1)
+_call1147:Dropdown({
+    Callback = function(...)
+        local _1764_vararg1 = ...
+        makefolder("VinzHub")
+        writefile("VinzHub/VinzHub_LastArea.txt", _1764_vararg1)
+    end,
+    Default = _1762,
+    Values = {
+        [1] = "Ancient Jungle",
+        [2] = "Arrow Lever",
+        [3] = "Coral Refs",
+        [4] = "Crater Island",
+        [5] = "Crescent Lever",
+        [6] = "Crystal Falls",
+        [7] = "Diamond Lever",
+        [8] = "Enchant Room",
+        [9] = "Esoteric Island",
+        [10] = "Fisherman Island",
+        [11] = "Hallow Island",
+        [12] = "Hourglass Diamond Lever",
+        [13] = "Kohana",
+        [14] = "Lost Isle",
+        [15] = "Ocean (for Element)",
+        [16] = "Sacred Temple",
+        [17] = "Second Enchant Altar",
+        [18] = "Sisyphus Statue",
+        [19] = "Treasure Room",
+        [20] = "Tropical Island",
+        [21] = "Underground Cellar",
+        [22] = "Volcano",
+        [23] = "Weather Machine",
+    },
+    Title = "Choose Fishing Area",
+})
+local _call1767 = _call1147:Toggle({
+    Value = _TeleportAndFreeze323,
+    Title = "Teleport & Freeze at Area",
+    Callback = function(...)
+        local _1768_vararg1 = ...
+        makefolder("VinzHub")
+        local _call1771 = _call15:JSONEncode({
+            AutoSell = _AutoSell299,
+            Disable3DRendering = _909_vararg1,
+            AntiStuckDetector = _AntiStuckDetector303,
+            HideUsername = _1118_vararg1,
+            FPSBoost = _823_vararg1,
+            WebhookActive = _WebhookActive311,
+            WebhookRarityFilter = _WebhookRarityFilter347,
+            WalkSpeed = 16,
+            Noclip = _790_vararg1,
+            TeleportAndFreeze = _1768_vararg1,
+            AutoGhostfin = _AutoGhostfin321,
+            JumpPower = 50,
+            WalkOnWater = _807_vararg1,
+            InfiniteJump = _784_vararg1,
+            AutoSellFishCount = _AutoSellFishCount329,
+            AutoLegitFish = _1252_vararg1,
+            FreezeAtSavedPos = _FreezeAtSavedPos331,
+            AutoFishV1 = _AutoFishV1335,
+            WebhookURL = _WebhookURL327,
+            SelectedWeather = _SelectedWeather313,
+            SelectedEventName = _SelectedEventName317,
+            AutoSellByCountEnabled = _AutoSellByCountEnabled343,
+            AutoSellDelay = _AutoSellDelay341,
+            InfiniteZoom = _813_vararg1,
+            AutoEventTeleport = _AutoEventTeleport319,
+        })
+        writefile("VinzHub/VinzHub_Config.json", _call1771)
+        _freezeAtAreaConnection354:Disconnect()
+        fenv.freezeAtAreaConnection = nil
+        _freezeAtSavedPosConnection357:Disconnect()
+        fenv.freezeAtSavedPosConnection = nil
+        _ghostfinFreezeConnection360:Disconnect()
+        fenv.ghostfinFreezeConnection = nil
+        _enchantFreezeConnection363:Disconnect()
+        fenv.enchantFreezeConnection = nil
+        _secondEnchantFreezeConnection366:Disconnect()
+        fenv.secondEnchantFreezeConnection = nil
+        _elementRodFreezeConnection369:Disconnect()
+        fenv.elementRodFreezeConnection = nil
+        fenv.freezeAtSavedPosToggle:Set(false)
+    end,
+})
+fenv.freezeAtAreaToggle = _call1767
+local _call1788 = _call1147:Toggle({
+    Value = false,
+    Title = "Teleport & Freeze at Saved Pos",
+    Callback = function(...)
+        local _1789_vararg1 = ...
+        makefolder("VinzHub")
+        local _call1792 = _call15:JSONEncode({
+            AutoSell = _AutoSell299,
+            Disable3DRendering = _909_vararg1,
+            AntiStuckDetector = _AntiStuckDetector303,
+            HideUsername = _1118_vararg1,
+            FPSBoost = _823_vararg1,
+            WebhookActive = _WebhookActive311,
+            WebhookRarityFilter = _WebhookRarityFilter347,
+            WalkSpeed = 16,
+            Noclip = _790_vararg1,
+            TeleportAndFreeze = _1768_vararg1,
+            AutoGhostfin = _AutoGhostfin321,
+            JumpPower = 50,
+            WalkOnWater = _807_vararg1,
+            InfiniteJump = _784_vararg1,
+            AutoSellFishCount = _AutoSellFishCount329,
+            AutoLegitFish = _1252_vararg1,
+            FreezeAtSavedPos = _1789_vararg1,
+            AutoFishV1 = _AutoFishV1335,
+            WebhookURL = _WebhookURL327,
+            SelectedWeather = _SelectedWeather313,
+            SelectedEventName = _SelectedEventName317,
+            AutoSellByCountEnabled = _AutoSellByCountEnabled343,
+            AutoSellDelay = _AutoSellDelay341,
+            InfiniteZoom = _813_vararg1,
+            AutoEventTeleport = _AutoEventTeleport319,
+        })
+        writefile("VinzHub/VinzHub_Config.json", _call1792)
+        _freezeAtAreaConnection354:Disconnect()
+        fenv.freezeAtAreaConnection = nil
+        _freezeAtSavedPosConnection357:Disconnect()
+        fenv.freezeAtSavedPosConnection = nil
+        _ghostfinFreezeConnection360:Disconnect()
+        fenv.ghostfinFreezeConnection = nil
+        _enchantFreezeConnection363:Disconnect()
+        fenv.enchantFreezeConnection = nil
+        _secondEnchantFreezeConnection366:Disconnect()
+        fenv.secondEnchantFreezeConnection = nil
+        _elementRodFreezeConnection369:Disconnect()
+        fenv.elementRodFreezeConnection = nil
+        _call1767:Set(false)
+        local _savedPosition1807 = fenv.savedPosition
+        _freezeAtSavedPosConnection357:Disconnect()
+        fenv.freezeAtSavedPosConnection = nil
+        local _call1812 = _LocalPlayer28.Character:FindFirstChild("HumanoidRootPart")
+        _call1812.CFrame = CFrame.new(_savedPosition1807)
+        local _call1817 = _call11.Heartbeat:Connect(function(...)
+            local _ = _LocalPlayer28.Character
+            local _call1822 = _LocalPlayer28.Character:FindFirstChild("HumanoidRootPart")
+            _call1822.CFrame = CFrame.new(_savedPosition1807)
+        end)
+        fenv.freezeAtSavedPosConnection = _call1817
+    end,
+})
+fenv.freezeAtSavedPosToggle = _call1788
+_call1147:Button({
+    Title = "Save Current Position",
+    Callback = function(...)
+        local _ = _LocalPlayer28.Character
+        local _Position1831 = _LocalPlayer28.Character.HumanoidRootPart.Position
+        fenv.savedPosition = _Position1831
+        makefolder("VinzHub")
+        local _call1837 = _call15:JSONEncode({
+            y = _Position1831.Y,
+            x = _Position1831.X,
+            z = _Position1831.Z,
+        })
+        writefile("VinzHub/VinzHub_SavedPosition.json", _call1837)
+        _7:Notify({
+            Title = "Position Saved",
+        })
+    end,
+})
+_call1147:Button({
+    Title = "Teleport to Saved Position",
+    Callback = function(...)
+        local _ = _LocalPlayer28.Character
+        local _call1846 = _LocalPlayer28.Character:FindFirstChild("HumanoidRootPart")
+        _call1846.CFrame = CFrame.new(_Position1831)
+    end,
+})
+local _call1850 = _call532:Tab({
+    Title = "Automatic",
+    Icon = "loader",
+})
+fenv.automaticTab = _call1850
+fenv.autoSellByTimeToggle = nil
+fenv.autoSellByCountToggle = nil
+fenv.isAutoSellActive = _AutoSell299
+fenv.autoSellDelay = _AutoSellDelay341
+fenv.startAutoSellByTime = function(...)
+    task.spawn(function(...)
+        _call1185:InvokeServer()
+        task.wait(_AutoSellDelay341)
+        local _ = _AutoSellDelay341 + 0.008337673708959928
+        _call1185:InvokeServer()
+        task.wait(_AutoSellDelay341)
+        local _ = _AutoSellDelay341 + 0.09796498832933419
+        _call1185:InvokeServer()
+        task.wait(_AutoSellDelay341)
+        local _ = _AutoSellDelay341 + 0.0631606408473569
+        _call1185:InvokeServer()
+        task.wait(_AutoSellDelay341)
+        local _ = _AutoSellDelay341 + 0.08230505059217914
+        _call1185:InvokeServer()
+        task.wait(_AutoSellDelay341)
+        local _ = _AutoSellDelay341 + 0.06891796307099254
+        _call1185:InvokeServer()
+        task.wait(_AutoSellDelay341)
+        local _ = _AutoSellDelay341 + 0.001204409458169601
+        _call1185:InvokeServer()
+        task.wait(_AutoSellDelay341)
+        local _ = _AutoSellDelay341 + 0.03732494442656528
+        _call1185:InvokeServer()
+        task.wait(_AutoSellDelay341)
+        local _ = _AutoSellDelay341 + 0.049856273589974846
+        _call1185:InvokeServer()
+        task.wait(_AutoSellDelay341)
+        local _ = _AutoSellDelay341 + 0.0702099162676631
+        _call1185:InvokeServer()
+        task.wait(_AutoSellDelay341)
+        local _ = _AutoSellDelay341 + 0.016436025203806846
+        _call1185:InvokeServer()
+        task.wait(_AutoSellDelay341)
+        local _ = _AutoSellDelay341 + 0.0901766536742999
+        _call1185:InvokeServer()
+        task.wait(_AutoSellDelay341)
+        local _ = _AutoSellDelay341 + 0.0818574715712541
+        _call1185:InvokeServer()
+        task.wait(_AutoSellDelay341)
+        local _ = _AutoSellDelay341 + 0.08501178626311859
+        _call1185:InvokeServer()
+        task.wait(_AutoSellDelay341)
+        local _ = _AutoSellDelay341 + 0.07381878924978649
+        _call1185:InvokeServer()
+        error("internal 542: <25ms: infinitelooperror>")
+    end)
+end
+fenv.startAutoSellByCount = function(...)
+    task.spawn(function(...)
+        local _call1904 = _call39:GetExpect({
+            [1] = "Inventory",
+            [2] = "Items",
+        })
+        for _1905, _1905_2 in pairs(_call1904) do
+            local _ = _callrequire33.GetItemDataFromItemType("Items", _1905_2.Id).Data.Type
+        end
+        task.wait(2)
+        local _call1912 = _call39:GetExpect({
+            [1] = "Inventory",
+            [2] = "Items",
+        })
+        for _1913, _1913_2 in pairs(_call1912) do
+            local _ = _callrequire33.GetItemDataFromItemType("Items", _1913_2.Id).Data.Type
+        end
+        task.wait(2)
+        local _call1920 = _call39:GetExpect({
+            [1] = "Inventory",
+            [2] = "Items",
+        })
+        for _1921, _1921_2 in pairs(_call1920) do
+            local _ = _callrequire33.GetItemDataFromItemType("Items", _1921_2.Id).Data.Type
+        end
+        task.wait(2)
+        local _ = _call39.GetExpect
+        error("internal 542: <25ms: infinitelooperror>")
+    end)
+end
+_call1850:Section({
+    Title = "Auto Sell (by Timer)",
+})
+local _call1932 = _call1850:Toggle({
+    Value = _AutoSell299,
+    Callback = function(...)
+        local _1933_vararg1 = ...
+        fenv.isAutoSellActive = _1933_vararg1
+        task.spawn(function(...)
+            _call1185:InvokeServer()
+            task.wait(_AutoSellDelay341)
+            local _ = _AutoSellDelay341 + 0.08840267631066166
+            local _ = _call1185.InvokeServer
+            error("internal 542: <25ms: infinitelooperror>")
+        end)
+        fenv.autoSellByCountToggle:Set(false)
+        makefolder("VinzHub")
+        local _call1947 = _call15:JSONEncode({
+            AutoSell = _1933_vararg1,
+            Disable3DRendering = _909_vararg1,
+            AntiStuckDetector = _AntiStuckDetector303,
+            HideUsername = _1118_vararg1,
+            FPSBoost = _823_vararg1,
+            WebhookActive = _WebhookActive311,
+            WebhookRarityFilter = _WebhookRarityFilter347,
+            WalkSpeed = 16,
+            Noclip = _790_vararg1,
+            TeleportAndFreeze = false,
+            AutoGhostfin = _AutoGhostfin321,
+            JumpPower = 50,
+            WalkOnWater = _807_vararg1,
+            InfiniteJump = _784_vararg1,
+            AutoSellFishCount = _AutoSellFishCount329,
+            AutoLegitFish = _1252_vararg1,
+            FreezeAtSavedPos = _1789_vararg1,
+            AutoFishV1 = _AutoFishV1335,
+            WebhookURL = _WebhookURL327,
+            SelectedWeather = _SelectedWeather313,
+            SelectedEventName = _SelectedEventName317,
+            AutoSellByCountEnabled = false,
+            AutoSellDelay = _AutoSellDelay341,
+            InfiniteZoom = _813_vararg1,
+            AutoEventTeleport = _AutoEventTeleport319,
+        })
+        writefile("VinzHub/VinzHub_Config.json", _call1947)
+    end,
+    Icon = "clock",
+    Title = "Auto Sell All",
+})
+fenv.autoSellByTimeToggle = _call1932
+_call1850:Slider({
+    Value = {
+        Max = 120,
+        Default = _AutoSellDelay341,
+        Min = 1,
+    },
+    Title = "Sell Delay (Seconds)",
+    Callback = function(...)
+        local _1950_vararg1 = ...
+        fenv.autoSellDelay = _1950_vararg1
+        makefolder("VinzHub")
+        local _call1953 = _call15:JSONEncode({
+            AutoSell = _1933_vararg1,
+            Disable3DRendering = _909_vararg1,
+            AntiStuckDetector = _AntiStuckDetector303,
+            HideUsername = _1118_vararg1,
+            FPSBoost = _823_vararg1,
+            WebhookActive = _WebhookActive311,
+            WebhookRarityFilter = _WebhookRarityFilter347,
+            WalkSpeed = 16,
+            Noclip = _790_vararg1,
+            TeleportAndFreeze = false,
+            AutoGhostfin = _AutoGhostfin321,
+            JumpPower = 50,
+            WalkOnWater = _807_vararg1,
+            InfiniteJump = _784_vararg1,
+            AutoSellFishCount = _AutoSellFishCount329,
+            AutoLegitFish = _1252_vararg1,
+            FreezeAtSavedPos = _1789_vararg1,
+            AutoFishV1 = _AutoFishV1335,
+            WebhookURL = _WebhookURL327,
+            SelectedWeather = _SelectedWeather313,
+            SelectedEventName = _SelectedEventName317,
+            AutoSellByCountEnabled = false,
+            AutoSellDelay = _1950_vararg1,
+            InfiniteZoom = _813_vararg1,
+            AutoEventTeleport = _AutoEventTeleport319,
+        })
+        writefile("VinzHub/VinzHub_Config.json", _call1953)
+    end,
+})
+_call1850:Divider()
+_call1850:Section({
+    Title = "Auto Sell (by Fish Count)",
+})
+_call1850:Input({
+    Callback = function(...)
+    end,
+    Placeholder = "e.g. 50",
+    Title = "Sell when count reaches:",
+    Default = _AutoSellFishCount329,
+})
+local _call1962 = _call1850:Toggle({
+    Value = false,
+    Callback = function(...)
+        task.spawn(function(...)
+            local _call1968 = _call39:GetExpect({
+                [1] = "Inventory",
+                [2] = "Items",
+            })
+            for _1969, _1969_2 in pairs(_call1968) do
+                local _ = _callrequire33.GetItemDataFromItemType("Items", _1969_2.Id).Data.Type
+            end
+            task.wait(2)
+            local _call1976 = _call39:GetExpect({
+                [1] = "Inventory",
+                [2] = "Items",
+            })
+            for _1977, _1977_2 in pairs(_call1976) do
+                local _ = _callrequire33.GetItemDataFromItemType("Items", _1977_2.Id).Data.Type
+            end
+            task.wait(2)
+            local _call1984 = _call39:GetExpect({
+                [1] = "Inventory",
+                [2] = "Items",
+            })
+            for _1985, _1985_2 in pairs(_call1984) do
+                local _ = _callrequire33.GetItemDataFromItemType
+                error("internal 542: <25ms: infinitelooperror>")
+            end
+        end)
+        fenv.isAutoSellActive = false
+        error("internal 542: <25ms: infinitelooperror>")
+    end,
+    Icon = "package",
+    Title = "Enable Auto Sell by Count",
+})
+fenv.autoSellByCountToggle = _call1962
+fenv.AutoEnchantState = {
+    TargetFound = false,
+    TargetIds = {},
+    Delay = 0.8,
+    Enabled = false,
+}
+fenv.ENCHANT_ROOM_POS = Vector3.new(3230.95, - 1302.85, 1401.96)
+fenv.autoEnchantToggle = nil
+fenv.enchantDropdown = nil
+fenv.getFirstEnchantStoneUUID = function(...)
+    local _call1993 = _call39:GetExpect({
+        [1] = "Inventory",
+        [2] = "Items",
+    })
+    for _1994, _1994_2 in ipairs(_call1993) do
+        local _ = _callrequire33.GetItemDataFromItemType
+        error("internal 542: <25ms: infinitelooperror>")
+    end
+end
+fenv.runEnchantPrepLoop = function(...)
+
+end
+fenv.runRollingLoop = function(...)
+
+end
+fenv.startOrStopAutoEnchant = function(...)
+    local _ = _enchantFreezeConnection363.Disconnect
+    error("internal 542: <25ms: infinitelooperror>")
+end
+fenv.AutoSecondEnchantState = {
+    TargetFound = false,
+    MaxChance = 1000000,
+    TargetIds = {},
+    RollDelay = 0.8,
+    Enabled = false,
+}

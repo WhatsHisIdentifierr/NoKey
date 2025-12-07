@@ -1,0 +1,2961 @@
+local v1 = game:GetService("Players")
+local vu2 = game:GetService("HttpService")
+local v3 = game:GetService("RbxAnalyticsService")
+local vu4 = game:GetService("TweenService")
+game:GetService("RunService")
+local vu6 = v3:GetClientId()
+if vu6 then
+    local vu7 = true
+    if vu7 then
+        vu7 = syn and syn.request or true
+    end
+    if vu7 then
+        local function vu514()
+            local v8 =
+                "https://raw.githubusercontent.com/deividcomsono/Obsidian/main/"
+            local vu9 = loadstring(game:HttpGet(v8 .. "Library.lua"))()
+            local v10 =
+                loadstring(game:HttpGet(v8 .. "addons/ThemeManager.lua"))()
+            local v11 =
+                loadstring(game:HttpGet(v8 .. "addons/SaveManager.lua"))()
+            local vu12 = vu9.Options
+            local _ = vu9.Toggles
+            vu9.ForceCheckbox = false
+            vu9.ShowToggleFrameInKeybinds = true
+            local vu13 = game:GetService("Players")
+            local vu14 = game:GetService("RunService")
+            local vu15 = game:GetService("TweenService")
+            local vu16 = game:GetService("Lighting")
+            local vu17 = game:GetService("Workspace")
+            local vu18 = game:GetService("HttpService")
+            local vu19 = game:GetService("TeleportService")
+            local vu20 = game:GetService("UserInputService")
+            local vu21 = game:GetService("VirtualInputManager")
+            local vu22 = game:GetService("ReplicatedStorage")
+            local vu23 = game:GetService("PathfindingService")
+            local vu24 = vu13.LocalPlayer
+            local vu25 = false
+            local vu26 = false
+            local vu27 = Enum.KeyCode.Q
+            local v28 = Instance.new("RemoteEvent").FireServer
+            local vu29 = nil
+            vu29 = hookfunction(v28, function(p30, p31, ...)
+                if
+                    typeof(p31) ~= "string"
+                    or p31 ~= "X-16" and p31 ~= "X-22"
+                then
+                    return vu29(p30, p31, ...)
+                else
+                    return vu29(p30, "", ...)
+                end
+            end)
+            local v32 = vu9:CreateWindow({
+                Title = "NEOX HUB",
+                Footer = "by hassanxzayn",
+                Icon = "rbxthumb://type=Asset&id=80622869023191&w=150&h=150",
+                NotifySide = "Right",
+                ShowCustomCursor = false,
+            })
+            local v33 = {
+                Home = v32:AddTab("Home", "rbxassetid://7733960981"),
+                Main = v32:AddTab("Main", "list"),
+                Pet = v32:AddTab("Pet Finder", "tornado"),
+                Misc = v32:AddTab("Misc", "settings"),
+                Esp = v32:AddTab("Esp", "eye"),
+                Buy = v32:AddTab("Buy", "shopping-cart"),
+                Server = v32:AddTab("Server", "server"),
+                Weather = v32:AddTab("Environment", "cloud"),
+                Performance = v32:AddTab("Performance", "zap"),
+                Settings = v32:AddTab("UI Settings", "settings-2"),
+            }
+            local v34 = v33.Home:AddLeftGroupbox("Home")
+            v34:AddLabel(
+                "Executor: " .. (identifyexecutor() or "Unknown Executor")
+            )
+            v34:AddDivider()
+            v34:AddButton({
+                Text = "Join our discord",
+                Func = function()
+                    local v35 = "https://discord.gg/99UuEwM9sX"
+                    if setclipboard then
+                        setclipboard(v35)
+                        vu9:Notify({
+                            Title = "Discord",
+                            Content = "Discord link copied to clipboard!",
+                            Time = 5,
+                        })
+                    end
+                end,
+                Tooltip = "Click to copy the invite link!",
+            })
+            local vu36 = vu24:WaitForChild("PlayerGui")
+            local v37 = vu36:FindFirstChild("NeoxHubMinimizeUI")
+            if v37 then
+                v37:Destroy()
+            end
+            local vu38 = Instance.new("ScreenGui")
+            vu38.Name = "NeoxHubMinimizeUI"
+            vu38.ResetOnSpawn = false
+            vu38.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+            vu38.Parent = vu36
+            local vu39 = Instance.new("TextButton")
+            vu39.Parent = vu38
+            vu39.Size = UDim2.new(0, 50, 0, 50)
+            vu39.Position = UDim2.new(0, 10, 1, -80)
+            vu39.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+            vu39.BackgroundTransparency = 0
+            vu39.BorderSizePixel = 0
+            vu39.ClipsDescendants = true
+            vu39.Active = true
+            vu39.ZIndex = 1000
+            vu39.Text = "NEOX"
+            vu39.Font = Enum.Font.GothamBold
+            vu39.TextColor3 = Color3.fromRGB(255, 255, 255)
+            vu39.TextSize = 18
+            vu39.TextYAlignment = Enum.TextYAlignment.Center
+            vu39.TextXAlignment = Enum.TextXAlignment.Center
+            local v40 = Instance.new("UICorner")
+            v40.CornerRadius = UDim.new(0, 10)
+            v40.Parent = vu39
+            local function vu41()
+                vu21:SendKeyEvent(true, vu27, false, game)
+                task.wait(0.1)
+                vu21:SendKeyEvent(false, vu27, false, game)
+            end
+            local vu42 = false
+            local vu43 = 10
+            local vu44 = nil
+            local vu45 = nil
+            local vu46 = nil
+            vu39.MouseButton1Click:Connect(function()
+                if not vu42 then
+                    vu41()
+                end
+            end)
+            local function vu48(pu47)
+                vu42 = false
+                vu44 = true
+                vu45 = pu47.Position
+                vu46 = vu39.Position
+                pu47.Changed:Connect(function()
+                    if pu47.UserInputState == Enum.UserInputState.End then
+                        vu44 = false
+                    end
+                end)
+            end
+            local function vu50(p49)
+                if vu44 then
+                    if vu43 < (p49.Position - vu45).Magnitude then
+                        vu42 = true
+                    end
+                    vu39.Position = UDim2.new(
+                        vu46.X.Scale,
+                        vu46.X.Offset + (p49.Position.X - vu45.X),
+                        vu46.Y.Scale,
+                        vu46.Y.Offset + (p49.Position.Y - vu45.Y)
+                    )
+                end
+            end
+            vu39.InputBegan:Connect(function(p51)
+                if
+                    p51.UserInputType == Enum.UserInputType.MouseButton1
+                    or p51.UserInputType == Enum.UserInputType.Touch
+                then
+                    vu48(p51)
+                end
+            end)
+            vu39.InputChanged:Connect(function(p52)
+                if
+                    p52.UserInputType == Enum.UserInputType.MouseMovement
+                    or p52.UserInputType == Enum.UserInputType.Touch
+                then
+                    vu50(p52)
+                end
+            end)
+            local v53 = v33.Main:AddLeftGroupbox("Base")
+            local v54, v55, v56 = ipairs(workspace.Plots:GetChildren())
+            local vu57 = nil
+            while true do
+                local v58
+                v56, v58 = v54(v55, v56)
+                if v56 == nil then
+                    break
+                end
+                if
+                    v58:FindFirstChild("YourBase", true)
+                    and v58:FindFirstChild("YourBase", true).Enabled
+                then
+                    vu57 = v58.Name
+                    break
+                end
+            end
+            if vu57 then
+                local vu59 =
+                    workspace.Plots[vu57].Purchases.PlotBlock.Main.BillboardGui.RemainingTime
+                v53:AddLabel("Lock Time: " .. vu59.Text, true, "LockTimeLabel")
+                task.spawn(function()
+                    while true do
+                        if vu12.LockTimeLabel then
+                            vu12.LockTimeLabel:SetText(
+                                "Lock Time: " .. vu59.Text
+                            )
+                        end
+                        task.wait(0.25)
+                    end
+                end)
+            end
+            v53:AddButton({
+                Text = "Walk to Base",
+                Func = function()
+                    local v60 = vu24.Character or vu24.CharacterAdded:Wait()
+                    local vu61 = v60:WaitForChild("Humanoid")
+                    local vu62 = v60:WaitForChild("HumanoidRootPart")
+                    local function vu71()
+                        local v63 = workspace:WaitForChild("Plots", 5)
+                        if not v63 then
+                            vu9:Notify({
+                                Title = "Walk to Base",
+                                Content = "Plots folder not found in workspace",
+                                Time = 5,
+                            })
+                            return nil
+                        end
+                        local v64, v65, v66 = pairs(v63:GetChildren())
+                        while true do
+                            local v67
+                            v66, v67 = v64(v65, v66)
+                            if v66 == nil then
+                                break
+                            end
+                            local v68 = v67:FindFirstChild("PlotSign")
+                            if v68 then
+                                local v69 = v68:FindFirstChild("YourBase")
+                                if v69 and v69.Enabled then
+                                    local v70 =
+                                        v67:FindFirstChild("DeliveryHitbox")
+                                    if v70 then
+                                        return v70
+                                    end
+                                end
+                            end
+                        end
+                        vu9:Notify({
+                            Title = "Walk to Base",
+                            Content = "No valid DeliveryHitbox found",
+                            Time = 5,
+                        })
+                        return nil
+                    end
+                    local function vu84(pu72)
+                        if pu72 and pu72:IsA("BasePart") then
+                            local vu73 = vu23:CreatePath({
+                                AgentRadius = 2,
+                                AgentHeight = 5,
+                                AgentCanJump = true,
+                                AgentJumpHeight = 8,
+                                AgentMaxSlope = 45,
+                            })
+                            local v74, v75 = pcall(function()
+                                vu73:ComputeAsync(vu62.Position, pu72.Position)
+                            end)
+                            if v74 then
+                                if vu73.Status ~= Enum.PathStatus.Success then
+                                    vu9:Notify({
+                                        Title = "Walk to Base",
+                                        Content = "Path not found! Status: "
+                                            .. tostring(vu73.Status),
+                                        Time = 5,
+                                    })
+                                else
+                                    local v76 = vu73
+                                    local v77 = vu73.GetWaypoints(v76)
+                                    vu9:Notify({
+                                        Title = "Walk to Base",
+                                        Content = "Path found! Walking to base...",
+                                        Time = 5,
+                                    })
+                                    local v78, v79, v80 = ipairs(v77)
+                                    while true do
+                                        local v81
+                                        v80, v81 = v78(v79, v80)
+                                        if v80 == nil then
+                                            break
+                                        end
+                                        if
+                                            not (
+                                                vu61 and (vu62 and vu61.Parent)
+                                            )
+                                        then
+                                            vu9:Notify({
+                                                Title = "Walk to Base",
+                                                Content = "Character components missing during pathfinding",
+                                                Time = 5,
+                                            })
+                                            return
+                                        end
+                                        vu61:MoveTo(v81.Position)
+                                        local v82, v83 = pcall(function()
+                                            vu61.MoveToFinished:Wait(2)
+                                        end)
+                                        if not v82 then
+                                            vu9:Notify({
+                                                Title = "Walk to Base",
+                                                Content = "MoveTo failed: "
+                                                    .. tostring(v83),
+                                                Time = 5,
+                                            })
+                                            return
+                                        end
+                                    end
+                                    vu9:Notify({
+                                        Title = "Walk to Base",
+                                        Content = "Successfully reached base!",
+                                        Time = 5,
+                                    })
+                                end
+                            else
+                                vu9:Notify({
+                                    Title = "Walk to Base",
+                                    Content = "Path computation failed: "
+                                        .. tostring(v75),
+                                    Time = 5,
+                                })
+                            end
+                        else
+                            vu9:Notify({
+                                Title = "Walk to Base",
+                                Content = "Invalid target for WalkTo",
+                                Time = 5,
+                            })
+                            return
+                        end
+                    end
+                    local function v86()
+                        local v85 = vu71()
+                        if v85 then
+                            vu84(v85)
+                        else
+                            vu9:Notify({
+                                Title = "Walk to Base",
+                                Content = "Failed to start pathfinding: No delivery hitbox found",
+                                Time = 5,
+                            })
+                        end
+                    end
+                    local v87, v88 = pcall(v86)
+                    if not v87 then
+                        vu9:Notify({
+                            Title = "Walk to Base",
+                            Content = "Main execution failed: "
+                                .. tostring(v88),
+                            Time = 5,
+                        })
+                    end
+                end,
+            })
+            local v89 = v33.Main:AddLeftGroupbox("Combat")
+            local vu90 = workspace.CurrentCamera
+            local vu91 = false
+            local vu92 = nil
+            local vu93 = nil
+            local vu94 = nil
+            local function vu105()
+                local v95 = math.huge
+                local v96 = vu13
+                local v97, v98, v99 = pairs(v96:GetPlayers())
+                local v100 = nil
+                while true do
+                    local v101
+                    v99, v101 = v97(v98, v99)
+                    if v99 == nil then
+                        break
+                    end
+                    if
+                        v101 ~= vu24
+                        and v101.Character
+                        and v101.Character:FindFirstChild("HumanoidRootPart")
+                    then
+                        local v102, v103 = vu90:WorldToViewportPoint(
+                            v101.Character.HumanoidRootPart.Position
+                        )
+                        if v103 then
+                            local v104 = (
+                                Vector2.new(v102.X, v102.Y)
+                                - Vector2.new(
+                                    vu90.ViewportSize.X / 2,
+                                    vu90.ViewportSize.Y / 2
+                                )
+                            ).Magnitude
+                            if v104 < v95 then
+                                v100 = v101
+                                v95 = v104
+                            end
+                        end
+                    end
+                end
+                return v100
+            end
+            local function vu109(p106)
+                if vu92 then
+                    vu92:Destroy()
+                end
+                local v107 = p106.Character:FindFirstChild("HumanoidRootPart")
+                if v107 then
+                    local v108 = Instance.new("BoxHandleAdornment")
+                    v108.Name = "TargetBox"
+                    v108.Adornee = v107
+                    v108.Size = Vector3.new(3, 6, 3)
+                    v108.AlwaysOnTop = true
+                    v108.ZIndex = 10
+                    v108.Color3 = Color3.fromRGB(255, 0, 0)
+                    v108.Transparency = 0.5
+                    v108.Parent = v107
+                    vu92 = v108
+                end
+            end
+            local function vu114(p110)
+                if vu93 then
+                    vu93:Destroy()
+                end
+                local v111 = p110.Character:FindFirstChild("Head")
+                if v111 then
+                    local v112 = Instance.new("BillboardGui")
+                    v112.Name = "DistanceLabel"
+                    v112.Adornee = v111
+                    v112.Size = UDim2.new(0, 100, 0, 20)
+                    v112.StudsOffset = Vector3.new(0, 2.5, 0)
+                    v112.AlwaysOnTop = true
+                    v112.Parent = v111
+                    local v113 = Instance.new("TextLabel", v112)
+                    v113.Size = UDim2.new(1, 0, 1, 0)
+                    v113.BackgroundTransparency = 1
+                    v113.TextColor3 = Color3.new(1, 1, 1)
+                    v113.TextStrokeTransparency = 0
+                    v113.Font = Enum.Font.SourceSansBold
+                    v113.TextScaled = true
+                    v113.Text = "..."
+                    vu93 = v112
+                    return v113
+                end
+            end
+            v89:AddToggle("AimbotLock", {
+                Text = "AimbotLock",
+                Default = false,
+                Callback = function(p115)
+                    vu91 = p115
+                    if vu91 then
+                        vu94 = vu14.RenderStepped:Connect(function()
+                            local v116 = vu105()
+                            if
+                                v116
+                                and v116.Character
+                                and v116.Character:FindFirstChild(
+                                    "HumanoidRootPart"
+                                )
+                            then
+                                local v117 = v116.Character.HumanoidRootPart
+                                vu90.CFrame = CFrame.new(
+                                    vu90.CFrame.Position,
+                                    v117.Position
+                                )
+                                vu109(v116)
+                                local v118 = vu114(v116)
+                                if v118 then
+                                    v118.Text = "Jarak: "
+                                        .. math.floor(
+                                            (
+                                                vu24.Character.HumanoidRootPart.Position
+                                                - v117.Position
+                                            ).Magnitude
+                                        )
+                                        .. "m"
+                                end
+                            end
+                        end)
+                        vu9:Notify({
+                            Title = "Aimbot",
+                            Content = "Aimbot enabled",
+                            Time = 5,
+                        })
+                    else
+                        if vu94 then
+                            vu94:Disconnect()
+                            vu94 = nil
+                        end
+                        if vu92 then
+                            vu92:Destroy()
+                            vu92 = nil
+                        end
+                        if vu93 then
+                            vu93:Destroy()
+                            vu93 = nil
+                        end
+                        vu9:Notify({
+                            Title = "Aimbot",
+                            Content = "Aimbot disabled",
+                            Time = 5,
+                        })
+                    end
+                end,
+            })
+            local vu119 = false
+            local vu120 = nil
+            v89:AddToggle("AntiTrapGood", {
+                Text = "Anti Trap (Advanced)",
+                Default = false,
+                Callback = function(p121)
+                    vu119 = p121
+                    if p121 then
+                        if not vu120 then
+                            local vu122 = 250
+                            local vu123 = false
+                            local function vu127(p124)
+                                if
+                                    not p124:IsA("TouchTransmitter")
+                                    or p124.Name ~= "TouchInterest"
+                                then
+                                    return false
+                                end
+                                local v125 = p124.Parent
+                                if
+                                    not v125
+                                    or (
+                                        not v125:IsA("MeshPart")
+                                        or v125.Name ~= "Open"
+                                    )
+                                then
+                                    return false
+                                end
+                                local v126 =
+                                    v125:FindFirstAncestorOfClass("Model")
+                                return v126 and v126.Name == "Trap" and true
+                                    or false
+                            end
+                            local function vu129(p128)
+                                if p128.Parent then
+                                    p128:Destroy()
+                                end
+                            end
+                            task.defer(function()
+                                local v130 = (vu123 and game or workspace):GetDescendants()
+                                for v131 = 1, #v130 do
+                                    local v132 = v130[v131]
+                                    if
+                                        v132:IsA("TouchTransmitter")
+                                        and vu127(v132)
+                                    then
+                                        vu129(v132)
+                                    end
+                                    if v131 % vu122 == 0 then
+                                        task.wait()
+                                    end
+                                end
+                            end)
+                            workspace.DescendantAdded:Connect(function(p133)
+                                if
+                                    p133:IsA("TouchTransmitter") and vu127(p133)
+                                then
+                                    vu129(p133)
+                                end
+                            end)
+                            vu120 = true
+                            vu9:Notify({
+                                Title = "Anti Trap",
+                                Content = "Advanced trap removal enabled",
+                                Time = 5,
+                            })
+                        end
+                    else
+                        vu120 = nil
+                        vu9:Notify({
+                            Title = "Anti Trap",
+                            Content = "Advanced trap removal disabled",
+                            Time = 5,
+                        })
+                    end
+                end,
+            })
+            v89:AddButton({
+                Text = "Disable traps (Basic)",
+                Func = function()
+                    if vu25 == false then
+                        vu25 = vu14.RenderStepped:Connect(function()
+                            local v134, v135, v136 =
+                                pairs(workspace:GetDescendants())
+                            while true do
+                                local v137
+                                v136, v137 = v134(v135, v136)
+                                if v136 == nil then
+                                    break
+                                end
+                                if
+                                    v137.Name == "Trap"
+                                    and v137:FindFirstChild("Open")
+                                    and v137.Open:FindFirstChild(
+                                        "TouchInterest"
+                                    )
+                                then
+                                    v137.Open.TouchInterest:Destroy()
+                                end
+                            end
+                        end)
+                        vu9:Notify({
+                            Title = "Traps",
+                            Content = "Basic trap removal enabled",
+                            Time = 5,
+                        })
+                    end
+                end,
+            })
+            v89:AddButton({
+                Text = "Anti Invisible",
+                Func = function()
+                    if vu26 == false then
+                        vu26 = vu14.RenderStepped:Connect(function()
+                            local v138 = vu13
+                            local v139, v140, v141 = pairs(v138:GetChildren())
+                            while true do
+                                local v142
+                                v141, v142 = v139(v140, v141)
+                                if v141 == nil then
+                                    break
+                                end
+                                if
+                                    v142 ~= vu24
+                                    and v142.Character
+                                    and v142.Character:FindFirstChild(
+                                        "HumanoidRootPart"
+                                    )
+                                then
+                                    local v143, v144, v145 =
+                                        pairs(v142.Character:GetChildren())
+                                    while true do
+                                        local v146
+                                        v145, v146 = v143(v144, v145)
+                                        if v145 == nil then
+                                            break
+                                        end
+                                        if
+                                            v146:IsA("BasePart")
+                                            and v146.Transparency == 1
+                                        then
+                                            v146.Transparency = 0
+                                        end
+                                    end
+                                end
+                            end
+                        end)
+                        vu9:Notify({
+                            Title = "Anti Invisible",
+                            Content = "Anti invisible enabled",
+                            Time = 5,
+                        })
+                    end
+                end,
+            })
+            v89:AddButton({
+                Text = "Get All Tools",
+                Func = function()
+                    if
+                        vu24.Character
+                        and vu24.Character:FindFirstChildOfClass("Humanoid")
+                    then
+                        local v147, v148, v149 = pairs(vu22.Items:GetChildren())
+                        while true do
+                            local v150
+                            v149, v150 = v147(v148, v149)
+                            if v149 == nil then
+                                break
+                            end
+                            if v150:IsA("Tool") then
+                                v150:Clone().Parent = vu24.Backpack
+                            end
+                        end
+                        vu9:Notify({
+                            Title = "Tools",
+                            Content = "All tools added to backpack",
+                            Time = 5,
+                        })
+                    end
+                end,
+            })
+            local vu151 = false
+            local vu152 = nil
+            local vu153 = 50
+            v89:AddToggle("SpeedBoost", {
+                Text = "Boost Speed",
+                Default = false,
+                Callback = function(p154)
+                    vu151 = p154
+                    if vu152 then
+                        vu152:Disconnect()
+                        vu152 = nil
+                    end
+                    if p154 then
+                        vu152 = vu14.Heartbeat:Connect(function()
+                            if
+                                not _G._lastSpeedBoostUpdate
+                                or tick() - _G._lastSpeedBoostUpdate >= 0.1
+                            then
+                                local v155 = vu24.Character
+                                if v155 then
+                                    local v156 =
+                                        v155:FindFirstChildOfClass("Humanoid")
+                                    local v157 =
+                                        v155:FindFirstChild("HumanoidRootPart")
+                                    if
+                                        v156
+                                        and (
+                                            v157
+                                            and v156.MoveDirection.Magnitude
+                                                > 0
+                                        )
+                                    then
+                                        local v158 = v156.MoveDirection
+                                        v157.Velocity = Vector3.new(
+                                            v158.X * vu153,
+                                            v157.Velocity.Y,
+                                            v158.Z * vu153
+                                        )
+                                    end
+                                end
+                                _G._lastSpeedBoostUpdate = tick()
+                            end
+                        end)
+                        vu9:Notify({
+                            Title = "Speed Boost",
+                            Content = "Speed boost enabled",
+                            Time = 5,
+                        })
+                    else
+                        vu9:Notify({
+                            Title = "Speed Boost",
+                            Content = "Speed boost disabled",
+                            Time = 5,
+                        })
+                    end
+                end,
+            })
+            local v159 = v33.Main:AddRightGroupbox("Character")
+            local vu160 = false
+            local vu161 = nil
+            v159:AddButton({
+                Text = "Moon Gravity",
+                Func = function()
+                    vu160 = not vu160
+                    local v162 = vu24.Character or vu24.CharacterAdded:Wait()
+                    local vu163 = v162:FindFirstChildWhichIsA("Humanoid")
+                    local vu164 = v162:FindFirstChild("HumanoidRootPart")
+                    if vu160 then
+                        if vu163 and vu164 then
+                            vu163.UseJumpPower = true
+                            vu163.JumpPower = 96
+                            if vu161 then
+                                vu161:Disconnect()
+                            end
+                            vu161 = vu14.Stepped:Connect(function()
+                                if vu160 then
+                                    if vu164.Velocity.Y < 0 then
+                                        vu164.Velocity = Vector3.new(
+                                            vu164.Velocity.X,
+                                            vu164.Velocity.Y * 0.9,
+                                            vu164.Velocity.Z
+                                        )
+                                    end
+                                else
+                                    if vu161 then
+                                        vu161:Disconnect()
+                                        vu161 = nil
+                                    end
+                                    vu163.JumpPower = 50
+                                    vu164.Velocity = Vector3.new(
+                                        vu164.Velocity.X,
+                                        0,
+                                        vu164.Velocity.Z
+                                    )
+                                end
+                            end)
+                            vu9:Notify({
+                                Title = "Moon Gravity",
+                                Content = "Moon gravity enabled",
+                                Time = 5,
+                            })
+                        end
+                    else
+                        if vu161 then
+                            vu161:Disconnect()
+                            vu161 = nil
+                        end
+                        if vu163 and vu164 then
+                            vu163.JumpPower = 50
+                            vu164.Velocity = Vector3.new(
+                                vu164.Velocity.X,
+                                0,
+                                vu164.Velocity.Z
+                            )
+                        end
+                        vu9:Notify({
+                            Title = "Moon Gravity",
+                            Content = "Moon gravity disabled",
+                            Time = 5,
+                        })
+                    end
+                end,
+            })
+            local vu165 = false
+            local vu166 = 0
+            local vu167 = 0.5
+            local vu168 = 50
+            local vu169 = 0.2
+            local function vu176()
+                if vu165 then
+                    local v170 = os.clock()
+                    if v170 - vu166 >= vu167 then
+                        local v171 = vu24.Character
+                        if v171 then
+                            local v172 = v171:FindFirstChildOfClass("Humanoid")
+                            local vu173 =
+                                v171:FindFirstChild("HumanoidRootPart")
+                            if v172 and vu173 then
+                                vu166 = v170
+                                if vu173:CanSetNetworkOwnership() then
+                                    vu173:SetNetworkOwner(vu24)
+                                end
+                                local vu174 = Instance.new("BodyVelocity")
+                                vu174.MaxForce = Vector3.new(0, math.huge, 0)
+                                vu174.Velocity = Vector3.new(0, vu168, 0)
+                                vu174.Parent = vu173
+                                local vu175 = nil
+                                vu175 = vu14.Heartbeat:Connect(function()
+                                    if vu169 <= os.clock() - vu166 then
+                                        vu174:Destroy()
+                                        if vu173:CanSetNetworkOwnership() then
+                                            vu173:SetNetworkOwner(nil)
+                                        end
+                                        vu175:Disconnect()
+                                    end
+                                end)
+                            end
+                        else
+                            return
+                        end
+                    else
+                        return
+                    end
+                else
+                    return
+                end
+            end
+            v159:AddToggle("InfiniteJumpAdvanced", {
+                Text = "Infinite Jump (Advanced)",
+                Default = false,
+                Callback = function(p177)
+                    vu165 = p177
+                    if p177 then
+                        vu20.JumpRequest:Connect(vu176)
+                        vu9:Notify({
+                            Title = "Infinite Jump",
+                            Content = "Advanced infinite jump enabled",
+                            Time = 5,
+                        })
+                    else
+                        vu9:Notify({
+                            Title = "Infinite Jump",
+                            Content = "Advanced infinite jump disabled",
+                            Time = 5,
+                        })
+                    end
+                end,
+            })
+            local v178 = v33.Main:AddRightGroupbox("Spin Wheel")
+            local vu179 = false
+            local vu180 = nil
+            v178:AddToggle("AutoSpinWheel", {
+                Text = "Auto Spin Wheel",
+                Default = false,
+                Callback = function(p181)
+                    vu179 = p181
+                    if vu179 then
+                        vu180 = task.spawn(function()
+                            while vu179 do
+                                local _ = {
+                                    i,
+                                }
+                                vu22:WaitForChild("Packages")
+                                    :WaitForChild("Net")
+                                    :WaitForChild("RE/YinYangEventService/Spin")
+                                    :FireServer()
+                                task.wait(5)
+                            end
+                        end)
+                        vu9:Notify({
+                            Title = "Spin Wheel",
+                            Content = "Auto spin wheel enabled",
+                            Time = 5,
+                        })
+                    else
+                        vu9:Notify({
+                            Title = "Spin Wheel",
+                            Content = "Auto spin wheel disabled",
+                            Time = 5,
+                        })
+                    end
+                end,
+            })
+            v178:AddButton({
+                Text = "Spin Wheel",
+                Func = function()
+                    local _ = {
+                        i,
+                    }
+                    vu22:WaitForChild("Packages")
+                        :WaitForChild("Net")
+                        :WaitForChild("RE/YinYangEventService/Spin")
+                        :FireServer()
+                    vu9:Notify({
+                        Title = "Spin Wheel",
+                        Content = "Spun the wheel!",
+                        Time = 5,
+                    })
+                end,
+            })
+            local v182 = v33.Misc:AddLeftGroupbox("Movement")
+            v182:AddButton({
+                Text = "Server Hop",
+                Func = function()
+                    local v183 = nil
+                    local v184 = {}
+                    while true do
+                        local vu185 = "https://games.roblox.com/v1/games/"
+                            .. game.PlaceId
+                            .. "/servers/Public?sortOrder=Asc&limit=100"
+                        if v183 then
+                            vu185 = vu185 .. "&cursor=" .. v183
+                        end
+                        local v186, v187 = pcall(function()
+                            return vu18:JSONDecode(game:HttpGet(vu185))
+                        end)
+                        if not (v186 and (v187 and v187.data)) then
+                            break
+                        end
+                        local v188, v189, v190 = ipairs(v187.data)
+                        while true do
+                            local v191
+                            v190, v191 = v188(v189, v190)
+                            if v190 == nil then
+                                break
+                            end
+                            if
+                                tonumber(v191.playing)
+                                and (
+                                    tonumber(v191.maxPlayers)
+                                    and v191.playing < v191.maxPlayers
+                                )
+                            then
+                                table.insert(v184, v191.id)
+                            end
+                        end
+                        v183 = v187.nextPageCursor
+                        if not v183 or #v184 > 0 then
+                            if #v184 ~= 0 then
+                                vu19:TeleportToPlaceInstance(
+                                    game.PlaceId,
+                                    v184[math.random(1, #v184)],
+                                    vu24
+                                )
+                                vu9:Notify({
+                                    Title = "Server Hop",
+                                    Content = "Server hopping...",
+                                    Time = 5,
+                                })
+                            else
+                                vu9:Notify({
+                                    Title = "Server Hop",
+                                    Content = "No available servers found",
+                                    Time = 5,
+                                })
+                            end
+                        end
+                    end
+                    v183 = nil
+                end,
+            })
+            local vu192 = false
+            local vu193 = nil
+            v182:AddToggle("AutoRejoin", {
+                Text = "Auto Rejoin on Kick",
+                Default = false,
+                Callback = function(p194)
+                    vu192 = p194
+                    if p194 then
+                        vu193 = vu24:GetPropertyChangedSignal("Parent")
+                            :Connect(function()
+                                if vu192 and not vu24.Parent then
+                                    vu9:Notify({
+                                        Title = "Auto Rejoin",
+                                        Content = "Rejoining server...",
+                                        Time = 5,
+                                    })
+                                    pcall(function()
+                                        vu19:Teleport(game.PlaceId, vu24)
+                                    end)
+                                end
+                            end)
+                        vu9:Notify({
+                            Title = "Auto Rejoin",
+                            Content = "Auto rejoin enabled",
+                            Time = 5,
+                        })
+                    else
+                        if vu193 then
+                            vu193:Disconnect()
+                            vu193 = nil
+                        end
+                        vu9:Notify({
+                            Title = "Auto Rejoin",
+                            Content = "Auto rejoin disabled",
+                            Time = 5,
+                        })
+                    end
+                end,
+            })
+            local vu195 = nil
+            local vu196 = true
+            local function vu202()
+                vu196 = false
+                local function v201()
+                    if vu196 == false and vu24.Character ~= nil then
+                        local v197, v198, v199 =
+                            pairs(vu24.Character:GetDescendants())
+                        while true do
+                            local v200
+                            v199, v200 = v197(v198, v199)
+                            if v199 == nil then
+                                break
+                            end
+                            if v200:IsA("BasePart") and v200.CanCollide then
+                                v200.CanCollide = false
+                            end
+                        end
+                    end
+                    wait(0.21)
+                end
+                vu195 = vu14.Stepped:Connect(v201)
+            end
+            local function vu207()
+                if vu195 then
+                    vu195:Disconnect()
+                end
+                vu196 = true
+                if vu24.Character then
+                    local v203, v204, v205 =
+                        pairs(vu24.Character:GetDescendants())
+                    while true do
+                        local v206
+                        v205, v206 = v203(v204, v205)
+                        if v205 == nil then
+                            break
+                        end
+                        if
+                            v206:IsA("BasePart")
+                            and v206.CanCollide == false
+                        then
+                            v206.CanCollide = true
+                        end
+                    end
+                end
+            end
+            v182:AddToggle("Noclip", {
+                Text = "Noclip",
+                Default = false,
+                Callback = function(p208)
+                    if p208 then
+                        vu202()
+                        vu9:Notify({
+                            Title = "Noclip",
+                            Content = "Noclip enabled",
+                            Time = 5,
+                        })
+                    else
+                        vu207()
+                        vu9:Notify({
+                            Title = "Noclip",
+                            Content = "Noclip disabled",
+                            Time = 5,
+                        })
+                    end
+                end,
+            })
+            v182:AddToggle("Freeze", {
+                Text = "Freeze",
+                Default = false,
+                Callback = function(p209)
+                    if
+                        vu24
+                        and vu24.Character
+                        and vu24.Character:FindFirstChild("HumanoidRootPart")
+                    then
+                        if p209 then
+                            vu24.Character.HumanoidRootPart.Anchored = true
+                            vu9:Notify({
+                                Title = "Freeze",
+                                Content = "Character frozen",
+                                Time = 5,
+                            })
+                        else
+                            vu24.Character.HumanoidRootPart.Anchored = false
+                            vu9:Notify({
+                                Title = "Freeze",
+                                Content = "Character unfrozen",
+                                Time = 5,
+                            })
+                        end
+                    end
+                end,
+            })
+            v182:AddButton({
+                Text = "Anti AFK",
+                Func = function()
+                    loadstring(
+                        game:HttpGet(
+                            "https://raw.githubusercontent.com/hassanxzayn-lua/Anti-afk/main/antiafkbyhassanxzyn"
+                        )
+                    )()
+                    vu9:Notify({
+                        Title = "Anti AFK",
+                        Content = "Anti AFK enabled",
+                        Time = 5,
+                    })
+                end,
+            })
+            local vu210 = false
+            local vu211 = nil
+            v182:AddToggle("Teleport", {
+                Text = "T + Left Click Teleport",
+                Default = false,
+                Callback = function(p212)
+                    vu210 = p212
+                    if p212 then
+                        if not vu211 then
+                            vu211 = vu20.InputBegan:Connect(function(p213, p214)
+                                if
+                                    not p214
+                                    and (vu210 and p213.UserInputType == Enum.UserInputType.MouseButton1)
+                                    and vu20:IsKeyDown(Enum.KeyCode.T)
+                                then
+                                    local v215 = vu24:GetMouse()
+                                    vu24.Character:MoveTo(
+                                        Vector3.new(
+                                            v215.Hit.x,
+                                            v215.Hit.y,
+                                            v215.Hit.z
+                                        )
+                                    )
+                                    vu9:Notify({
+                                        Title = "Teleport",
+                                        Content = "Teleported to cursor position",
+                                        Time = 3,
+                                    })
+                                end
+                            end)
+                        end
+                        vu9:Notify({
+                            Title = "Teleport",
+                            Content = "T + Click teleport enabled",
+                            Time = 5,
+                        })
+                    else
+                        if vu211 then
+                            vu211:Disconnect()
+                            vu211 = nil
+                        end
+                        vu9:Notify({
+                            Title = "Teleport",
+                            Content = "T + Click teleport disabled",
+                            Time = 5,
+                        })
+                    end
+                end,
+            })
+            local vu216 = false
+            if true then
+                vu24:GetMouse().KeyDown:Connect(function(p217)
+                    if vu216 and p217:byte() == 32 then
+                        local v218 = vu24.Character
+                        if v218 then
+                            v218 =
+                                vu24.Character:FindFirstChildOfClass("Humanoid")
+                        end
+                        if v218 then
+                            v218:ChangeState("Jumping")
+                            wait()
+                            v218:ChangeState("Seated")
+                        end
+                    end
+                end)
+            end
+            v182:AddToggle("InfiniteJump", {
+                Text = "Infinite Jumps (Basic)",
+                Default = false,
+                Callback = function(p219)
+                    vu216 = p219
+                    if p219 then
+                        vu9:Notify({
+                            Title = "Infinite Jump",
+                            Content = "Basic infinite jump enabled",
+                            Time = 5,
+                        })
+                    else
+                        vu9:Notify({
+                            Title = "Infinite Jump",
+                            Content = "Basic infinite jump disabled",
+                            Time = 5,
+                        })
+                    end
+                end,
+            })
+            local v220 = v33.Misc:AddRightGroupbox("Stats")
+            v220:AddSlider("WalkSpeed", {
+                Text = "WalkSpeed",
+                Default = 16,
+                Min = 16,
+                Max = 500,
+                Rounding = 1,
+                Callback = function(p221)
+                    if
+                        vu24.Character
+                        and vu24.Character:FindFirstChild("Humanoid")
+                    then
+                        vu24.Character.Humanoid.WalkSpeed = p221
+                    end
+                end,
+            })
+            v220:AddSlider("JumpPower", {
+                Text = "Jump Power",
+                Default = 50,
+                Min = 50,
+                Max = 500,
+                Rounding = 1,
+                Callback = function(p222)
+                    if
+                        vu24.Character
+                        and vu24.Character:FindFirstChild("Humanoid")
+                    then
+                        vu24.Character.Humanoid.JumpPower = p222
+                    end
+                end,
+            })
+            v220:AddSlider("Gravity", {
+                Text = "Gravity",
+                Default = 196,
+                Min = 0,
+                Max = 500,
+                Rounding = 1,
+                Callback = function(p223)
+                    workspace.Gravity = p223
+                end,
+            })
+            v220:AddSlider("HipHeight", {
+                Text = "HipHeight",
+                Default = 0,
+                Min = 0,
+                Max = 500,
+                Rounding = 1,
+                Callback = function(p224)
+                    if
+                        vu24.Character
+                        and vu24.Character:FindFirstChild("Humanoid")
+                    then
+                        vu24.Character.Humanoid.HipHeight = p224
+                    end
+                end,
+            })
+            v220:AddInput("FOV", {
+                Default = "70",
+                Numeric = true,
+                Finished = true,
+                Text = "Change FOV",
+                Tooltip = "Enter FOV value",
+                Callback = function(p225)
+                    local v226 = tonumber(p225)
+                    if v226 then
+                        workspace.Camera.FieldOfView = v226
+                        vu9:Notify({
+                            Title = "FOV",
+                            Content = "FOV set to " .. v226,
+                            Time = 3,
+                        })
+                    end
+                end,
+            })
+            local v227 = v33.Esp:AddLeftGroupbox("Base ESP")
+            local vu228 = nil
+            local vu229 = nil
+            local vu230 = nil
+            local vu231 = false
+            local function vu232()
+                if vu228 then
+                    vu228:Destroy()
+                end
+                if vu230 then
+                    vu230:Destroy()
+                end
+                vu228 = Instance.new("ScreenGui")
+                vu228.Name = "BaseStatusGUI"
+                vu228.ResetOnSpawn = false
+                vu228.Parent = vu36
+                vu229 = Instance.new("TextLabel")
+                vu229.Size = UDim2.new(0, 230, 0, 30)
+                vu229.Position = UDim2.new(1, -240, 1, -40)
+                vu229.BackgroundTransparency = 0.3
+                vu229.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+                vu229.TextColor3 = Color3.fromRGB(255, 255, 255)
+                vu229.Font = Enum.Font.GothamBold
+                vu229.TextSize = 18
+                vu229.TextStrokeTransparency = 0.5
+                vu229.BorderSizePixel = 0
+                vu229.ZIndex = 9999
+                vu229.Text = ""
+                vu229.Parent = vu228
+                vu230 = Instance.new("Sound")
+                vu230.SoundId = "rbxassetid://2979857617"
+                vu230.Volume = 1.3
+                vu230.Looped = true
+                vu230.Parent = vu17
+            end
+            local function vu233()
+                if vu228 then
+                    vu228:Destroy()
+                    vu228 = nil
+                end
+                if vu230 then
+                    vu230:Stop()
+                    vu230:Destroy()
+                    vu230 = nil
+                end
+                vu229 = nil
+            end
+            local function vu240()
+                local v234 = vu17:FindFirstChild("Plots")
+                if v234 then
+                    local v235, v236, v237 = ipairs(v234:GetChildren())
+                    while true do
+                        local v238
+                        v237, v238 = v235(v236, v237)
+                        if v237 == nil then
+                            break
+                        end
+                        local v239 = v238:FindFirstChild("PlotSign")
+                        if
+                            v239
+                            and (
+                                v239:FindFirstChild("YourBase")
+                                and v239.YourBase.Enabled
+                            )
+                        then
+                            return v238
+                        end
+                    end
+                end
+            end
+            local function vu246(p241)
+                local v242, v243, v244 = ipairs(p241:GetDescendants())
+                while true do
+                    local v245
+                    v244, v245 = v242(v243, v244)
+                    if v244 == nil then
+                        break
+                    end
+                    if
+                        v245:IsA("TextLabel")
+                        and (v245.Name == "RemainingTime" and v245.Visible)
+                    then
+                        return tonumber(v245.Text:match("(%d+)"))
+                    end
+                end
+            end
+            v227:AddToggle("BaseReminder", {
+                Text = "Base Reminder Lock",
+                Default = false,
+                Callback = function(p247)
+                    vu231 = p247
+                    if p247 then
+                        vu232()
+                        vu9:Notify({
+                            Title = "Base Reminder",
+                            Content = "Base reminder enabled",
+                            Time = 5,
+                        })
+                    else
+                        vu233()
+                        vu9:Notify({
+                            Title = "Base Reminder",
+                            Content = "Base reminder disabled",
+                            Time = 5,
+                        })
+                    end
+                end,
+            })
+            local vu248 = false
+            local vu249 = nil
+            local vu250 = {}
+            local function vu256()
+                vu248 = false
+                if vu249 then
+                    vu249:Disconnect()
+                    vu249 = nil
+                end
+                local v251, v252, vu253 = pairs(vu250)
+                while true do
+                    local vu254
+                    vu253, vu254 = v251(v252, vu253)
+                    if vu253 == nil then
+                        break
+                    end
+                    pcall(function()
+                        if vu253 and vu253.Parent then
+                            local v255 =
+                                vu253:FindFirstAncestorWhichIsA("BillboardGui")
+                            if v255 and v255.Parent then
+                                v255.Enabled = vu254.bb_enabled
+                                v255.AlwaysOnTop = vu254.bb_alwaysOnTop
+                                v255.Size = vu254.bb_size
+                                v255.MaxDistance = vu254.bb_maxDistance
+                                vu253.TextScaled = vu254.label_textScaled
+                                vu253.TextWrapped = vu254.label_textWrapped
+                                vu253.AutomaticSize = vu254.label_automaticSize
+                                vu253.Size = vu254.label_size
+                                vu253.TextSize = vu254.label_textSize
+                            end
+                        end
+                    end)
+                end
+                table.clear(vu250)
+            end
+            local function vu274()
+                vu256()
+                vu248 = true
+                local vu257 = workspace.CurrentCamera
+                local vu258 = 45
+                local vu259 = 100
+                local vu260 = 300
+                local vu261 = 30
+                local vu262 = 36
+                local vu263 = 0
+                vu249 = vu14.RenderStepped:Connect(function()
+                    if vu248 then
+                        if tick() - vu263 >= 0.1 then
+                            vu263 = tick()
+                            local v264, v265, v266 =
+                                ipairs(workspace.Plots:GetDescendants())
+                            while true do
+                                local v267
+                                v266, v267 = v264(v265, v266)
+                                if v266 == nil then
+                                    break
+                                end
+                                if
+                                    v267:IsA("TextLabel")
+                                    and v267.Name == "RemainingTime"
+                                then
+                                    local v268 = v267:FindFirstAncestorWhichIsA(
+                                        "BillboardGui"
+                                    )
+                                    if v268 then
+                                        local v269 =
+                                            v268:FindFirstAncestorWhichIsA(
+                                                "Model"
+                                            )
+                                        if v269 then
+                                            local v270 =
+                                                v269:FindFirstChildWhichIsA(
+                                                    "BasePart",
+                                                    true
+                                                )
+                                            if v270 then
+                                                if not vu250[v267] then
+                                                    vu250[v267] = {
+                                                        bb_enabled = v268.Enabled,
+                                                        bb_alwaysOnTop = v268.AlwaysOnTop,
+                                                        bb_size = v268.Size,
+                                                        bb_maxDistance = v268.MaxDistance,
+                                                        label_textScaled = v267.TextScaled,
+                                                        label_textWrapped = v267.TextWrapped,
+                                                        label_automaticSize = v267.AutomaticSize,
+                                                        label_size = v267.Size,
+                                                        label_textSize = v267.TextSize,
+                                                    }
+                                                end
+                                                v268.MaxDistance = 10000
+                                                v268.AlwaysOnTop = true
+                                                v268.ClipsDescendants = false
+                                                v268.Size =
+                                                    UDim2.new(0, 300, 0, 150)
+                                                v267.TextScaled = false
+                                                v267.TextWrapped = true
+                                                v267.ClipsDescendants = false
+                                                v267.Size =
+                                                    UDim2.new(1, 0, 0, 32)
+                                                v267.AutomaticSize =
+                                                    Enum.AutomaticSize.Y
+                                                local v271 = (
+                                                    vu257.CFrame.Position
+                                                    - v270.Position
+                                                ).Magnitude
+                                                if
+                                                    vu258 >= v271
+                                                    or v270.Position.Y < 0
+                                                then
+                                                    v268.Enabled = true
+                                                    local v272 = math.clamp(
+                                                        (v271 - vu259) / vu260,
+                                                        0,
+                                                        1
+                                                    )
+                                                    local v273 = math.clamp(
+                                                        vu261
+                                                            + (
+                                                                    vu262 - vu261
+                                                                )
+                                                                * v272,
+                                                        vu261,
+                                                        vu262
+                                                    )
+                                                    v267.TextSize = v273
+                                                    v267.Size = UDim2.new(
+                                                        1,
+                                                        0,
+                                                        0,
+                                                        v273 + 6
+                                                    )
+                                                else
+                                                    v268.Enabled = false
+                                                end
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    else
+                        return
+                    end
+                end)
+            end
+            v227:AddToggle("ViewBaseTimers", {
+                Text = "View Base Lock Timers",
+                Default = false,
+                Callback = function(p275)
+                    if p275 then
+                        vu274()
+                        vu9:Notify({
+                            Title = "Base Timers",
+                            Content = "Base lock timers view enabled",
+                            Time = 5,
+                        })
+                    else
+                        vu256()
+                        vu9:Notify({
+                            Title = "Base Timers",
+                            Content = "Base lock timers view disabled",
+                            Time = 5,
+                        })
+                    end
+                end,
+            })
+            task.spawn(function()
+                while true do
+                    if vu231 and vu229 then
+                        local v276 = vu240()
+                        if v276 then
+                            local v277 = vu246(v276)
+                            if v277 then
+                                vu229.Text = "\239\191\189\239\191\189\239\184\143 Base Timer: "
+                                    .. v277
+                                    .. "s"
+                                if v277 <= 10 then
+                                    vu229.TextColor3 = Color3.fromRGB(255, 0, 0)
+                                    if not vu230.IsPlaying then
+                                        vu230:Play()
+                                    end
+                                else
+                                    vu229.TextColor3 =
+                                        Color3.fromRGB(255, 255, 255)
+                                    if vu230.IsPlaying then
+                                        vu230:Stop()
+                                    end
+                                end
+                            else
+                                vu229.Text =
+                                    "\239\191\189\239\191\189 Base is Unlocked"
+                                vu229.TextColor3 = Color3.fromRGB(255, 255, 255)
+                                vu15
+                                    :Create(vu229, TweenInfo.new(0.3), {
+                                        BackgroundColor3 = Color3.fromRGB(
+                                            50,
+                                            0,
+                                            0
+                                        ),
+                                    })
+                                    :Play()
+                                if vu230.IsPlaying then
+                                    vu230:Stop()
+                                end
+                            end
+                        else
+                            vu229.Text =
+                                "\239\191\189\239\191\189\239\191\189\239\191\189\239\191\189 Searching for Base..."
+                            vu229.TextColor3 = Color3.fromRGB(255, 255, 255)
+                            vu15
+                                :Create(vu229, TweenInfo.new(0.3), {
+                                    BackgroundColor3 = Color3.fromRGB(
+                                        20,
+                                        20,
+                                        20
+                                    ),
+                                })
+                                :Play()
+                            if vu230.IsPlaying then
+                                vu230:Stop()
+                            end
+                        end
+                    end
+                    task.wait(1)
+                end
+            end)
+            local v278 = v33.Esp:AddLeftGroupbox("Player ESP")
+            local vu279 = false
+            local vu280 = false
+            local vu281 = {}
+            local vu282 = {}
+            local function vu285(p283)
+                if p283.Character and not vu281[p283] then
+                    local v284 = Instance.new("Highlight", p283.Character)
+                    v284.FillColor = Color3.fromRGB(255, 0, 0)
+                    v284.OutlineColor = Color3.fromRGB(255, 255, 255)
+                    vu281[p283] = v284
+                end
+            end
+            local function vu287(p286)
+                if vu281[p286] then
+                    vu281[p286]:Destroy()
+                    vu281[p286] = nil
+                end
+            end
+            local function vu291(p288)
+                if p288.Character and not vu282[p288] then
+                    local v289 = Instance.new("BillboardGui")
+                    v289.Adornee = p288.Character:FindFirstChild("Head")
+                    v289.Size = UDim2.new(0, 200, 0, 50)
+                    v289.StudsOffset = Vector3.new(0, 2, 0)
+                    v289.AlwaysOnTop = true
+                    v289.Parent = p288.Character
+                    local v290 = Instance.new("TextLabel")
+                    v290.Size = UDim2.new(1, 0, 1, 0)
+                    v290.BackgroundTransparency = 1
+                    v290.TextColor3 = Color3.new(1, 1, 1)
+                    v290.TextStrokeTransparency = 0
+                    v290.Text = p288.Name
+                    v290.TextScaled = true
+                    v290.Font = Enum.Font.SourceSansBold
+                    v290.Parent = v289
+                    vu282[p288] = v289
+                end
+            end
+            local function vu293(p292)
+                if vu282[p292] then
+                    vu282[p292]:Destroy()
+                    vu282[p292] = nil
+                end
+            end
+            local vu294 = nil
+            local function vu297(p295)
+                if
+                    p295
+                    and (
+                        p295 ~= vu24.Character
+                        and not p295:FindFirstChild("HighlightESP")
+                    )
+                then
+                    local v296 = Instance.new("Highlight")
+                    v296.Name = "HighlightESP"
+                    v296.FillTransparency = 0.75
+                    v296.OutlineTransparency = 0.5
+                    v296.FillColor = Color3.new(0, 0, 0)
+                    v296.OutlineColor = Color3.new(1, 1, 1)
+                    v296.Adornee = p295
+                    v296.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+                    v296.Parent = p295
+                end
+            end
+            local function vu299(p298)
+                if p298 then
+                    p298 = p298:FindFirstChild("HighlightESP")
+                end
+                if p298 then
+                    p298:Destroy()
+                end
+            end
+            local function vu305()
+                if not vu294 then
+                    vu294 = vu14.Heartbeat:Connect(function()
+                        if
+                            not _G._lastESPUpdate
+                            or tick() - _G._lastESPUpdate >= 0.1
+                        then
+                            local v300 = vu13
+                            local v301, v302, v303 = ipairs(v300:GetPlayers())
+                            while true do
+                                local v304
+                                v303, v304 = v301(v302, v303)
+                                if v303 == nil then
+                                    break
+                                end
+                                if v304 ~= vu24 and v304.Character then
+                                    vu297(v304.Character)
+                                end
+                            end
+                            _G._lastESPUpdate = tick()
+                        end
+                    end)
+                end
+            end
+            local function vu311()
+                if vu294 then
+                    vu294:Disconnect()
+                    vu294 = nil
+                end
+                local v306 = vu13
+                local v307, v308, v309 = ipairs(v306:GetPlayers())
+                while true do
+                    local v310
+                    v309, v310 = v307(v308, v309)
+                    if v309 == nil then
+                        break
+                    end
+                    if v310 ~= vu24 and v310.Character then
+                        vu299(v310.Character)
+                    end
+                end
+            end
+            v278:AddToggle("PlayersESP", {
+                Text = "Players ESP (Basic)",
+                Default = false,
+                Callback = function(p312)
+                    vu279 = p312
+                    if vu279 then
+                        local v313 = vu13
+                        local v314, v315, v316 = pairs(v313:GetPlayers())
+                        while true do
+                            local v317
+                            v316, v317 = v314(v315, v316)
+                            if v316 == nil then
+                                break
+                            end
+                            if v317.Character then
+                                vu285(v317)
+                            end
+                        end
+                        vu9:Notify({
+                            Title = "Player ESP",
+                            Content = "Basic player ESP enabled",
+                            Time = 5,
+                        })
+                    else
+                        local v318, v319, v320 = pairs(vu281)
+                        while true do
+                            v320 = v318(v319, v320)
+                            if v320 == nil then
+                                break
+                            end
+                            vu287(v320)
+                        end
+                        vu9:Notify({
+                            Title = "Player ESP",
+                            Content = "Basic player ESP disabled",
+                            Time = 5,
+                        })
+                    end
+                end,
+            })
+            v278:AddToggle("PlayersName", {
+                Text = "Players Name",
+                Default = false,
+                Callback = function(p321)
+                    vu280 = p321
+                    if vu280 then
+                        local v322 = vu13
+                        local v323, v324, v325 = pairs(v322:GetPlayers())
+                        while true do
+                            local v326
+                            v325, v326 = v323(v324, v325)
+                            if v325 == nil then
+                                break
+                            end
+                            if v326.Character then
+                                vu291(v326)
+                            end
+                        end
+                        vu9:Notify({
+                            Title = "Player Names",
+                            Content = "Player names enabled",
+                            Time = 5,
+                        })
+                    else
+                        local v327, v328, v329 = pairs(vu282)
+                        while true do
+                            v329 = v327(v328, v329)
+                            if v329 == nil then
+                                break
+                            end
+                            vu293(v329)
+                        end
+                        vu9:Notify({
+                            Title = "Player Names",
+                            Content = "Player names disabled",
+                            Time = 5,
+                        })
+                    end
+                end,
+            })
+            v278:AddToggle("AdvancedPlayerESP", {
+                Text = "Player ESP (Advanced)",
+                Default = false,
+                Callback = function(p330)
+                    if p330 then
+                        vu305()
+                        vu9:Notify({
+                            Title = "Player ESP",
+                            Content = "Advanced player ESP enabled",
+                            Time = 5,
+                        })
+                    else
+                        vu311()
+                        vu9:Notify({
+                            Title = "Player ESP",
+                            Content = "Advanced player ESP disabled",
+                            Time = 5,
+                        })
+                    end
+                end,
+            })
+            local v331 = workspace:FindFirstChild("Plots")
+            local vu332 = {}
+            local function vu343(p333)
+                local v334 = p333:FindFirstChild("Purchases")
+                    or p333:WaitForChild("Purchases", 5)
+                if v334 then
+                    local v335 = v334:FindFirstChild("PlotBlock")
+                        or v334:WaitForChild("PlotBlock", 5)
+                    if v335 then
+                        local v336 = v335:FindFirstChild("Main")
+                            or v335:WaitForChild("Main", 5)
+                        if v336 then
+                            local v337 = v336:FindFirstChild("BillboardGui")
+                                or v336:WaitForChild("BillboardGui", 5)
+                            if
+                                v337
+                                and (
+                                    v337:IsA("BillboardGui")
+                                    and not table.find(vu332, v337)
+                                )
+                            then
+                                v337.AlwaysOnTop = true
+                                v337.MaxDistance = 10000
+                                v337.Size = UDim2.new(30, 0, 15, 0)
+                                v337.StudsOffset = Vector3.new(0, 5, 0)
+                                v337.Enabled = false
+                                local v338, v339, v340 = ipairs({
+                                    "Locked",
+                                    "LockStudio",
+                                    "Delay",
+                                    "RemainingTime",
+                                })
+                                while true do
+                                    local v341
+                                    v340, v341 = v338(v339, v340)
+                                    if v340 == nil then
+                                        break
+                                    end
+                                    local v342 = v337:FindFirstChild(v341)
+                                    if v342 and v342:IsA("TextLabel") then
+                                        v342.TextScaled = true
+                                        v342.Size = UDim2.new(1, 0, 0.25, 0)
+                                        v342.TextStrokeTransparency = 0.3
+                                        v342.TextColor3 = Color3.new(1, 1, 1)
+                                        v342.BackgroundTransparency = 1
+                                        v342.TextWrapped = true
+                                        v342.TextXAlignment =
+                                            Enum.TextXAlignment.Center
+                                        v342.TextYAlignment =
+                                            Enum.TextYAlignment.Center
+                                    end
+                                end
+                                table.insert(vu332, v337)
+                            end
+                        end
+                    else
+                        return
+                    end
+                else
+                    return
+                end
+            end
+            local vu344, vu345, vu346, vu347, vu348, vu349, vu350, vu351, vu352, vu353, vu354, vu355, vu356, vu357, vu358, vu359
+            if v331 then
+                local v360, v361, v362 = pairs(v331:GetChildren())
+                vu344 = vu195
+                vu345 = vu180
+                vu346 = vu287
+                vu347 = vu152
+                vu348 = vu233
+                vu349 = vu94
+                vu350 = vu256
+                vu351 = vu249
+                vu352 = vu211
+                vu353 = vu193
+                vu354 = vu161
+                vu355 = vu279
+                vu356 = vu294
+                vu357 = vu311
+                vu358 = vu281
+                vu359 = vu285
+                while true do
+                    local v363
+                    v362, v363 = v360(v361, v362)
+                    if v362 == nil then
+                        break
+                    end
+                    vu343(v363)
+                end
+            else
+                vu356 = vu294
+                vu357 = vu311
+                vu358 = vu281
+                vu359 = vu285
+                vu344 = vu195
+                vu345 = vu180
+                vu346 = vu287
+                vu347 = vu152
+                vu349 = vu94
+                vu348 = vu233
+                vu350 = vu256
+                vu351 = vu249
+                vu352 = vu211
+                vu353 = vu193
+                vu354 = vu161
+                vu355 = vu279
+            end
+            v227:AddToggle("UnlockedBaseESP", {
+                Text = "Esp Unlocked Base",
+                Default = false,
+                Callback = function(p364)
+                    local v365, v366, v367 = pairs(vu332)
+                    while true do
+                        local v368
+                        v367, v368 = v365(v366, v367)
+                        if v367 == nil then
+                            break
+                        end
+                        if v368 and v368.Parent then
+                            v368.Enabled = p364
+                        end
+                    end
+                    if p364 then
+                        vu9:Notify({
+                            Title = "Base ESP",
+                            Content = "Unlocked base ESP enabled",
+                            Time = 5,
+                        })
+                    else
+                        vu9:Notify({
+                            Title = "Base ESP",
+                            Content = "Unlocked base ESP disabled",
+                            Time = 5,
+                        })
+                    end
+                end,
+            })
+            if v331 then
+                v331.ChildAdded:Connect(function(p369)
+                    vu343(p369)
+                end)
+            end
+            local v370 = v33.Esp:AddRightGroupbox("Advanced ESP")
+            local vu371 = {
+                Legendary = {
+                    Color = Color3.new(1, 1, 0),
+                    Size = UDim2.new(0, 150, 0, 50),
+                },
+                Mythic = {
+                    Color = Color3.new(1, 0, 0),
+                    Size = UDim2.new(0, 150, 0, 50),
+                },
+                ["Brainrot God"] = {
+                    Color = Color3.new(0.5, 0, 0.5),
+                    Size = UDim2.new(0, 180, 0, 60),
+                },
+                Secret = {
+                    Color = Color3.new(0, 0, 0),
+                    Size = UDim2.new(0, 200, 0, 70),
+                },
+            }
+            local vu372 = {
+                Gold = {
+                    Color = Color3.fromRGB(255, 215, 0),
+                    Size = UDim2.new(0, 120, 0, 30),
+                },
+                Diamond = {
+                    Color = Color3.fromRGB(0, 191, 255),
+                    Size = UDim2.new(0, 120, 0, 30),
+                },
+                Rainbow = {
+                    Color = Color3.fromRGB(255, 192, 203),
+                    Size = UDim2.new(0, 120, 0, 30),
+                },
+                Bloodrot = {
+                    Color = Color3.fromRGB(139, 0, 0),
+                    Size = UDim2.new(0, 120, 0, 30),
+                },
+            }
+            local vu373 = {}
+            local vu374 = false
+            local vu375 = {}
+            local function vu392()
+                if vu374 then
+                    local v376, v377, v378 =
+                        pairs(workspace.Plots:GetChildren())
+                    while true do
+                        local v379
+                        v378, v379 = v376(v377, v378)
+                        if v378 == nil then
+                            break
+                        end
+                        local v380 = v379:FindFirstChild("Purchases", true)
+                            and (
+                                v379.Purchases:FindFirstChild("PlotBlock", true)
+                                and v379.Purchases.PlotBlock.Main:FindFirstChild(
+                                    "BillboardGui",
+                                    true
+                                )
+                            )
+                        if v380 then
+                            v380 =
+                                v379.Purchases.PlotBlock.Main.BillboardGui:FindFirstChild(
+                                    "RemainingTime",
+                                    true
+                                )
+                        end
+                        if v380 and v380:IsA("TextLabel") then
+                            local v381 = "LockTimeESP_" .. v379.Name
+                            local v382 = v379:FindFirstChild(v381)
+                            local v383 = v380.Text == "0s"
+                            local v384 = v383 and "Unlocked"
+                                or "Lock: " .. v380.Text
+                            local v385
+                            if v379.Name ~= vu57 then
+                                v385 = v383 and Color3.fromRGB(220, 20, 60)
+                                    or Color3.fromRGB(255, 255, 0)
+                            else
+                                v385 = v383 and Color3.fromRGB(0, 255, 0)
+                                    or Color3.fromRGB(0, 255, 0)
+                            end
+                            if v382 then
+                                v382.TextLabel.Text = v384
+                                v382.TextLabel.TextColor3 = v385
+                            else
+                                local v386 = Instance.new("BillboardGui")
+                                v386.Name = v381
+                                v386.Size = UDim2.new(0, 200, 0, 30)
+                                v386.StudsOffset = Vector3.new(0, 5, 0)
+                                v386.AlwaysOnTop = true
+                                v386.Adornee = v379.Purchases.PlotBlock.Main
+                                local v387 = Instance.new("TextLabel")
+                                v387.Text = v384
+                                v387.Size = UDim2.new(1, 0, 1, 0)
+                                v387.BackgroundTransparency = 1
+                                v387.TextScaled = true
+                                v387.TextColor3 = v385
+                                v387.TextStrokeColor3 = Color3.new(0, 0, 0)
+                                v387.TextStrokeTransparency = 0
+                                v387.Font = Enum.Font.SourceSansBold
+                                v387.Parent = v386
+                                v386.Parent = v379
+                                vu375[v379.Name] = v386
+                            end
+                        end
+                    end
+                else
+                    local v388, v389, v390 = pairs(vu375)
+                    while true do
+                        local v391
+                        v390, v391 = v388(v389, v390)
+                        if v390 == nil then
+                            break
+                        end
+                        if v391 then
+                            v391:Destroy()
+                        end
+                    end
+                    vu375 = {}
+                end
+            end
+            local function vu413()
+                local v393, v394, v395 = pairs(workspace.Plots:GetChildren())
+                while true do
+                    local v396
+                    v395, v396 = v393(v394, v395)
+                    if v395 == nil then
+                        break
+                    end
+                    if v396.Name ~= vu57 then
+                        local v397, v398, v399 = pairs(v396:GetDescendants())
+                        while true do
+                            local v400
+                            v399, v400 = v397(v398, v399)
+                            if v399 == nil then
+                                break
+                            end
+                            if
+                                v400.Name == "Rarity"
+                                and (v400:IsA("TextLabel") and vu371[v400.Text])
+                            then
+                                local v401 = v400.Parent.Parent
+                                local v402 = v400.Text .. "_ESP"
+                                local v403 = "Mutation_ESP"
+                                local v404 = v401:FindFirstChild(v402)
+                                local v405 = v401:FindFirstChild(v403)
+                                if vu373[v400.Text] then
+                                    if not v404 then
+                                        local v406 = vu371[v400.Text]
+                                        local v407 =
+                                            Instance.new("BillboardGui")
+                                        v407.Name = v402
+                                        v407.Size = v406.Size
+                                        v407.StudsOffset = Vector3.new(0, 3, 0)
+                                        v407.AlwaysOnTop = true
+                                        local v408 = Instance.new("TextLabel")
+                                        v408.Text = v400.Parent.DisplayName.Text
+                                        v408.Size = UDim2.new(1, 0, 1, 0)
+                                        v408.BackgroundTransparency = 1
+                                        v408.TextScaled = true
+                                        v408.TextColor3 = v406.Color
+                                        v408.TextStrokeColor3 =
+                                            Color3.new(0, 0, 0)
+                                        v408.TextStrokeTransparency = 0
+                                        v408.Font = Enum.Font.SourceSansBold
+                                        v408.Parent = v407
+                                        v407.Parent = v401
+                                    end
+                                    local v409 =
+                                        v400.Parent:FindFirstChild("Mutation")
+                                    if
+                                        v409
+                                        and (
+                                            v409:IsA("TextLabel")
+                                            and vu372[v409.Text]
+                                        )
+                                    then
+                                        local v410 = vu372[v409.Text]
+                                        if v405 then
+                                            v405.TextLabel.Text = v409.Text
+                                            v405.TextLabel.TextColor3 =
+                                                v410.Color
+                                        else
+                                            local v411 =
+                                                Instance.new("BillboardGui")
+                                            v411.Name = v403
+                                            v411.Size = v410.Size
+                                            v411.StudsOffset =
+                                                Vector3.new(0, 6, 0)
+                                            v411.AlwaysOnTop = true
+                                            local v412 =
+                                                Instance.new("TextLabel")
+                                            v412.Text = v409.Text
+                                            v412.Size = UDim2.new(1, 0, 1, 0)
+                                            v412.BackgroundTransparency = 1
+                                            v412.TextScaled = true
+                                            v412.TextColor3 = v410.Color
+                                            v412.TextStrokeColor3 =
+                                                Color3.new(0, 0, 0)
+                                            v412.TextStrokeTransparency = 0
+                                            v412.Font = Enum.Font.SourceSansBold
+                                            v412.Parent = v411
+                                            v411.Parent = v401
+                                        end
+                                    elseif v405 then
+                                        v405:Destroy()
+                                    end
+                                else
+                                    if v404 then
+                                        v404:Destroy()
+                                    end
+                                    if v405 then
+                                        v405:Destroy()
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+            v370:AddDropdown("ESPDropdown", {
+                Values = {
+                    "Lock",
+                    "Players",
+                    "Legendary",
+                    "Mythic",
+                    "Brainrot God",
+                    "Secret",
+                },
+                Multi = true,
+                Default = {},
+                Text = "ESP Types",
+                Callback = function(p414)
+                    if p414.Players then
+                        vu355 = true
+                        local v415 = vu13
+                        local v416, v417, v418 = pairs(v415:GetPlayers())
+                        while true do
+                            local v419
+                            v418, v419 = v416(v417, v418)
+                            if v418 == nil then
+                                break
+                            end
+                            if v419.Character then
+                                vu359(v419)
+                            end
+                        end
+                    else
+                        vu355 = false
+                        local v420, v421, v422 = pairs(vu358)
+                        while true do
+                            v422 = v420(v421, v422)
+                            if v422 == nil then
+                                break
+                            end
+                            vu346(v422)
+                        end
+                    end
+                    vu373.Legendary = p414.Legendary or false
+                    vu373.Mythic = p414.Mythic or false
+                    vu373["Brainrot God"] = p414["Brainrot God"] or false
+                    vu373.Secret = p414.Secret or false
+                    vu374 = p414.Lock or false
+                    vu392()
+                    vu413()
+                    vu9:Notify({
+                        Title = "ESP",
+                        Content = "ESP settings updated",
+                        Time = 5,
+                    })
+                end,
+            })
+            task.spawn(function()
+                while true do
+                    task.wait(0.25)
+                    if vu374 then
+                        vu392()
+                    end
+                    if next(vu373) ~= nil then
+                        vu413()
+                    end
+                end
+            end)
+            local v423 = v33.Pet:AddLeftGroupbox("Pet Notifications")
+            local vu424 = workspace:WaitForChild("RenderedMovingAnimals")
+            local vu425 = {
+                "Frigo Camelo",
+                "Orangutini Ananassini",
+                "Rhino Toasterino",
+                "Bombardiro Crocodilo",
+                "Bombombini Gusini",
+                "Cavallo Virtuoso",
+            }
+            local vu426 = {
+                "Cocofanto Elefanto",
+                "Girafa Celestre",
+                "Gattatino Nyanino",
+                "Matteo",
+                "Tralalero Tralala",
+                "Unclito Samito",
+                "Odin Din Din Dun",
+                "Trenozosturzzo Turbo 3000",
+                "Lucky Block",
+            }
+            local vu427 = {
+                "La Vacca Saturno Saturnita",
+                "Sammyni Spiderini",
+                "Los Tralaleritos",
+                "Las Tralaleritas",
+                "Graipuss Medussi",
+                "La Grande Combinassion",
+                "Garama and Madundung",
+            }
+            local function vu439(p428, p429)
+                local v430 = vu424
+                local v431, v432, v433 = ipairs(v430:GetChildren())
+                while true do
+                    local v434
+                    v433, v434 = v431(v432, v433)
+                    if v433 == nil then
+                        break
+                    end
+                    local v435, v436, v437 = ipairs(p428)
+                    while true do
+                        local v438
+                        v437, v438 = v435(v436, v437)
+                        if v437 == nil then
+                            break
+                        end
+                        if v434.Name:match(v438) then
+                            vu9:Notify({
+                                Title = p429 .. " Brainrot!",
+                                Content = v434.Name .. " sudah ada",
+                                Time = 5,
+                            })
+                        end
+                    end
+                end
+            end
+            vu424.ChildAdded:Connect(function(p440)
+                if getgenv().notifyMythic then
+                    local v441, v442, v443 = ipairs(vu425)
+                    while true do
+                        local v444
+                        v443, v444 = v441(v442, v443)
+                        if v443 == nil then
+                            break
+                        end
+                        if p440.Name:match(v444) then
+                            vu9:Notify({
+                                Title = "Mythic Brainrot!",
+                                Content = p440.Name .. " Spawn!!",
+                                Time = 5,
+                            })
+                        end
+                    end
+                end
+                if getgenv().notifyGod then
+                    local v445, v446, v447 = ipairs(vu426)
+                    while true do
+                        local v448
+                        v447, v448 = v445(v446, v447)
+                        if v447 == nil then
+                            break
+                        end
+                        if p440.Name:match(v448) then
+                            vu9:Notify({
+                                Title = "God Brainrot!",
+                                Content = p440.Name .. " Spawn!!",
+                                Time = 5,
+                            })
+                        end
+                    end
+                end
+                if getgenv().notifySecret then
+                    local v449, v450, v451 = ipairs(vu427)
+                    while true do
+                        local v452
+                        v451, v452 = v449(v450, v451)
+                        if v451 == nil then
+                            break
+                        end
+                        if p440.Name:match(v452) then
+                            vu9:Notify({
+                                Title = "Secret Brainrot!",
+                                Content = p440.Name .. " Spawn!!",
+                                Time = 5,
+                            })
+                        end
+                    end
+                end
+            end)
+            getgenv().notifyMythic = false
+            getgenv().notifyGod = false
+            getgenv().notifySecret = false
+            v423:AddToggle("NotifyMythic", {
+                Text = "Notify Mythic Brainrot",
+                Default = false,
+                Callback = function(p453)
+                    getgenv().notifyMythic = p453
+                    if p453 then
+                        vu439(vu425, "Mythic")
+                    end
+                    vu9:Notify({
+                        Title = "Pet Notifications",
+                        Content = "Mythic brainrot notifications "
+                            .. (p453 and "enabled" or "disabled"),
+                        Time = 5,
+                    })
+                end,
+            })
+            v423:AddToggle("NotifyGod", {
+                Text = "Notify God Brainrot",
+                Default = false,
+                Callback = function(p454)
+                    getgenv().notifyGod = p454
+                    if p454 then
+                        vu439(vu426, "God")
+                    end
+                    vu9:Notify({
+                        Title = "Pet Notifications",
+                        Content = "God brainrot notifications "
+                            .. (p454 and "enabled" or "disabled"),
+                        Time = 5,
+                    })
+                end,
+            })
+            v423:AddToggle("NotifySecret", {
+                Text = "Notify Secret Brainrot",
+                Default = false,
+                Callback = function(p455)
+                    getgenv().notifySecret = p455
+                    if p455 then
+                        vu439(vu427, "Secret")
+                    end
+                    vu9:Notify({
+                        Title = "Pet Notifications",
+                        Content = "Secret brainrot notifications "
+                            .. (p455 and "enabled" or "disabled"),
+                        Time = 5,
+                    })
+                end,
+            })
+            local v456 = v33.Buy:AddLeftGroupbox("Shops")
+            v456:AddButton({
+                Text = "Open Shop",
+                Func = function()
+                    local v457 = vu24:FindFirstChild("PlayerGui")
+                    if v457 then
+                        local v458 = v457:FindFirstChild("CoinsShop")
+                        if v458 and v458:IsA("ScreenGui") then
+                            local v459 = v458:FindFirstChild("CoinsShop")
+                            if v459 and v459:IsA("Frame") then
+                                local v460 = not v459.Visible
+                                v459.Visible = v460
+                                v459.Position = v460
+                                        and UDim2.new(0.5, 0, 0.5, 0)
+                                    or UDim2.new(0.5, 0, 1.5, 0)
+                                vu9:Notify({
+                                    Title = "Shop",
+                                    Content = "Shop "
+                                        .. (v460 and "opened" or "closed"),
+                                    Time = 3,
+                                })
+                            end
+                        end
+                    else
+                        return
+                    end
+                end,
+            })
+            v456:AddButton({
+                Text = "Open Galaxy Wheel",
+                Func = function()
+                    local v461 = vu24:FindFirstChild("PlayerGui")
+                    if v461 then
+                        local v462 = v461:FindFirstChild("YinYangWheel")
+                        if v462 and v462:IsA("ScreenGui") then
+                            local v463 = v462:FindFirstChild("YinYangWheel")
+                            if v463 and v463:IsA("Frame") then
+                                local v464 = not v463.Visible
+                                v463.Visible = v464
+                                v463.Position = v464
+                                        and UDim2.new(0.5, 0, 0.5, 0)
+                                    or UDim2.new(0.5, 0, 1.5, 0)
+                                vu9:Notify({
+                                    Title = "Galaxy Wheel",
+                                    Content = "Galaxy wheel "
+                                        .. (v464 and "opened" or "closed"),
+                                    Time = 3,
+                                })
+                            end
+                        end
+                    else
+                        return
+                    end
+                end,
+            })
+            local v465 = v33.Buy:AddRightGroupbox("Auto Buy")
+            local vu466 = {}
+            v465:AddDropdown("AutoBuyItems", {
+                Values = {
+                    "Slap",
+                    "Speed Coil",
+                    "Trap",
+                    "Iron Slap",
+                    "Gravity Coil",
+                    "Bee Launcher",
+                    "Gold Slap",
+                    "Coil Combo",
+                    "Rage Table",
+                    "Diamond Slap",
+                    "Grapple Hook",
+                    "Taser Gun",
+                    "Emerald Slap",
+                    "Invisibility Cloak",
+                    "Boogie Bomb",
+                    "Ruby Slap",
+                    "Medusa's Head",
+                    "Dark Matter Slap",
+                    "Web Slinger",
+                    "Flame Slap",
+                    "Quantum Cloner",
+                    "All Seeing Sentry",
+                    "Nuclear Slap",
+                    "Rainbowrath Sword",
+                    "Body Swap Potion",
+                    "Splatter Slap",
+                    "Paintball Gun",
+                },
+                Multi = true,
+                Default = {},
+                Text = "Select Which Items To Auto Buy",
+                Callback = function(p467)
+                    vu466 = p467
+                end,
+            })
+            v465:AddButton({
+                Text = "Auto Buy Selected Items",
+                Func = function()
+                    local v468, v469, v470 = ipairs(vu466)
+                    while true do
+                        local v471
+                        v470, v471 = v468(v469, v470)
+                        if v470 == nil then
+                            break
+                        end
+                        game:GetService("ReplicatedStorage")
+                            :WaitForChild("Packages")
+                            :WaitForChild("Net")
+                            :WaitForChild("RF/CoinsShopService/RequestBuy")
+                            :InvokeServer(unpack({
+                                v471,
+                            }))
+                        wait(0.3)
+                    end
+                    vu9:Notify({
+                        Title = "Auto Buy",
+                        Content = "Auto buy completed for selected items",
+                        Time = 5,
+                    })
+                end,
+            })
+            local v472 = v33.Server:AddLeftGroupbox("Server Management")
+            local vu473 = ""
+            v472:AddInput("JobID", {
+                Default = "",
+                Text = "Enter Job ID",
+                Tooltip = "Enter server Job ID to join",
+                Callback = function(p474)
+                    vu473 = p474
+                end,
+            })
+            v472:AddButton({
+                Text = "Join Job ID",
+                Func = function()
+                    if vu473 == "" then
+                        vu9:Notify({
+                            Title = "Error",
+                            Content = "Please enter a valid Job ID.",
+                            Time = 5,
+                        })
+                    else
+                        local vu475 = game.PlaceId
+                        if vu473 ~= game.JobId then
+                            local v476, v477 = pcall(function()
+                                vu19:TeleportToPlaceInstance(vu475, vu473, vu24)
+                            end)
+                            if v476 then
+                                vu9:Notify({
+                                    Title = "Teleporting",
+                                    Content = "Attempting to join Job ID: "
+                                        .. vu473,
+                                    Time = 5,
+                                })
+                            else
+                                vu9:Notify({
+                                    Title = "Error",
+                                    Content = "Failed to teleport to the specified Job ID: "
+                                        .. v477,
+                                    Time = 5,
+                                })
+                            end
+                        else
+                            vu9:Notify({
+                                Title = "Already in the Server",
+                                Content = "You are already in the server with this Job ID.",
+                                Time = 5,
+                            })
+                        end
+                    end
+                end,
+            })
+            v472:AddButton({
+                Text = "Clear Job ID",
+                Func = function()
+                    vu473 = ""
+                    vu12.JobID:SetValue("")
+                    vu9:Notify({
+                        Title = "Cleared",
+                        Content = "Job ID has been cleared.",
+                        Time = 5,
+                    })
+                end,
+            })
+            v472:AddButton({
+                Text = "Copy Job ID",
+                Func = function()
+                    local v478 = game.JobId
+                    if setclipboard then
+                        setclipboard(v478)
+                        vu9:Notify({
+                            Title = "Success",
+                            Content = "Job ID copied to clipboard: " .. v478,
+                            Time = 5,
+                        })
+                    else
+                        vu9:Notify({
+                            Title = "Error",
+                            Content = "setclipboard is not available",
+                            Time = 5,
+                        })
+                    end
+                end,
+            })
+            local v479 = v33.Weather:AddLeftGroupbox("Time Control")
+            local vu480 = nil
+            local vu481 = nil
+            v479:AddToggle("OnlyDay", {
+                Text = "Only Day",
+                Default = false,
+                Callback = function(p482)
+                    if p482 then
+                        vu480 = vu14.Heartbeat:Connect(function()
+                            vu16.TimeOfDay = "12:00:00"
+                        end)
+                        vu9:Notify({
+                            Title = "Time Control",
+                            Content = "Always day enabled",
+                            Time = 5,
+                        })
+                    else
+                        if vu480 then
+                            vu480:Disconnect()
+                            vu480 = nil
+                        end
+                        vu9:Notify({
+                            Title = "Time Control",
+                            Content = "Always day disabled",
+                            Time = 5,
+                        })
+                    end
+                end,
+            })
+            v479:AddToggle("OnlyNight", {
+                Text = "Only Night",
+                Default = false,
+                Callback = function(p483)
+                    if p483 then
+                        vu481 = vu14.Heartbeat:Connect(function()
+                            vu16.TimeOfDay = "22:00:00"
+                        end)
+                        vu9:Notify({
+                            Title = "Time Control",
+                            Content = "Always night enabled",
+                            Time = 5,
+                        })
+                    else
+                        if vu481 then
+                            vu481:Disconnect()
+                            vu481 = nil
+                        end
+                        vu9:Notify({
+                            Title = "Time Control",
+                            Content = "Always night disabled",
+                            Time = 5,
+                        })
+                    end
+                end,
+            })
+            local v484 = v33.Performance:AddLeftGroupbox("Performance")
+            local vu485 = nil
+            v484:AddButton({
+                Text = "FPS Counter & Boost",
+                Func = function()
+                    if gethui then
+                        local v486 = gethui():FindFirstChild("FpsCounterGui")
+                        if v486 then
+                            v486:Destroy()
+                            vu16.GlobalShadows = true
+                            vu16.FogEnd = 1000
+                            vu16.EnvironmentDiffuseScale = 1
+                            vu16.EnvironmentSpecularScale = 1
+                            vu9:Notify({
+                                Title = "Performance",
+                                Content = "FPS Counter disabled",
+                                Time = 5,
+                            })
+                        else
+                            vu485 = Instance.new("ScreenGui")
+                            vu485.Name = "FpsCounterGui"
+                            vu485.IgnoreGuiInset = true
+                            vu485.Parent = gethui()
+                            local vu487 = Instance.new("TextLabel")
+                            vu487.Name = "FpsLabel"
+                            vu487.BackgroundTransparency = 1
+                            vu487.Position = UDim2.new(1, -100, 0, 0)
+                            vu487.Size = UDim2.new(0, 100, 0, 30)
+                            vu487.Text = "0 FPS"
+                            vu487.TextSize = 16
+                            vu487.TextColor3 = Color3.fromRGB(255, 255, 255)
+                            vu487.TextStrokeTransparency = 0.6
+                            vu487.Draggable = true
+                            vu487.Parent = vu485
+                            local function vu493(p488)
+                                local v489 = tick()
+                                local vu490 = 0
+                                local v491 = vu14.Heartbeat:Connect(function()
+                                    vu490 = vu490 + 1
+                                end)
+                                task.wait(p488)
+                                v491:Disconnect()
+                                local v492 = tick() - v489
+                                return math.ceil(vu490 / v492)
+                            end
+                            local vu494 = true
+                            task.spawn(function()
+                                while vu494 and vu485.Parent do
+                                    local v495, v496 = pcall(vu493, 0.5)
+                                    if v495 then
+                                        vu487.Text = tostring(v496) .. " FPS"
+                                        if v496 >= 60 then
+                                            vu487.TextColor3 =
+                                                Color3.fromRGB(0, 255, 0)
+                                        elseif v496 >= 50 then
+                                            vu487.TextColor3 =
+                                                Color3.fromRGB(255, 170, 0)
+                                        elseif v496 >= 30 then
+                                            vu487.TextColor3 =
+                                                Color3.fromRGB(255, 85, 0)
+                                        else
+                                            vu487.TextColor3 =
+                                                Color3.fromRGB(255, 0, 0)
+                                        end
+                                    end
+                                    task.wait(0.5)
+                                end
+                            end)
+                            vu485.AncestryChanged:Connect(function()
+                                if not vu485.Parent then
+                                    vu494 = false
+                                end
+                            end)
+                            pcall(function()
+                                vu16.GlobalShadows = false
+                                vu16.FogEnd = 100000
+                                vu16.EnvironmentDiffuseScale = 0.5
+                                vu16.EnvironmentSpecularScale = 0.5
+                                local v497, v498, v499 =
+                                    ipairs(game:GetDescendants())
+                                while true do
+                                    local vu500
+                                    v499, vu500 = v497(v498, v499)
+                                    if v499 == nil then
+                                        break
+                                    end
+                                    pcall(function()
+                                        if vu500:IsA("BasePart") then
+                                            vu500.CastShadow = false
+                                            vu500.Material =
+                                                Enum.Material.SmoothPlastic
+                                            vu500.Reflectance = 0
+                                            if vu500:IsA("MeshPart") then
+                                                vu500.CollisionFidelity =
+                                                    Enum.CollisionFidelity.Box
+                                            end
+                                        elseif
+                                            vu500:IsA("Decal")
+                                            or vu500:IsA("Texture")
+                                        then
+                                            if vu500.Transparency > 0.25 then
+                                                vu500.Transparency = 0.25
+                                            end
+                                        elseif
+                                            vu500:IsA("ParticleEmitter")
+                                            or vu500:IsA("Trail")
+                                        then
+                                            vu500.Lifetime = NumberRange.new(0)
+                                        end
+                                    end)
+                                end
+                            end)
+                            vu9:Notify({
+                                Title = "Performance",
+                                Content = "FPS Counter enabled and performance optimized",
+                                Time = 5,
+                            })
+                        end
+                    else
+                        vu9:Notify({
+                            Title = "Error",
+                            Content = "gethui function not available",
+                            Time = 5,
+                        })
+                        return
+                    end
+                end,
+            })
+            v484:AddButton({
+                Text = "Remove Laser",
+                Func = function()
+                    local v501 = workspace:FindFirstChild("Plots")
+                    if v501 then
+                        local v502, v503, v504 = pairs(v501:GetChildren())
+                        while true do
+                            local v505
+                            v504, v505 = v502(v503, v504)
+                            if v504 == nil then
+                                break
+                            end
+                            local v506 = v505:FindFirstChild("Laser")
+                            if v506 and v506:IsA("Folder") then
+                                v506:Destroy()
+                            end
+                        end
+                    end
+                    vu9:Notify({
+                        Title = "Performance",
+                        Content = "Lasers removed from plots",
+                        Time = 5,
+                    })
+                end,
+            })
+            local v507 = v33.Settings:AddLeftGroupbox("Menu")
+            v507:AddToggle("KeybindMenuOpen", {
+                Default = vu9.KeybindFrame.Visible,
+                Text = "Open Keybind Menu",
+                Callback = function(p508)
+                    vu9.KeybindFrame.Visible = p508
+                end,
+            })
+            v507:AddToggle("ShowCustomCursor", {
+                Text = "Custom Cursor",
+                Default = true,
+                Callback = function(p509)
+                    vu9.ShowCustomCursor = p509
+                end,
+            })
+            v507:AddDropdown("NotificationSide", {
+                Values = {
+                    "Left",
+                    "Right",
+                },
+                Default = "Right",
+                Text = "Notification Side",
+                Callback = function(p510)
+                    vu9:SetNotifySide(p510)
+                end,
+            })
+            v507:AddDropdown("DPIDropdown", {
+                Values = {
+                    "50%",
+                    "75%",
+                    "100%",
+                    "125%",
+                    "150%",
+                    "175%",
+                    "200%",
+                },
+                Default = "100%",
+                Text = "DPI Scale",
+                Callback = function(p511)
+                    local v512 = p511:gsub("%%", "")
+                    vu9:SetDPIScale((tonumber(v512)))
+                end,
+            })
+            v507:AddDivider()
+            v507:AddLabel("Menu bind"):AddKeyPicker("MenuKeybind", {
+                Default = "RightShift",
+                NoUI = true,
+                Text = "Menu keybind",
+            })
+            v507:AddButton("Unload", function()
+                vu9:Unload()
+            end)
+            vu9.ToggleKeybind = vu12.MenuKeybind
+            v10:SetLibrary(vu9)
+            v11:SetLibrary(vu9)
+            v11:IgnoreThemeSettings()
+            v11:SetIgnoreIndexes({
+                "MenuKeybind",
+            })
+            v10:SetFolder("NEOXHub")
+            v11:SetFolder("NEOXHub/StealABrainrot")
+            v11:BuildConfigSection(v33.Settings)
+            v10:ApplyToTab(v33.Settings)
+            v11:LoadAutoloadConfig()
+            task.spawn(function()
+                task.wait(1)
+                pcall(function()
+                    loadstring(
+                        game:HttpGet(
+                            "https://raw.githubusercontent.com/wedfwef3/ere.github.io/refs/heads/main/infyield.lua"
+                        )
+                    )()
+                end)
+            end)
+            local v513 = vu9
+            v513:OnUnload(function()
+                print("NEOX Hub Unloaded!")
+                if vu25 then
+                    vu25:Disconnect()
+                end
+                if vu26 then
+                    vu26:Disconnect()
+                end
+                if vu349 then
+                    vu349:Disconnect()
+                end
+                if vu345 then
+                    vu345:Disconnect()
+                end
+                if vu354 then
+                    vu354:Disconnect()
+                end
+                if vu353 then
+                    vu353:Disconnect()
+                end
+                if vu352 then
+                    vu352:Disconnect()
+                end
+                if vu480 then
+                    vu480:Disconnect()
+                end
+                if vu481 then
+                    vu481:Disconnect()
+                end
+                if vu344 then
+                    vu344:Disconnect()
+                end
+                if vu347 then
+                    vu347:Disconnect()
+                end
+                if vu356 then
+                    vu356:Disconnect()
+                end
+                if vu351 then
+                    vu351:Disconnect()
+                end
+                vu348()
+                if vu38 then
+                    vu38:Destroy()
+                end
+                vu350()
+                vu357()
+            end)
+        end
+        vu514()
+    end
+end

