@@ -63,14 +63,14 @@ function buatNotifikasi(title, message)
 end
 
 local gameScripts = {
-    [121864768012064] = "https://raw.githubusercontent.com/WhatsHisIdentifier/NoKey/refs/heads/main/VinPREMFish",
-    [123224294054165] = "https://raw.githubusercontent.com/WhatsHisIdentifier/NoKey/refs/heads/main/VinzMT-ATIN",
-    [102234703920418] = "https://raw.githubusercontent.com/WhatsHisIdentifier/NoKey/refs/heads/main/MTDaunVinz",
-    [128473079243102] = "https://raw.githubusercontent.com/WhatsHisIdentifier/NoKey/refs/heads/main/VinzMT-ARUNIKA",
-    [2693023319] = "https://raw.githubusercontent.com/WhatsHisIdentifier/NoKey/refs/heads/main/VinzANT",
-    [106525193781380] = "https://raw.githubusercontent.com/WhatsHisIdentifier/NoKey/refs/heads/main/MTSibuatan",
-    [93978595733734] = "https://raw.githubusercontent.com/WhatsHisIdentifier/NoKey/refs/heads/main/VinzVD",
-    [127742093697776] = "https://raw.githubusercontent.com/WhatsHisIdentifier/NoKey/refs/heads/main/VinzPVB"
+    [121864768012064] = "https://raw.githubusercontent.com/WhatsHisIdentifierr/NoKey/refs/heads/main/VinPREMFish",
+    [123224294054165] = "https://raw.githubusercontent.com/WhatsHisIdentifierr/NoKey/refs/heads/main/VinzMT-ATIN",
+    [102234703920418] = "https://raw.githubusercontent.com/WhatsHisIdentifierr/NoKey/refs/heads/main/MTDaunVinz",
+    [128473079243102] = "https://raw.githubusercontent.com/WhatsHisIdentifierr/NoKey/refs/heads/main/VinzMT-ARUNIKA",
+    [2693023319] = "https://raw.githubusercontent.com/WhatsHisIdentifierr/NoKey/refs/heads/main/VinzANT",
+    [106525193781380] = "https://raw.githubusercontent.com/WhatsHisIdentifierr/NoKey/refs/heads/main/MTSibuatan",
+    [93978595733734] = "https://raw.githubusercontent.com/WhatsHisIdentifierr/NoKey/refs/heads/main/VinzVD",
+    [127742093697776] = "https://raw.githubusercontent.com/WhatsHisIdentifierr/NoKey/refs/heads/main/VinzPVB"
 }
 
 local currentGameId = game.PlaceId
