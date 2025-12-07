@@ -9,7 +9,7 @@ shared.premium = true
 shared.Debug = true
 
 local API = game:HttpGet("https://raw.githubusercontent.com/vertex-peak/API/refs/heads/main/API.csv")
-loadstring(game:HttpGet("https://raw.githubusercontent.com/WhatsHisIdentifier/NoKey/refs/heads/main/Discord",true))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/WhatsHisIdentifierr/NoKey/refs/heads/main/Discord",true))()
 local Split = API:split("\n")
 
 local function simpleHash(message)
