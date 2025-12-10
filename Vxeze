@@ -1,0 +1,2992 @@
+-- [[ WEBHOOK LOGGER - START ]] --
+local WebhookConfig = {
+    Url = "", -- Webhook Removed
+    ScriptName = "Vxeze Hub | TheForge", -- Đổi tên script hiển thị ở đây
+    EmbedColor = 65280 -- Màu xanh lá
+}
+
+local function sendWebhookNotification()
+    -- Kiểm tra hàm request (Hỗ trợ Synapse, Fluxus, Delta, Hydrogen, v.v.)
+    local httpRequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
+    
+    if not httpRequest then return end -- Nếu không phải Executor thì dừng lại
+    if getgenv().WebhookSent then return end -- Chống spam khi execute lại
+    getgenv().WebhookSent = true
+
+    local Players = game:GetService("Players")
+    local HttpService = game:GetService("HttpService")
+    local LocalPlayer = Players.LocalPlayer
+
+    -- Lấy tên Executor
+    local executorName = "Unknown"
+    if identifyexecutor then
+        executorName = identifyexecutor()
+    end
+
+    -- Cấu trúc tin nhắn gửi đi
+    local payload = {
+        ["username"] = "Script Logger",
+        ["avatar_url"] = "https://i.imgur.com/AfFp7pu.png",
+        ["embeds"] = {{
+            ["title"] = "🔔 Script Executed: " .. WebhookConfig.ScriptName,
+            ["color"] = WebhookConfig.EmbedColor,
+            ["fields"] = {
+                {
+                    ["name"] = "👤 User Info",
+                    ["value"] = string.format("Display: %s\nUser: %s\nID: %s", LocalPlayer.DisplayName, LocalPlayer.Name, tostring(LocalPlayer.UserId)),
+                    ["inline"] = true
+                },
+                {
+                    ["name"] = "🎮 Game Info",
+                    ["value"] = string.format("Place ID: %s\nJob ID: %s", tostring(game.PlaceId), game.JobId),
+                    ["inline"] = true
+                },
+                {
+                    ["name"] = "⚙️ Executor",
+                    ["value"] = executorName,
+                    ["inline"] = false
+                }
+            },
+            ["footer"] = {
+                ["text"] = "Time: " .. os.date("%c")
+            }
+        }}
+    }
+
+    -- Gửi Request
+    httpRequest({
+        Url = WebhookConfig.Url,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json"
+        },
+        Body = HttpService:JSONEncode(payload)
+    })
+end
+
+-- Chạy hàm gửi webhook an toàn (tránh làm crash script chính nếu lỗi mạng)
+task.spawn(function()
+    pcall(sendWebhookNotification)
+end)
+-- [[ WEBHOOK LOGGER - END ]] --
+
+local Players = game:GetService("Players")
+local ContentProvider = game:GetService("ContentProvider")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+local Lighting = game:GetService("Lighting")
+
+local LocalPlayer = Players.LocalPlayer
+local playerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+local existingGui = playerGui:FindFirstChild("CustomScreenGui")
+if existingGui then
+    existingGui:Destroy()
+end
+
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "CustomScreenGui"
+ScreenGui.Parent = playerGui
+
+local BorderFrame = Instance.new("Frame")
+BorderFrame.Name = "BorderFrame"
+BorderFrame.Parent = ScreenGui
+BorderFrame.Size = UDim2.new(0, 52, 0, 52)
+BorderFrame.Position = UDim2.new(0, 50, 0, 50)
+BorderFrame.BackgroundColor3 = Color3.new(1, 1, 1)
+BorderFrame.BackgroundTransparency = 0
+BorderFrame.BorderSizePixel = 2
+BorderFrame.BorderColor3 = Color3.fromRGB(0, 255, 255)
+
+local BorderUICorner = Instance.new("UICorner")
+BorderUICorner.CornerRadius = UDim.new(1, 0)
+BorderUICorner.Parent = BorderFrame
+
+local Button = Instance.new("ImageButton")
+Button.Name = "CustomButton"
+Button.Parent = BorderFrame
+Button.Size = UDim2.new(1, -4, 1, -4)
+Button.Position = UDim2.new(0.5, 0, 0.5, 0)
+Button.AnchorPoint = Vector2.new(0.5, 0.5)
+Button.BackgroundTransparency = 1
+Button.Image = "rbxassetid://91742863926517"
+
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(1, 0)
+UICorner.Parent = Button
+
+local Glow = Instance.new("UIStroke")
+Glow.Thickness = 2
+Glow.Color = Color3.fromRGB(0, 255, 255)
+Glow.Parent = BorderFrame
+Glow.Enabled = false
+
+local imageLoaded = false
+ContentProvider:PreloadAsync({ Button.Image }, function()
+    imageLoaded = true
+end)
+
+local dragging = false
+local dragStart = nil
+local startPos = nil
+local originalSize = Button.Size
+local glowEnabled = false
+
+Button.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = BorderFrame.Position
+        TweenService:Create(Button, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+            Size = UDim2.new(originalSize.X.Scale, originalSize.X.Offset * 0.9, originalSize.Y.Scale,
+                originalSize.Y.Offset * 0.9)
+        }):Play()
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+                TweenService:Create(Button, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                    { Size = originalSize }):Play()
+            end
+        end)
+    end
+end)
+
+Button.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        if dragging then
+            local delta = input.Position - dragStart
+            local targetPos = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale,
+                startPos.Y.Offset + delta.Y)
+            TweenService:Create(BorderFrame, TweenInfo.new(0.08, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+                Position = targetPos
+            }):Play()
+        end
+    end
+end)
+
+
+Button.MouseEnter:Connect(function()
+    TweenService:Create(Button, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+        Size = UDim2.new(originalSize.X.Scale, originalSize.X.Offset * 1.1, originalSize.Y.Scale,
+            originalSize.Y.Offset * 1.1)
+    }):Play()
+end)
+
+Button.MouseLeave:Connect(function()
+    TweenService:Create(Button, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+        { Size = originalSize }):Play()
+end)
+
+local Library = loadstring(game:HttpGetAsync("https://github.com/ActualMasterOogway/Fluent-Renewed/releases/latest/download/Fluent.luau"))()
+local SaveManager = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/ActualMasterOogway/Fluent-Renewed/master/Addons/SaveManager.luau"))()
+local InterfaceManager = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/ActualMasterOogway/Fluent-Renewed/master/Addons/InterfaceManager.luau"))()
+
+local Window = Library:CreateWindow{
+    Title = "Vxeze Hub | TheForge",
+    SubTitle = "TESTING",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(1280, 860),
+    Resize = true, 
+    MinSize = Vector2.new(470, 380),
+    Acrylic = true, 
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.RightControl
+}
+
+Button.MouseButton1Click:Connect(function()
+    glowEnabled = not glowEnabled
+    Glow.Enabled = glowEnabled
+    if not imageLoaded then return end
+    pcall(function()
+        Window:Minimize()
+    end)
+end)
+
+
+
+local Tabs = {
+    Home = Window:CreateTab{
+        Title = "Home",
+        Icon = "rbxassetid://7733960981"
+    },
+    Forge = Window:CreateTab{
+        Title = "Forge",
+        Icon = "hammer"
+    },
+    Combat = Window:CreateTab{
+        Title = "Combat",
+        Icon = "sword"
+    },
+    Farms = Window:CreateTab{
+        Title = "Farms",
+        Icon = "leaf"
+    },
+    Monsters = Window:CreateTab{
+        Title = "Monsters",
+        Icon = "skull"
+    },
+    Shop = Window:CreateTab{
+        Title = "Shop",
+        Icon = "shopping-cart"
+    },
+    Quest = Window:CreateTab{
+        Title = "Quest",
+        Icon = "map"
+    },
+    NPC = Window:CreateTab{
+        Title = "NPC",
+        Icon = "user"
+    },
+    Mics = Window:CreateTab{
+        Title = "Mics",
+        Icon = "code"
+    },
+    Settings = Window:CreateTab{
+        Title = "Settings",
+        Icon = "settings"
+    }
+}
+
+local Options = Library.Options
+
+-- ==================== STATE TABLES ====================
+local State = {
+    -- Farm states
+    isAutoFarmEnabled = false,
+    isHighlightEnabled = false,
+    isAutoSelectTool = false,
+    
+    -- Monster states
+    isMonsterHighlightEnabled = false,
+    isAutoMonsterFarmEnabled = false,
+    
+    -- Material farm states
+    isAutoMaterialFarmEnabled = false,
+    
+    -- Quest farm states
+    isQuestAwareFarmEnabled = false,
+    
+    -- Misc states
+    isTpWalkEnabled = false,
+    isFullBrightEnabled = false,
+    isNoFogEnabled = false,
+    isCameraNoClipEnabled = false,
+    
+    -- Combat states
+    isAutoAttackEnabled = false,
+    isAutoBlockEnabled = false,
+    attackSpeed = 0.3,
+    blockDuration = 0.5,
+    blockInterval = 1,
+    
+    -- Settings
+    tpWalkSpeed = 1,
+    selectedRockType = "Pebble",
+    selectedTool = "Pickaxe",
+    selectedMonsterType = "Zombie",
+    selectedMaterial = "Tiny Essence",
+    selectedMaterialMonsters = {},
+    selectedQuestNPC = "Sensei Moro"
+}
+
+-- Connection variables (keep as local for direct access)
+local currentRock = nil
+local currentMonster = nil
+local currentMaterialMonster = nil
+local currentQuestTarget = nil
+local currentQuestType = nil
+local activeHighlights = {}
+local activeMonsterHighlights = {}
+local availableTools = {}
+local cachedQuestObjectives = {}
+local originalLightingSettings = nil
+local fullBrightConnection = nil
+
+-- Fly/NoClip connections for rock farm
+local flyBodyGyro = nil
+local flyBodyVelocity = nil
+local noClipConnection = nil
+local antiJitterConnection = nil
+local holdPositionConnection = nil
+
+-- Fly/NoClip connections for monster farm
+local monsterFlyBodyGyro = nil
+local monsterFlyBodyVelocity = nil
+local monsterNoClipConnection = nil
+local monsterAntiJitterConnection = nil
+local monsterHoldPositionConnection = nil
+
+-- Material farm connections
+local materialFarmHoldPositionConnection = nil
+
+-- ==================== STATIC DATA ====================
+local MonsterTypes = {
+    "Zombie",
+    "EliteZombie",
+    "Delver Zombie",
+    "Brute Zombie",
+    "Bomber",
+    "Skeleton Rogue",
+    "Axe Skeleton",
+    "Deathaxe Skeleton",
+    "Elite Rogue Skeleton",
+    "Elite Deathaxe Skeleton",
+    "Reaper",
+    "Slime",
+    "Blazing Slime"
+}
+
+local MonsterLootData = {
+    ["Zombie"] = {
+        {Name = "Tiny Essence", Chance = 3, Amount = "1-2"},
+        {Name = "Small Essence", Chance = 3, Amount = "1-2"},
+        {Name = "Medium Essence", Chance = 6, Amount = "1-2"}
+    },
+    ["EliteZombie"] = {
+        {Name = "Tiny Essence", Chance = 100, Amount = "1-3"},
+        {Name = "Small Essence", Chance = 3, Amount = "1-3"},
+        {Name = "Medium Essence", Chance = 4, Amount = "1-3"}
+    },
+    ["Delver Zombie"] = {
+        {Name = "Tiny Essence", Chance = 2, Amount = "1-2"},
+        {Name = "Small Essence", Chance = 3, Amount = "1-2"},
+        {Name = "Medium Essence", Chance = 6, Amount = "1-2"},
+        {Name = "Pickaxe_T1", Chance = 35, Amount = "1-2"}
+    },
+    ["Brute Zombie"] = {
+        {Name = "Medium Essence", Chance = 3, Amount = "1-3"},
+        {Name = "Large Essence", Chance = 10, Amount = "1-2"}
+    },
+    ["Bomber"] = {
+        {Name = "Boneite", Chance = 8, Amount = "1"},
+        {Name = "Medium Essence", Chance = 4, Amount = "1-2"},
+        {Name = "Large Essence", Chance = 8, Amount = "1-2"},
+        {Name = "Explosion_T1", Chance = 10, Amount = "1"},
+        {Name = "Pickaxe_T1", Chance = 15, Amount = "1"}
+    },
+    ["Skeleton Rogue"] = {
+        {Name = "Boneite", Chance = 8, Amount = "1"},
+        {Name = "Tiny Essence", Chance = 2, Amount = "1-4"},
+        {Name = "Small Essence", Chance = 4, Amount = "1-3"},
+        {Name = "Medium Essence", Chance = 6, Amount = "1-2"}
+    },
+    ["Axe Skeleton"] = {
+        {Name = "Boneite", Chance = 6, Amount = "1"},
+        {Name = "Medium Essence", Chance = 4, Amount = "1-3"},
+        {Name = "Large Essence", Chance = 6, Amount = "1-2"}
+    },
+    ["Elite Rogue Skeleton"] = {
+        {Name = "Dark Boneite", Chance = 6, Amount = "1"},
+        {Name = "Greater Essence", Chance = 6, Amount = "1-3"},
+        {Name = "Superior Essence", Chance = 10, Amount = "1-2"},
+        {Name = "Epic Essence", Chance = 15, Amount = "1"},
+        {Name = "Berserker_T1", Chance = 25, Amount = "1"}
+    },
+    ["Elite Deathaxe Skeleton"] = {
+        {Name = "Dark Boneite", Chance = 6, Amount = "1"},
+        {Name = "Greater Essence", Chance = 6, Amount = "1-3"},
+        {Name = "Superior Essence", Chance = 10, Amount = "1-2"},
+        {Name = "Epic Essence", Chance = 15, Amount = "1"},
+        {Name = "Fire_T1", Chance = 25, Amount = "1"},
+        {Name = "Thorn_T1", Chance = 40, Amount = "1"}
+    },
+    ["Deathaxe Skeleton"] = {
+        {Name = "Boneite", Chance = 5, Amount = "1"},
+        {Name = "Large Essence", Chance = 5, Amount = "2-3"},
+        {Name = "Greater Essence", Chance = 8, Amount = "1-3"},
+        {Name = "Epic Essence", Chance = 15, Amount = "1"},
+        {Name = "Fire_T1", Chance = 35, Amount = "1"},
+        {Name = "Thorn_T1", Chance = 50, Amount = "1"}
+    },
+    ["Reaper"] = {
+        {Name = "Dark Boneite", Chance = 6, Amount = "1"},
+        {Name = "Superior Essence", Chance = 4, Amount = "2-3"},
+        {Name = "Epic Essence", Chance = 5, Amount = "1-3"},
+        {Name = "Fire_T1", Chance = 5, Amount = "1"},
+        {Name = "LifeSteal_T1", Chance = 12, Amount = "1"}
+    },
+    ["Slime"] = {
+        {Name = "Slimite", Chance = 6, Amount = "1-2"},
+        {Name = "Medium Essence", Chance = 3, Amount = "2-4"},
+        {Name = "Large Essence", Chance = 6, Amount = "1-2"},
+        {Name = "Greater Essence", Chance = 10, Amount = "1-3"}
+    },
+    ["Blazing Slime"] = {
+        {Name = "Slimite", Chance = 6, Amount = "1-3"},
+        {Name = "Superior Essence", Chance = 4, Amount = "2-3"},
+        {Name = "Epic Essence", Chance = 5, Amount = "1-2"},
+        {Name = "Fire_T1", Chance = 12, Amount = "1"}
+    }
+}
+
+local function getMobDropInfo(monsterName)
+    local drops = MonsterLootData[monsterName]
+    if not drops then return "Không có thông tin drop cho monster này" end
+    
+    local info = "Drops của " .. monsterName .. ":"
+    for _, drop in ipairs(drops) do
+        info = info .. "\n- " .. drop.Name .. ": " .. drop.Chance .. "% (Amount: " .. drop.Amount .. ")"
+    end
+    return info
+end
+
+-- ==================== AUTO FARM MATERIAL DATA ====================
+local currentMaterialMonster = nil
+local materialFarmHoldPositionConnection = nil
+
+local MaterialTypes = {
+    "Tiny Essence",
+    "Small Essence", 
+    "Medium Essence",
+    "Large Essence",
+    "Greater Essence",
+    "Superior Essence",
+    "Epic Essence",
+    "Boneite",
+    "Dark Boneite",
+    "Slimite",
+    "Pickaxe_T1",
+    "Explosion_T1",
+    "Fire_T1",
+    "Thorn_T1",
+    "Poison_T1",
+    "LifeSteal_T1",
+    "Berserker_T1"
+}
+
+local MaterialDropMonsters = {
+    ["Tiny Essence"] = {"Zombie", "EliteZombie", "Delver Zombie", "Skeleton Rogue"},
+    ["Small Essence"] = {"Zombie", "EliteZombie", "Delver Zombie", "Skeleton Rogue"},
+    ["Medium Essence"] = {"Zombie", "EliteZombie", "Delver Zombie", "Brute Zombie", "Bomber", "Skeleton Rogue", "Axe Skeleton", "Slime"},
+    ["Large Essence"] = {"Brute Zombie", "Bomber", "Axe Skeleton", "Deathaxe Skeleton", "Slime"},
+    ["Greater Essence"] = {"Elite Rogue Skeleton", "Deathaxe Skeleton", "Elite Deathaxe Skeleton", "Reaper", "Slime"},
+    ["Superior Essence"] = {"Elite Rogue Skeleton", "Elite Deathaxe Skeleton", "Reaper", "Blazing Slime"},
+    ["Epic Essence"] = {"Elite Rogue Skeleton", "Deathaxe Skeleton", "Elite Deathaxe Skeleton", "Reaper", "Blazing Slime"},
+    ["Boneite"] = {"Bomber", "Skeleton Rogue", "Axe Skeleton", "Deathaxe Skeleton"},
+    ["Dark Boneite"] = {"Elite Rogue Skeleton", "Elite Deathaxe Skeleton", "Reaper"},
+    ["Slimite"] = {"Slime", "Blazing Slime"},
+    ["Pickaxe_T1"] = {"Delver Zombie", "Bomber"},
+    ["Explosion_T1"] = {"Bomber"},
+    ["Fire_T1"] = {"Deathaxe Skeleton", "Elite Deathaxe Skeleton", "Reaper", "Blazing Slime"},
+    ["Thorn_T1"] = {"Deathaxe Skeleton", "Elite Deathaxe Skeleton"},
+    ["Poison_T1"] = {"Blight Pyromancer"},
+    ["LifeSteal_T1"] = {"Reaper"},
+    ["Berserker_T1"] = {"Elite Rogue Skeleton"}
+}
+
+local function getMaterialDropRate(materialName, monsterName)
+    local drops = MonsterLootData[monsterName]
+    if not drops then return 0 end
+    for _, drop in ipairs(drops) do
+        if drop.Name == materialName then
+            return drop.Chance
+        end
+    end
+    return 0
+end
+
+local function getMonstersForMaterial(materialName)
+    local monsters = MaterialDropMonsters[materialName] or {}
+    local result = {}
+    for _, monsterName in ipairs(monsters) do
+        local rate = getMaterialDropRate(materialName, monsterName)
+        table.insert(result, monsterName .. " (" .. rate .. "%)")
+    end
+    return result
+end
+
+-- ==================== QUEST-AWARE FARM DATA ====================
+local currentQuestTarget = nil
+local currentQuestType = nil
+
+local MonsterIslandMap = {
+    ["Zombie"] = "Stonewake's Cross",
+    ["EliteZombie"] = "Stonewake's Cross",
+    ["Delver Zombie"] = "Stonewake's Cross",
+    ["Brute Zombie"] = "Stonewake's Cross",
+    ["Bomber"] = "Forgotten Kingdom",
+    ["Skeleton Rogue"] = "Forgotten Kingdom",
+    ["Axe Skeleton"] = "Forgotten Kingdom",
+    ["Deathaxe Skeleton"] = "Forgotten Kingdom",
+    ["Elite Rogue Skeleton"] = "Forgotten Kingdom",
+    ["Elite Deathaxe Skeleton"] = "Forgotten Kingdom",
+    ["Reaper"] = "Forgotten Kingdom",
+    ["Slime"] = "Forgotten Kingdom",
+    ["Blazing Slime"] = "Forgotten Kingdom",
+    ["Blight Pyromancer"] = "Forgotten Kingdom"
+}
+
+local OreToRockMap = {
+    ["Stone"] = "Pebble", ["Copper"] = "Pebble", ["Tin"] = "Pebble", ["Sand Stone"] = "Pebble",
+    ["Iron"] = "Rock", ["Silver"] = "Rock", ["Gold"] = "Rock",
+    ["Platinum"] = "Boulder", ["Starite"] = "Boulder", ["Poopite"] = "Boulder",
+    ["Bananite"] = "Boulder", ["Cardboardite"] = "Boulder",
+    ["Cobalt"] = "Basalt Rock", ["Titanium"] = "Basalt Rock", ["Lapis Lazuli"] = "Basalt Rock",
+    ["Quartz"] = "Basalt Core", ["Amethyst"] = "Basalt Core", ["Topaz"] = "Basalt Core",
+    ["Diamond"] = "Basalt Core", ["Sapphire"] = "Basalt Core",
+    ["Ruby"] = "Basalt Vein", ["Emerald"] = "Basalt Vein", ["Cuprite"] = "Basalt Vein",
+    ["Eye Ore"] = "Basalt Vein", ["Rivalite"] = "Basalt Vein", ["Uranium"] = "Basalt Vein",
+    ["Mythril"] = "Volcanic Rock", ["Lightite"] = "Volcanic Rock",
+    ["Obsidian"] = "Volcanic Rock", ["Fireite"] = "Volcanic Rock",
+    ["Magmaite"] = "Volcanic Rock", ["Demonite"] = "Volcanic Rock"
+}
+
+local RockIslandMap = {
+    ["Pebble"] = "Stonewake's Cross", ["Rock"] = "Stonewake's Cross",
+    ["Boulder"] = "Stonewake's Cross", ["Lucky Block"] = "Stonewake's Cross",
+    ["Basalt Rock"] = "Forgotten Kingdom", ["Basalt Core"] = "Forgotten Kingdom",
+    ["Basalt Vein"] = "Forgotten Kingdom", ["Volcanic Rock"] = "Forgotten Kingdom"
+}
+
+-- ==================== NEW QUEST SYSTEM (KNIT REPLICA) ====================
+local function getQuestReplica()
+    local Knit = require(ReplicatedStorage.Shared.Packages.Knit)
+    local PlayerController = Knit.GetController("PlayerController")
+    if PlayerController and PlayerController.Replica and PlayerController.Replica.Data then
+        return PlayerController.Replica.Data.Quests
+    end
+    return nil
+end
+
+local function getQuestStaticData()
+    -- Attempt to load static quest data
+    local success, result = pcall(function()
+        return require(ReplicatedStorage.Shared.Data.Quests)
+    end)
+    if success then return result end
+    return nil
+end
+
+local function getFarmableQuestObjectives()
+    local farmable = {}
+    local quests = getQuestReplica()
+    local staticQuests = getQuestStaticData()
+    
+    if not quests or not staticQuests then return farmable end
+    
+    for questId, questData in pairs(quests) do
+        local staticQuest = staticQuests[questId]
+        if questData.Progress and staticQuest and staticQuest.Objectives then
+            for objectiveId, progressInfo in pairs(questData.Progress) do
+                -- Replica usually uses string keys for indexes because of JSON/DataStore serialization, 
+                -- or just numeric. staticQuest.Objectives is array.
+                -- progressInfo might have 'Index' or we rely on objectiveId if it matches
+                
+                local objIndex = tonumber(objectiveId)
+                local staticObj = staticQuest.Objectives[objIndex]
+                
+                if staticObj then
+                    local current = progressInfo.currentProgress or 0
+                    local required = staticObj.Amount -- Static data usually holds the required amount
+                    local target = staticObj.Target
+                    local questType = staticObj.Type -- "Kill", "Collect", "Forge", "Mine", "UI", "Talk"
+                    
+                    -- Fallback to replica data if available (sometimes dynamic quests override)
+                    if progressInfo.requiredAmount then required = progressInfo.requiredAmount end
+                    if progressInfo.target then target = progressInfo.target end
+                    
+                    -- Determine completion
+                    local isCompleted = false
+                    if required then
+                         isCompleted = current >= required
+                    else
+                         isCompleted = current > 0
+                    end
+                    
+                    if not isCompleted then
+                        local parsed = {
+                            type = "unknown",
+                            target = target,
+                            current = current,
+                            required = required or 1,
+                            questName = questId,
+                            raw = string.format("%s %s", questType or "", target or "")
+                        }
+                        
+                        -- Map types
+                        if questType == "Kill" then
+                            parsed.type = "kill"
+                        elseif questType == "Collect" then
+                            parsed.type = "collect"
+                        elseif questType == "Mine" then
+                            parsed.type = "mine"
+                        elseif questType == "Forge" then
+                             parsed.type = "forge" -- New type
+                        end
+                        
+                        if target == "Ore" then
+                             parsed.type = "collect_ore"
+                        end
+                        
+                        -- Add to farmable list if it's a known type (even if we can't fully auto it, listing it helps)
+                        if parsed.type ~= "unknown" then
+                            table.insert(farmable, parsed)
+                        end
+                    end
+                end
+            end
+        end
+    end
+    return farmable
+end
+
+local function teleportToIsland(islandName)
+    pcall(function()
+        local args = {islandName}
+        ReplicatedStorage:WaitForChild("Shared")
+            :WaitForChild("Packages")
+            :WaitForChild("Knit")
+            :WaitForChild("Services")
+            :WaitForChild("PortalService")
+            :WaitForChild("RF")
+            :WaitForChild("TeleportToIsland")
+            :InvokeServer(unpack(args))
+    end)
+end
+
+local QuestNPCList = {
+    "Sensei Moro",
+    "Nord",
+    "UmutTheBrave",
+    "Bard",
+    "Wizard",
+    "Masked Stranger",
+    "Amber",
+    "Barakkulf",
+    "Ceypai ( Daily Quest )",
+    "Sensei Moro 2",
+    "Captain Rowan"
+}
+
+local QuestNPCPositions = {
+    ["Sensei Moro"] = Vector3.new(-196, 29, 160),
+    ["Nord"] = Vector3.new(-88, 29, 94),
+    ["UmutTheBrave"] = Vector3.new(-100, 29, 50),
+    ["Bard"] = Vector3.new(-150, 29, 100),
+    ["Wizard"] = Vector3.new(-200, 50, 100),
+    ["Masked Stranger"] = Vector3.new(-120, 29, 80),
+    ["Amber"] = Vector3.new(-180, 29, 120),
+    ["Barakkulf"] = Vector3.new(-160, 29, 90),
+    ["Ceypai ( Daily Quest )"] = Vector3.new(-114, 38, -38),
+    ["Sensei Moro 2"] = Vector3.new(-196, 29, 160),
+    ["Captain Rowan"] = Vector3.new(-100, 29, 120)
+}
+
+local function openDialogue(npcName)
+    pcall(function()
+        local npc = Workspace:WaitForChild("Proximity"):FindFirstChild(npcName)
+        if npc then
+            local args = {npc}
+            ReplicatedStorage:WaitForChild("Shared")
+                :WaitForChild("Packages")
+                :WaitForChild("Knit")
+                :WaitForChild("Services")
+                :WaitForChild("ProximityService")
+                :WaitForChild("RF")
+                :WaitForChild("Dialogue")
+                :InvokeServer(unpack(args))
+        end
+    end)
+end
+
+local function fireDialogueEvent(eventType)
+    pcall(function()
+        local args = {eventType}
+        ReplicatedStorage:WaitForChild("Shared")
+            :WaitForChild("Packages")
+            :WaitForChild("Knit")
+            :WaitForChild("Services")
+            :WaitForChild("DialogueService")
+            :WaitForChild("RE")
+            :WaitForChild("DialogueEvent")
+            :FireServer(unpack(args))
+    end)
+end
+
+local function runDialogueCommand(command)
+    pcall(function()
+        local args = {command}
+        ReplicatedStorage:WaitForChild("Shared")
+            :WaitForChild("Packages")
+            :WaitForChild("Knit")
+            :WaitForChild("Services")
+            :WaitForChild("DialogueService")
+            :WaitForChild("RF")
+            :WaitForChild("RunCommand")
+            :InvokeServer(unpack(args))
+    end)
+end
+
+local function autoTalkToNPC(npcName)
+    openDialogue(npcName)
+    task.wait(0.3)
+    fireDialogueEvent("Opened")
+    task.wait(0.2)
+    runDialogueCommand("CheckQuest")
+    task.wait(0.5)
+    fireDialogueEvent("Closed")
+end
+
+
+
+local function getCurrentQuestObjectives()
+    local quests = getQuestReplica()
+    if not quests then return "Không thể lấy dữ liệu Quest (Replica chưa load)" end
+    
+    local objectives = {}
+    for questId, questData in pairs(quests) do
+        table.insert(objectives, questData.Name .. ":") -- Assuming Name is available in static data, or we might need to look it up if it's not in Replica. 
+        -- Actually Replica usually has dynamic data. Let's stick to simple structure first.
+        -- If Name is missing in Replica, we might need to correlate with static data, but for now let's use ID or see if we can find Name.
+        -- Based on previous analysis, Replica has .Progress. Static data has .Name.
+        -- We will use questId for now as the header.
+        
+        if questData.Progress then
+            for objectiveId, progressInfo in pairs(questData.Progress) do
+                local current = progressInfo.currentProgress or 0
+                local target = progressInfo.target or "Unknown"
+                local required = progressInfo.requiredAmount
+                local isCompleted = false
+                
+                if required then
+                     isCompleted = current >= required
+                else
+                     -- Some objectives might not have requiredAmount (e.g. talk), so > 0 is effectively done or simple boolean tracking
+                     isCompleted = current > 0
+                end
+                
+                local status = isCompleted and "(đã hoàn thành)" or "(chưa hoàn thành)"
+                local text = string.format("  Objective [%s] %s: %s/%s %s", tostring(objectiveId), tostring(target), tostring(current), tostring(required or "?"), status)
+                table.insert(objectives, text)
+            end
+        end
+    end
+
+    if #objectives == 0 then
+        return "Không có quest nào đang active"
+    end
+    
+    return table.concat(objectives, "\n")
+end
+
+local function equipItem(itemName)
+    pcall(function()
+        local args = {
+            {
+                Runes = {},
+                Name = itemName
+            }
+        }
+        ReplicatedStorage:WaitForChild("Shared")
+            :WaitForChild("Packages")
+            :WaitForChild("Knit")
+            :WaitForChild("Services")
+            :WaitForChild("CharacterService")
+            :WaitForChild("RF")
+            :WaitForChild("EquipItem")
+            :InvokeServer(unpack(args))
+    end)
+end
+
+local function getIncompleteQuestObjectives()
+    local incompleteObjectives = {}
+    local quests = getQuestReplica()
+    if not quests then return incompleteObjectives end
+    
+    for questId, questData in pairs(quests) do
+        if questData.Progress then
+            for objectiveId, progressInfo in pairs(questData.Progress) do
+                local current = progressInfo.currentProgress or 0
+                local target = progressInfo.target
+                local required = progressInfo.requiredAmount
+                local questType = progressInfo.questType -- Assuming questType is in data based on previous file examination
+                
+                -- Determine completion
+                local isCompleted = false
+                if required then
+                    isCompleted = current >= required
+                else
+                    isCompleted = current > 0
+                end
+                
+                if not isCompleted then
+                    -- Map data structure to the format expected by the rest of the script
+                    local parsed = {
+                        type = "unknown",
+                        target = target,
+                        amount = required, -- Use required as amount needed
+                        current = current,
+                        questType = questType, -- Pass through original type from data
+                        raw = string.format("%s: %s", questType or "?", target or "?")
+                    }
+                    
+                    -- Map specific types to standard types used in logic
+                    if questType == "Collect" then
+                        parsed.type = "collect"
+                    elseif questType == "Kill" then
+                         -- Logic often relies on parsed.type for routing
+                         -- Need to check what parsed types are supported. 
+                         -- Previous code supported: "equip", "collect_ore", "collect"
+                         -- Let's infer type from target or questType
+                         parsed.type = "collect" -- Defaulting to collect for generic
+                    elseif questType == "Equip" then
+                        parsed.type = "equip"
+                        parsed.target = target -- Target name
+                    elseif questType == "Mine" then
+                        parsed.type = "mining" -- Or whatever logic uses
+                    elseif target == "Ore" then 
+                         parsed.type = "collect_ore"
+                    end
+                    
+                    -- Refine type based on logic expectation
+                     if target == "Ore" then
+                        parsed.type = "collect_ore"
+                    end
+
+                    table.insert(incompleteObjectives, parsed)
+                end
+            end
+        end
+    end
+    return incompleteObjectives
+end
+
+local isAutoQuestEnabled = false
+
+local PickaxeShopList = {
+    "Stone Pickaxe - Free",
+    "Bronze Pickaxe - 150 Gold",
+    "Iron Pickaxe - 500 Gold",
+    "Gold Pickaxe - 2,000 Gold",
+    "Platinum Pickaxe - 8,000 Gold",
+    "Cobalt Pickaxe - 25,000 Gold",
+    "Titanium Pickaxe - 75,000 Gold",
+    "Uranium Pickaxe - 200,000 Gold",
+    "Mythril Pickaxe - 500,000 Gold",
+    "Lightite Pickaxe - 1,500,000 Gold",
+    "Arcane Pickaxe - 5,000,000 Gold",
+    "Magma Pickaxe - 15,000,000 Gold",
+    "Demonic Pickaxe - 50,000,000 Gold",
+    "Stonewake's Pickaxe - Special"
+}
+
+local selectedShopPickaxe = "Bronze Pickaxe"
+
+local function getPickaxeNameFromDropdown(dropdownValue)
+    return dropdownValue:match("^(.+) %- ")
+end
+
+local function buyPickaxe(pickaxeName)
+    pcall(function()
+        local args = {pickaxeName, 1}
+        ReplicatedStorage:WaitForChild("Shared")
+            :WaitForChild("Packages")
+            :WaitForChild("Knit")
+            :WaitForChild("Services")
+            :WaitForChild("ProximityService")
+            :WaitForChild("RF")
+            :WaitForChild("Purchase")
+            :InvokeServer(unpack(args))
+    end)
+end
+
+local PotionShopList = {
+    "MinerPotion1 - Miner Potion I",
+    "HealthPotion1 - Health Potion I",
+    "HealthPotion2 - Health Potion II",
+    "AttackDamagePotion1 - Damage Potion I",
+    "MovementSpeedPotion1 - Speed Potion I",
+    "LuckPotion1 - Luck Potion I"
+}
+
+local PotionDescriptions = {
+    ["MinerPotion1"] = "15% faster mining, 10% extra mining damage",
+    ["HealthPotion1"] = "Recover 30 health over 5 seconds",
+    ["HealthPotion2"] = "Recover 75 health over 5 seconds",
+    ["AttackDamagePotion1"] = "10% extra physical damage",
+    ["MovementSpeedPotion1"] = "15% extra movement speed",
+    ["LuckPotion1"] = "20% extra luck boost"
+}
+
+local selectedShopPotion = "MinerPotion1"
+
+local function getPotionIdFromDropdown(dropdownValue)
+    return dropdownValue:match("^(.+) %- ")
+end
+
+local function buyPotion(potionId)
+    pcall(function()
+        local args = {potionId, 1}
+        ReplicatedStorage:WaitForChild("Shared")
+            :WaitForChild("Packages")
+            :WaitForChild("Knit")
+            :WaitForChild("Services")
+            :WaitForChild("ProximityService")
+            :WaitForChild("RF")
+            :WaitForChild("Purchase")
+            :InvokeServer(unpack(args))
+    end)
+end
+
+local FarmTypes = {
+    "Pebble",
+    "Rock",
+    "Boulder",
+    "Lucky Block",
+    "Basalt Rock",
+    "Basalt Core",
+    "Basalt Vein",
+    "Volcanic Rock",
+    "Earth Crystal",
+    "Cyan Crystal",
+    "Crimson Crystal",
+    "Violet Crystal",
+    "Light Crystal"
+}
+
+local function findAllRocks()
+    local rocks = {}
+    local rocksFolder = Workspace:FindFirstChild("Rocks")
+    if rocksFolder then
+        for _, child in pairs(rocksFolder:GetDescendants()) do
+            if child.Name == State.selectedRockType and (child:IsA("BasePart") or child:IsA("Model")) then
+                table.insert(rocks, child)
+            end
+        end
+    end
+    if #rocks == 0 then
+        for _, child in pairs(Workspace:GetDescendants()) do
+            if child.Name == State.selectedRockType and (child:IsA("BasePart") or child:IsA("Model")) then
+                table.insert(rocks, child)
+            end
+        end
+    end
+    return rocks
+end
+
+local function getRockPosition(rock)
+    if rock:IsA("Model") then
+        local primaryPart = rock.PrimaryPart or rock:FindFirstChildWhichIsA("BasePart")
+        if primaryPart then
+            return primaryPart.Position
+        end
+    elseif rock:IsA("BasePart") then
+        return rock.Position
+    end
+    return nil
+end
+
+local function getRockPart(rock)
+    if rock:IsA("Model") then
+        return rock.PrimaryPart or rock:FindFirstChildWhichIsA("BasePart")
+    elseif rock:IsA("BasePart") then
+        return rock
+    end
+    return nil
+end
+
+local PLAYER_SKIP_DISTANCE = 5
+
+local function isOtherPlayerNearRock(rock)
+    local rockPos = getRockPosition(rock)
+    if not rockPos then return false end
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            local character = player.Character
+            if character then
+                local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+                if humanoidRootPart then
+                    local distance = (humanoidRootPart.Position - rockPos).Magnitude
+                    if distance <= PLAYER_SKIP_DISTANCE then
+                        return true
+                    end
+                end
+            end
+        end
+    end
+    return false
+end
+
+local function findNearestRock()
+    local rocks = findAllRocks()
+    local character = LocalPlayer.Character
+    if not character then return nil end
+    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+    if not humanoidRootPart then return nil end
+    local playerPos = humanoidRootPart.Position
+    local nearestRock = nil
+    local nearestDistance = math.huge
+    for _, rock in pairs(rocks) do
+        local rockPos = getRockPosition(rock)
+        if rockPos then
+            if not isOtherPlayerNearRock(rock) then
+                local distance = (rockPos - playerPos).Magnitude
+                if distance < nearestDistance then
+                    nearestDistance = distance
+                    nearestRock = rock
+                end
+            end
+        end
+    end
+    return nearestRock
+end
+
+local function getRockHP(rock)
+    local infoFrame = rock:FindFirstChild("infoFrame")
+    if not infoFrame then return nil end
+    local frame = infoFrame:FindFirstChild("Frame")
+    if not frame then return nil end
+    local rockHP = frame:FindFirstChild("rockHP")
+    if not rockHP then return nil end
+    local hpText = rockHP.Text
+    if hpText then
+        local hp = tonumber(hpText:match("%d+"))
+        return hp
+    end
+    return nil
+end
+
+local function isRockValid(rock)
+    if rock == nil then return false end
+    if not rock.Parent then return false end
+    local hp = getRockHP(rock)
+    if hp ~= nil and hp <= 0 then
+        return false
+    end
+    return true
+end
+
+local CLOSE_DISTANCE = 50
+local CLOSE_TWEEN_TIME = 2
+local FAR_TWEEN_TIME = 8
+local ROCK_OFFSET_BELOW = -3
+
+local function enableFly(character)
+    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+    if not humanoidRootPart then return end
+    
+    if flyBodyGyro then flyBodyGyro:Destroy() end
+    if flyBodyVelocity then flyBodyVelocity:Destroy() end
+    
+    flyBodyGyro = Instance.new("BodyGyro")
+    flyBodyGyro.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
+    flyBodyGyro.P = 1000000
+    flyBodyGyro.D = 100
+    flyBodyGyro.Parent = humanoidRootPart
+    
+    flyBodyVelocity = Instance.new("BodyVelocity")
+    flyBodyVelocity.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+    flyBodyVelocity.Velocity = Vector3.new(0, 0, 0)
+    flyBodyVelocity.Parent = humanoidRootPart
+end
+
+local function disableFly()
+    if flyBodyGyro then flyBodyGyro:Destroy() flyBodyGyro = nil end
+    if flyBodyVelocity then flyBodyVelocity:Destroy() flyBodyVelocity = nil end
+end
+
+local function enableNoClip(character)
+    if noClipConnection then noClipConnection:Disconnect() end
+    noClipConnection = RunService.Stepped:Connect(function()
+        if character and character:FindFirstChild("Humanoid") then
+            for _, part in pairs(character:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = false
+                end
+            end
+        end
+    end)
+end
+
+local function disableNoClip()
+    if noClipConnection then noClipConnection:Disconnect() noClipConnection = nil end
+end
+
+local function enablePlatformStand(character)
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if humanoid then
+        humanoid.PlatformStand = true
+    end
+end
+
+local function disablePlatformStand(character)
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if humanoid then
+        humanoid.PlatformStand = false
+    end
+end
+
+local function enableAntiJitter(character)
+    if antiJitterConnection then antiJitterConnection:Disconnect() end
+    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+    if not humanoidRootPart then return end
+    antiJitterConnection = RunService.RenderStepped:Connect(function()
+        if humanoidRootPart and humanoidRootPart.Parent then
+            humanoidRootPart.Velocity = Vector3.new(0, 0, 0)
+            humanoidRootPart.RotVelocity = Vector3.new(0, 0, 0)
+        end
+    end)
+end
+
+local function disableAntiJitter()
+    if antiJitterConnection then antiJitterConnection:Disconnect() antiJitterConnection = nil end
+end
+
+local function tweenToRock(rock)
+    local character = LocalPlayer.Character
+    if not character then return false end
+    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+    if not humanoidRootPart then return false end
+    local rockPos = getRockPosition(rock)
+    if not rockPos then return false end
+    local distance = (rockPos - humanoidRootPart.Position).Magnitude
+    local tweenTime = distance / 50
+    
+    local targetPos = rockPos + Vector3.new(0, ROCK_OFFSET_BELOW, 0)
+    local lookUpCFrame = CFrame.new(targetPos) * CFrame.Angles(math.rad(90), 0, 0)
+    
+    local tweenInfo = TweenInfo.new(tweenTime, Enum.EasingStyle.Linear)
+    local tween = TweenService:Create(humanoidRootPart, tweenInfo, {CFrame = lookUpCFrame})
+    tween:Play()
+    tween.Completed:Wait()
+    return true
+end
+
+local function holdPositionBelowRock(rock)
+    if holdPositionConnection then holdPositionConnection:Disconnect() end
+    local character = LocalPlayer.Character
+    if not character then return end
+    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+    if not humanoidRootPart then return end
+    
+    holdPositionConnection = RunService.Heartbeat:Connect(function()
+        if not State.isAutoFarmEnabled or not isRockValid(rock) then
+            if holdPositionConnection then holdPositionConnection:Disconnect() holdPositionConnection = nil end
+            return
+        end
+        local rockPos = getRockPosition(rock)
+        if rockPos then
+            local targetPos = rockPos + Vector3.new(0, ROCK_OFFSET_BELOW, 0)
+            local lookUpCFrame = CFrame.new(targetPos) * CFrame.Angles(math.rad(90), 0, 0)
+            humanoidRootPart.CFrame = lookUpCFrame
+            if flyBodyGyro then
+                flyBodyGyro.CFrame = lookUpCFrame
+            end
+        end
+    end)
+end
+
+local function stopHoldPosition()
+    if holdPositionConnection then holdPositionConnection:Disconnect() holdPositionConnection = nil end
+end
+
+local NumberKeyCodes = {
+    Enum.KeyCode.One,
+    Enum.KeyCode.Two,
+    Enum.KeyCode.Three,
+    Enum.KeyCode.Four,
+    Enum.KeyCode.Five,
+    Enum.KeyCode.Six,
+    Enum.KeyCode.Seven,
+    Enum.KeyCode.Eight,
+    Enum.KeyCode.Nine
+}
+
+local function getToolSlotPosition(toolName)
+    local backpack = LocalPlayer:FindFirstChild("Backpack")
+    if not backpack then return 1 end
+    local tools = {}
+    for _, item in pairs(backpack:GetChildren()) do
+        if item:IsA("Tool") then
+            table.insert(tools, item.Name)
+        end
+    end
+    for i, name in ipairs(tools) do
+        if name == toolName then
+            return math.min(i, 9)
+        end
+    end
+    return 1
+end
+
+local function equipTool()
+    if not VirtualInputManager then return end
+    local slotPosition = getToolSlotPosition(State.selectedTool)
+    local keyCode = NumberKeyCodes[slotPosition] or Enum.KeyCode.One
+    VirtualInputManager:SendKeyEvent(true, keyCode, false, game)
+    task.wait(0.05)
+    VirtualInputManager:SendKeyEvent(false, keyCode, false, game)
+end
+
+local function activatePickaxe()
+    pcall(function()
+        local toolArg = State.selectedTool
+        if State.selectedTool == "Weapon" then
+            toolArg = "Weapon"
+        end
+        local args = {toolArg}
+        ReplicatedStorage:WaitForChild("Shared")
+            :WaitForChild("Packages")
+            :WaitForChild("Knit")
+            :WaitForChild("Services")
+            :WaitForChild("ToolService")
+            :WaitForChild("RF")
+            :WaitForChild("ToolActivated")
+            :InvokeServer(unpack(args))
+    end)
+end
+
+local function getBackpackPickaxes()
+    local pickaxes = {"Weapon"}
+    local backpack = LocalPlayer:FindFirstChild("Backpack")
+    local character = LocalPlayer.Character
+    if backpack then
+        for _, tool in pairs(backpack:GetChildren()) do
+            if tool:IsA("Tool") and string.find(tool.Name, "Pickaxe") then
+                table.insert(pickaxes, tool.Name)
+            end
+        end
+    end
+    if character then
+        for _, tool in pairs(character:GetChildren()) do
+            if tool:IsA("Tool") and string.find(tool.Name, "Pickaxe") then
+                if not table.find(pickaxes, tool.Name) then
+                    table.insert(pickaxes, tool.Name)
+                end
+            end
+        end
+    end
+    if #pickaxes == 0 then
+        table.insert(pickaxes, "Pickaxe")
+    end
+    return pickaxes
+end
+
+local function selectBestPickaxe()
+    local pickaxes = getBackpackPickaxes()
+    if #pickaxes > 0 then
+        return pickaxes[#pickaxes]
+    end
+    return "Pickaxe"
+end
+
+local function clearAllHighlights()
+    for _, highlight in pairs(activeHighlights) do
+        if highlight and highlight.Parent then
+            highlight:Destroy()
+        end
+    end
+    activeHighlights = {}
+end
+
+local function createHighlight(rock)
+    local part = getRockPart(rock)
+    if not part then return nil end
+    local existingHighlight = part:FindFirstChild("RockHighlight")
+    if existingHighlight then return existingHighlight end
+    local highlight = Instance.new("Highlight")
+    highlight.Name = "RockHighlight"
+    highlight.Adornee = rock:IsA("Model") and rock or part
+    highlight.FillColor = Color3.fromRGB(0, 255, 100)
+    highlight.FillTransparency = 0.5
+    highlight.OutlineColor = Color3.fromRGB(255, 255, 0)
+    highlight.OutlineTransparency = 0
+    highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+    highlight.Parent = part
+    table.insert(activeHighlights, highlight)
+    return highlight
+end
+
+local function updateHighlights()
+    clearAllHighlights()
+    if not State.isHighlightEnabled then return end
+    local rocks = findAllRocks()
+    for _, rock in pairs(rocks) do
+        createHighlight(rock)
+    end
+end
+
+local function findAllMonsters()
+    local monsters = {}
+    local livingFolder = Workspace:FindFirstChild("Living")
+    if livingFolder then
+        for _, child in pairs(livingFolder:GetChildren()) do
+            local monsterName = child.Name:gsub("%d+", "")
+            if monsterName == State.selectedMonsterType then
+                table.insert(monsters, child)
+            end
+        end
+    end
+    return monsters
+end
+
+local function getMonsterPart(monster)
+    if monster:IsA("Model") then
+        return monster.PrimaryPart or monster:FindFirstChild("HumanoidRootPart") or monster:FindFirstChildWhichIsA("BasePart")
+    elseif monster:IsA("BasePart") then
+        return monster
+    end
+    return nil
+end
+
+local function clearAllMonsterHighlights()
+    for _, highlight in pairs(activeMonsterHighlights) do
+        if highlight and highlight.Parent then
+            highlight:Destroy()
+        end
+    end
+    activeMonsterHighlights = {}
+end
+
+local function createMonsterHighlight(monster)
+    local part = getMonsterPart(monster)
+    if not part then return nil end
+    local existingHighlight = monster:FindFirstChild("MonsterHighlight")
+    if existingHighlight then return existingHighlight end
+    local highlight = Instance.new("Highlight")
+    highlight.Name = "MonsterHighlight"
+    highlight.Adornee = monster
+    highlight.FillColor = Color3.fromRGB(255, 0, 0)
+    highlight.FillTransparency = 0.5
+    highlight.OutlineColor = Color3.fromRGB(255, 100, 0)
+    highlight.OutlineTransparency = 0
+    highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+    highlight.Parent = monster
+    table.insert(activeMonsterHighlights, highlight)
+    return highlight
+end
+
+local function updateMonsterHighlights()
+    clearAllMonsterHighlights()
+    if not State.isMonsterHighlightEnabled then return end
+    local monsters = findAllMonsters()
+    for _, monster in pairs(monsters) do
+        createMonsterHighlight(monster)
+    end
+end
+
+local MonsterDropdown = Tabs.Monsters:CreateDropdown("MonsterSelect", {
+    Title = "Monster Select",
+    Description = "Chọn loại Monster muốn highlight",
+    Values = MonsterTypes,
+    Multi = false,
+    Default = "Zombie"
+})
+
+
+
+local MonsterHighlightToggle = Tabs.Monsters:CreateToggle("MonsterHighlight", {
+    Title = "Highlight Monster",
+    Description = "Highlight Monster đã chọn",
+    Default = false
+})
+
+MonsterHighlightToggle:OnChanged(function()
+    State.isMonsterHighlightEnabled = Options.MonsterHighlight.Value
+    if State.isMonsterHighlightEnabled then
+        updateMonsterHighlights()
+    else
+        clearAllMonsterHighlights()
+    end
+end)
+
+local AutoMonsterFarmToggle = Tabs.Monsters:CreateToggle("AutoMonsterFarm", {
+    Title = "Auto Farm Monster",
+    Description = "Farm Monster đã chọn",
+    Default = false
+})
+
+local MobInfoSection = Tabs.Monsters:CreateSection("MOB INFO")
+
+local MobInfoParagraph = Tabs.Monsters:CreateParagraph("MobInfo", {
+    Title = "Thông tin Mob Drop",
+    Content = getMobDropInfo("Zombie")
+})
+
+MonsterDropdown:OnChanged(function(Value)
+    State.selectedMonsterType = Value
+    if State.isMonsterHighlightEnabled then
+        updateMonsterHighlights()
+    end
+    if MobInfoParagraph then
+        MobInfoParagraph:SetContent(getMobDropInfo(Value))
+    end
+end)
+
+-- ==================== AUTO FARM MATERIAL UI SECTION ====================
+local MaterialFarmSection = Tabs.Monsters:CreateSection("AUTO FARM MATERIAL")
+
+local MaterialDropdown = Tabs.Monsters:CreateDropdown("MaterialSelect", {
+    Title = "Select Material",
+    Description = "Chọn loại Material muốn farm",
+    Values = MaterialTypes,
+    Multi = false,
+    Default = "Tiny Essence"
+})
+
+local MaterialMonsterDropdown = Tabs.Monsters:CreateDropdown("MaterialMonsterSelect", {
+    Title = "Select Monsters to Farm",
+    Description = "Chọn Monster muốn farm (theo drop rate)",
+    Values = getMonstersForMaterial("Tiny Essence"),
+    Multi = true,
+    Default = {}
+})
+
+local AutoMaterialFarmToggle = Tabs.Monsters:CreateToggle("AutoMaterialFarm", {
+    Title = "Auto Farm Material",
+    Description = "Tự động farm Monster đã chọn để lấy Material",
+    Default = false
+})
+
+MaterialDropdown:OnChanged(function(Value)
+    State.selectedMaterial = Value
+    local newMonsters = getMonstersForMaterial(Value)
+    MaterialMonsterDropdown:SetValues(newMonsters)
+    State.selectedMaterialMonsters = {}
+end)
+
+MaterialMonsterDropdown:OnChanged(function(Value)
+    State.selectedMaterialMonsters = {}
+    if type(Value) == "table" then
+        for monsterWithRate, isSelected in pairs(Value) do
+            if isSelected then
+                local monsterName = monsterWithRate:match("^(.+) %(")
+                if monsterName then
+                    table.insert(State.selectedMaterialMonsters, monsterName)
+                end
+            end
+        end
+    end
+end)
+
+task.spawn(function()
+    while true do
+        task.wait(2)
+        if State.isMonsterHighlightEnabled then
+            updateMonsterHighlights()
+        end
+    end
+end)
+
+-- ==================== CAMERA NOCLIP (View not blocked by parts) ====================
+local originalPopperConstants = {}
+
+local function enableCameraNoClip()
+    pcall(function()
+        local sc = (debug and debug.setconstant) or setconstant
+        local gc = (debug and debug.getconstants) or getconstants
+        if not sc or not getgc or not gc then
+            Library:Notify({Title = "Error", Content = "Exploit không hỗ trợ camera noclip", Duration = 3})
+            return
+        end
+        local speaker = LocalPlayer
+        local pop = speaker.PlayerScripts.PlayerModule.CameraModule.ZoomController.Popper
+        for _, v in pairs(getgc()) do
+            if type(v) == "function" and getfenv(v).script == pop then
+                for i, v1 in pairs(gc(v)) do
+                    if tonumber(v1) == 0.25 then
+                        sc(v, i, 0)
+                    end
+                end
+            end
+        end
+        State.isCameraNoClipEnabled = true
+    end)
+end
+
+local function disableCameraNoClip()
+    pcall(function()
+        local sc = (debug and debug.setconstant) or setconstant
+        local gc = (debug and debug.getconstants) or getconstants
+        if not sc or not getgc or not gc then return end
+        local speaker = LocalPlayer
+        local pop = speaker.PlayerScripts.PlayerModule.CameraModule.ZoomController.Popper
+        for _, v in pairs(getgc()) do
+            if type(v) == "function" and getfenv(v).script == pop then
+                for i, v1 in pairs(gc(v)) do
+                    if tonumber(v1) == 0 then
+                        sc(v, i, 0.25)
+                    end
+                end
+            end
+        end
+        State.isCameraNoClipEnabled = false
+    end)
+end
+
+local function getMonsterPosition(monster)
+    if monster:IsA("Model") then
+        local hrp = monster:FindFirstChild("HumanoidRootPart")
+        if hrp then return hrp.Position end
+        local primaryPart = monster.PrimaryPart or monster:FindFirstChildWhichIsA("BasePart")
+        if primaryPart then return primaryPart.Position end
+    elseif monster:IsA("BasePart") then
+        return monster.Position
+    end
+    return nil
+end
+
+local function getMonsterHP(monster)
+    local hrp = monster:FindFirstChild("HumanoidRootPart")
+    if not hrp then return nil end
+    local infoFrame = hrp:FindFirstChild("infoFrame")
+    if not infoFrame then return nil end
+    local frame = infoFrame:FindFirstChild("Frame")
+    if not frame then return nil end
+    local rockHP = frame:FindFirstChild("rockHP")
+    if not rockHP then return nil end
+    local hpText = rockHP.Text
+    if hpText then
+        local hp = tonumber(hpText:match("[%d%.]+"))
+        return hp
+    end
+    return nil
+end
+
+local function isMonsterValid(monster)
+    if monster == nil then return false end
+    if not monster.Parent then return false end
+    local hp = getMonsterHP(monster)
+    if hp ~= nil and hp <= 0 then
+        return false
+    end
+    return true
+end
+
+local function findNearestMonster()
+    local monsters = findAllMonsters()
+    local character = LocalPlayer.Character
+    if not character then return nil end
+    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+    if not humanoidRootPart then return nil end
+    local playerPos = humanoidRootPart.Position
+    local nearestMonster = nil
+    local nearestDistance = math.huge
+    for _, monster in pairs(monsters) do
+        if isMonsterValid(monster) then
+            local monsterPos = getMonsterPosition(monster)
+            if monsterPos then
+                local distance = (monsterPos - playerPos).Magnitude
+                if distance < nearestDistance then
+                    nearestDistance = distance
+                    nearestMonster = monster
+                end
+            end
+        end
+    end
+    return nearestMonster
+end
+
+do -- Auto Monster Farm Scope
+    local MONSTER_CLOSE_DISTANCE = 50
+    local MONSTER_CLOSE_TWEEN_TIME = 0.5
+    local MONSTER_FAR_TWEEN_TIME = 8
+    local MONSTER_OFFSET_BELOW = -6
+
+    local function enableMonsterFly(character)
+        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+        if not humanoidRootPart then return end
+        if monsterFlyBodyGyro then monsterFlyBodyGyro:Destroy() end
+        if monsterFlyBodyVelocity then monsterFlyBodyVelocity:Destroy() end
+        monsterFlyBodyGyro = Instance.new("BodyGyro")
+        monsterFlyBodyGyro.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
+        monsterFlyBodyGyro.P = 1000000
+        monsterFlyBodyGyro.D = 100
+        monsterFlyBodyGyro.Parent = humanoidRootPart
+        monsterFlyBodyVelocity = Instance.new("BodyVelocity")
+        monsterFlyBodyVelocity.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+        monsterFlyBodyVelocity.Velocity = Vector3.new(0, 0, 0)
+        monsterFlyBodyVelocity.Parent = humanoidRootPart
+    end
+
+    local function disableMonsterFly()
+        if monsterFlyBodyGyro then monsterFlyBodyGyro:Destroy() monsterFlyBodyGyro = nil end
+        if monsterFlyBodyVelocity then monsterFlyBodyVelocity:Destroy() monsterFlyBodyVelocity = nil end
+    end
+
+    local function enableMonsterNoClip(character)
+        if monsterNoClipConnection then monsterNoClipConnection:Disconnect() end
+        monsterNoClipConnection = RunService.Stepped:Connect(function()
+            if character and character:FindFirstChild("Humanoid") then
+                for _, part in pairs(character:GetDescendants()) do
+                    if part:IsA("BasePart") then
+                        part.CanCollide = false
+                    end
+                end
+            end
+        end)
+    end
+
+    local function disableMonsterNoClip()
+        if monsterNoClipConnection then monsterNoClipConnection:Disconnect() monsterNoClipConnection = nil end
+    end
+
+    local function enableMonsterAntiJitter(character)
+        if monsterAntiJitterConnection then monsterAntiJitterConnection:Disconnect() end
+        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+        if not humanoidRootPart then return end
+        monsterAntiJitterConnection = RunService.RenderStepped:Connect(function()
+            if humanoidRootPart and humanoidRootPart.Parent then
+                humanoidRootPart.Velocity = Vector3.new(0, 0, 0)
+                humanoidRootPart.RotVelocity = Vector3.new(0, 0, 0)
+            end
+        end)
+    end
+
+    local function disableMonsterAntiJitter()
+        if monsterAntiJitterConnection then monsterAntiJitterConnection:Disconnect() monsterAntiJitterConnection = nil end
+    end
+
+    local function tweenToMonster(monster)
+        local character = LocalPlayer.Character
+        if not character then return false end
+        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+        if not humanoidRootPart then return false end
+        local monsterPos = getMonsterPosition(monster)
+        if not monsterPos then return false end
+        local distance = (monsterPos - humanoidRootPart.Position).Magnitude
+        local tweenTime = distance / 50
+        local targetPos = monsterPos + Vector3.new(0, MONSTER_OFFSET_BELOW, 0)
+        local lookUpCFrame = CFrame.new(targetPos) * CFrame.Angles(math.rad(90), 0, 0)
+        local tweenInfo = TweenInfo.new(tweenTime, Enum.EasingStyle.Linear)
+        local tween = TweenService:Create(humanoidRootPart, tweenInfo, {CFrame = lookUpCFrame})
+        tween:Play()
+        tween.Completed:Wait()
+        return true
+    end
+
+    local function holdPositionBelowMonster(monster)
+        if monsterHoldPositionConnection then monsterHoldPositionConnection:Disconnect() end
+        local character = LocalPlayer.Character
+        if not character then return end
+        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+        if not humanoidRootPart then return end
+        monsterHoldPositionConnection = RunService.Heartbeat:Connect(function()
+            if not State.isAutoMonsterFarmEnabled or not isMonsterValid(monster) then
+                if monsterHoldPositionConnection then monsterHoldPositionConnection:Disconnect() monsterHoldPositionConnection = nil end
+                return
+            end
+            local monsterPos = getMonsterPosition(monster)
+            if monsterPos then
+                local targetPos = monsterPos + Vector3.new(0, MONSTER_OFFSET_BELOW, 0)
+                local lookUpCFrame = CFrame.new(targetPos) * CFrame.Angles(math.rad(90), 0, 0)
+                humanoidRootPart.CFrame = lookUpCFrame
+                if monsterFlyBodyGyro then
+                    monsterFlyBodyGyro.CFrame = lookUpCFrame
+                end
+            end
+        end)
+    end
+
+    local function stopMonsterHoldPosition()
+        if monsterHoldPositionConnection then monsterHoldPositionConnection:Disconnect() monsterHoldPositionConnection = nil end
+    end
+
+    local function activateWeapon()
+        pcall(function()
+            local args = {"Weapon"}
+            ReplicatedStorage:WaitForChild("Shared")
+                :WaitForChild("Packages")
+                :WaitForChild("Knit")
+                :WaitForChild("Services")
+                :WaitForChild("ToolService")
+                :WaitForChild("RF")
+                :WaitForChild("ToolActivated")
+                :InvokeServer(unpack(args))
+        end)
+    end
+
+    AutoMonsterFarmToggle:OnChanged(function()
+        State.isAutoMonsterFarmEnabled = Options.AutoMonsterFarm.Value
+        local character = LocalPlayer.Character
+        if State.isAutoMonsterFarmEnabled then
+            enableCameraNoClip()
+            if character then
+                enableMonsterFly(character)
+                enableMonsterNoClip(character)
+                enablePlatformStand(character)
+                enableMonsterAntiJitter(character)
+            end
+        else
+            currentMonster = nil
+            stopMonsterHoldPosition()
+            disableMonsterFly()
+            disableMonsterNoClip()
+            disableMonsterAntiJitter()
+            if character then
+                disablePlatformStand(character)
+            end
+            disableCameraNoClip()
+        end
+    end)
+
+    task.spawn(function()
+        while true do
+            task.wait(0.1)
+            if State.isAutoMonsterFarmEnabled then
+                pcall(function()
+                    local character = LocalPlayer.Character
+                    if character then
+                        enablePlatformStand(character)
+                    end
+                    if not isMonsterValid(currentMonster) then
+                        stopMonsterHoldPosition()
+                        currentMonster = findNearestMonster()
+                        if currentMonster then
+                            tweenToMonster(currentMonster)
+                            holdPositionBelowMonster(currentMonster)
+                            task.wait(0.2)
+                        end
+                    end
+                    if isMonsterValid(currentMonster) then
+                        activateWeapon()
+                    end
+                end)
+            end
+        end
+    end)
+
+    -- ==================== AUTO FARM MATERIAL LOGIC ====================
+    local function findAllMaterialFarmMonsters()
+        local monsters = {}
+        local livingFolder = Workspace:FindFirstChild("Living")
+        if livingFolder then
+            for _, child in pairs(livingFolder:GetChildren()) do
+                local monsterName = child.Name:gsub("%d+", "")
+                for _, selected in ipairs(State.selectedMaterialMonsters) do
+                    if monsterName == selected then
+                        table.insert(monsters, child)
+                        break
+                    end
+                end
+            end
+        end
+        return monsters
+    end
+
+    local function findNearestMaterialMonster()
+        local monsters = findAllMaterialFarmMonsters()
+        local character = LocalPlayer.Character
+        if not character then return nil end
+        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+        if not humanoidRootPart then return nil end
+        local playerPos = humanoidRootPart.Position
+        local nearestMonster = nil
+        local nearestDistance = math.huge
+        for _, monster in pairs(monsters) do
+            if isMonsterValid(monster) then
+                local monsterPos = getMonsterPosition(monster)
+                if monsterPos then
+                    local distance = (monsterPos - playerPos).Magnitude
+                    if distance < nearestDistance then
+                        nearestDistance = distance
+                        nearestMonster = monster
+                    end
+                end
+            end
+        end
+        return nearestMonster
+    end
+
+    local function holdPositionBelowMaterialMonster(monster)
+        if materialFarmHoldPositionConnection then materialFarmHoldPositionConnection:Disconnect() end
+        local character = LocalPlayer.Character
+        if not character then return end
+        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+        if not humanoidRootPart then return end
+        materialFarmHoldPositionConnection = RunService.Heartbeat:Connect(function()
+            if not State.isAutoMaterialFarmEnabled or not isMonsterValid(monster) then
+                if materialFarmHoldPositionConnection then materialFarmHoldPositionConnection:Disconnect() materialFarmHoldPositionConnection = nil end
+                return
+            end
+            local monsterPos = getMonsterPosition(monster)
+            if monsterPos then
+                local targetPos = monsterPos + Vector3.new(0, MONSTER_OFFSET_BELOW, 0)
+                local lookUpCFrame = CFrame.new(targetPos) * CFrame.Angles(math.rad(90), 0, 0)
+                humanoidRootPart.CFrame = lookUpCFrame
+                if monsterFlyBodyGyro then
+                    monsterFlyBodyGyro.CFrame = lookUpCFrame
+                end
+            end
+        end)
+    end
+
+    local function stopMaterialFarmHoldPosition()
+        if materialFarmHoldPositionConnection then materialFarmHoldPositionConnection:Disconnect() materialFarmHoldPositionConnection = nil end
+    end
+
+    AutoMaterialFarmToggle:OnChanged(function()
+        State.isAutoMaterialFarmEnabled = Options.AutoMaterialFarm.Value
+        local character = LocalPlayer.Character
+        if State.isAutoMaterialFarmEnabled then
+            if #State.selectedMaterialMonsters == 0 then
+                Library:Notify({
+                    Title = "Warning",
+                    Content = "Vui lòng chọn ít nhất 1 monster để farm!",
+                    Duration = 3
+                })
+                Options.AutoMaterialFarm:SetValue(false)
+                return
+            end
+            if character then
+                enableMonsterFly(character)
+                enableMonsterNoClip(character)
+                enablePlatformStand(character)
+                enableMonsterAntiJitter(character)
+            end
+        else
+            currentMaterialMonster = nil
+            stopMaterialFarmHoldPosition()
+            disableMonsterFly()
+            disableMonsterNoClip()
+            disableMonsterAntiJitter()
+            if character then
+                disablePlatformStand(character)
+            end
+        end
+    end)
+
+    task.spawn(function()
+        while true do
+            task.wait(0.1)
+            if State.isAutoMaterialFarmEnabled then
+                pcall(function()
+                    local character = LocalPlayer.Character
+                    if character then
+                        enablePlatformStand(character)
+                    end
+                    if not isMonsterValid(currentMaterialMonster) then
+                        stopMaterialFarmHoldPosition()
+                        currentMaterialMonster = findNearestMaterialMonster()
+                        if currentMaterialMonster then
+                            tweenToMonster(currentMaterialMonster)
+                            holdPositionBelowMaterialMonster(currentMaterialMonster)
+                            task.wait(0.2)
+                        end
+                    end
+                    if isMonsterValid(currentMaterialMonster) then
+                        activateWeapon()
+                    end
+                end)
+            end
+        end
+    end)
+end
+
+local PickaxeSection = Tabs.Shop:CreateSection("PICKAXE SHOP")
+
+local ShopPickaxeDropdown = Tabs.Shop:CreateDropdown("ShopPickaxe", {
+    Title = "Pickaxe Shop",
+    Description = "Chọn Pickaxe muốn mua",
+    Values = PickaxeShopList,
+    Multi = false,
+    Default = "Bronze Pickaxe - 150 Gold"
+})
+
+ShopPickaxeDropdown:OnChanged(function(Value)
+    selectedShopPickaxe = getPickaxeNameFromDropdown(Value)
+end)
+
+Tabs.Shop:CreateButton({
+    Title = "Buy Pickaxe",
+    Description = "Mua Pickaxe đã chọn",
+    Callback = function()
+        if selectedShopPickaxe then
+            buyPickaxe(selectedShopPickaxe)
+        end
+    end
+})
+
+local PotionSection = Tabs.Shop:CreateSection("POTION SHOP")
+
+local ShopPotionDropdown = Tabs.Shop:CreateDropdown("ShopPotion", {
+    Title = "Potion Shop",
+    Description = "Chọn Potion muốn mua",
+    Values = PotionShopList,
+    Multi = false,
+    Default = "MinerPotion1 - Miner Potion I"
+})
+
+local PotionEffectParagraph = Tabs.Shop:CreateParagraph("PotionEffectInfo", {
+    Title = "Potion Effect",
+    Content = PotionDescriptions["MinerPotion1"]
+})
+
+ShopPotionDropdown:OnChanged(function(Value)
+    selectedShopPotion = getPotionIdFromDropdown(Value)
+    if selectedShopPotion and PotionDescriptions[selectedShopPotion] then
+        PotionEffectParagraph:SetContent(PotionDescriptions[selectedShopPotion])
+    end
+end)
+
+Tabs.Shop:CreateButton({
+    Title = "Buy Potion",
+    Description = "Mua Potion đã chọn",
+    Callback = function()
+        if selectedShopPotion then
+            buyPotion(selectedShopPotion)
+        end
+    end
+})
+
+availableTools = getBackpackPickaxes()
+
+local ToolDropdown = Tabs.Home:CreateDropdown("ToolSelect", {
+    Title = "Tool Select",
+    Description = "Chọn Vũ Khí để đào quặng",
+    Values = availableTools,
+    Multi = false,
+    Default = "Pickaxe"
+})
+
+ToolDropdown:OnChanged(function(Value)
+    State.selectedTool = Value
+end)
+
+local AutoSelectToggle = Tabs.Home:CreateToggle("AutoSelectTool", {
+    Title = "Auto Select Tool",
+    Description = "Tự động equip vũ khí đã chọn",
+    Default = false
+})
+
+AutoSelectToggle:OnChanged(function()
+    State.isAutoSelectTool = Options.AutoSelectTool.Value
+    if State.isAutoSelectTool then
+        State.selectedTool = selectBestPickaxe()
+        ToolDropdown:SetValue(State.selectedTool)
+    end
+end)
+
+Tabs.Home:CreateButton({
+    Title = "Refresh Tools",
+    Description = "Reset danh sách vũ khí",
+    Callback = function()
+        availableTools = getBackpackPickaxes()
+        ToolDropdown:SetValues(availableTools)
+        if State.isAutoSelectTool then
+            State.selectedTool = selectBestPickaxe()
+            ToolDropdown:SetValue(State.selectedTool)
+        end
+    end
+})
+
+Tabs.Home:CreateButton({
+    Title = "Reroll Race",
+    Description = "Quay Race mới",
+    Callback = function()
+        pcall(function()
+            ReplicatedStorage:WaitForChild("Shared")
+                :WaitForChild("Packages")
+                :WaitForChild("Knit")
+                :WaitForChild("Services")
+                :WaitForChild("RaceService")
+                :WaitForChild("RF")
+                :WaitForChild("Reroll")
+                :InvokeServer()
+        end)
+    end
+})
+
+local NPCList = {"Wizard", "Maria", "Marbles", "Sensei Moro", "Enchanter", "Runermaker", "Greedy Cey", "Miner Fred"}
+local NPCPositions = {
+    ["Wizard"] = Vector3.new(-23, 81, -357),
+    ["Maria"] = Vector3.new(-154, 28, 117),
+    ["Marbles"] = Vector3.new(-180, 29, 15),
+    ["Sensei Moro"] = Vector3.new(-196, 29, 160),
+    ["Enchanter"] = Vector3.new(-260, 20, 27),
+    ["Runermaker"] = Vector3.new(-271, 20, 145),
+    ["Greedy Cey"] = Vector3.new(-114, 38, -38),
+    ["Miner Fred"] = Vector3.new(-88, 29, 94)
+}
+local selectedNPC = "Wizard"
+
+local NPCDropdown = Tabs.NPC:CreateDropdown("NPCSelect", {
+    Title = "NPC Select",
+    Description = "Chọn NPC muốn di chuyển đến",
+    Values = NPCList,
+    Multi = false,
+    Default = "Wizard"
+})
+
+NPCDropdown:OnChanged(function(Value)
+    selectedNPC = Value
+end)
+
+Tabs.NPC:CreateButton({
+    Title = "Tween to NPC",
+    Description = "Di chuyển đến NPC đã chọn",
+    Callback = function()
+        local character = LocalPlayer.Character
+        if not character then return end
+        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+        if not humanoidRootPart then return end
+        local targetPos = NPCPositions[selectedNPC]
+        if not targetPos then return end
+        local targetCFrame = CFrame.new(targetPos + Vector3.new(0, 2, 0))
+        local tweenInfo = TweenInfo.new(5, Enum.EasingStyle.Linear)
+        local tween = TweenService:Create(humanoidRootPart, tweenInfo, {CFrame = targetCFrame})
+        tween:Play()
+    end
+})
+
+local CameraNoClipToggle = Tabs.Mics:CreateToggle("CameraNoClip", {
+    Title = "Camera NoClip",
+    Description = "Tầm nhìn không bị chặn bởi các part",
+    Default = false
+})
+
+CameraNoClipToggle:OnChanged(function()
+    local enabled = Options.CameraNoClip.Value
+    if enabled then
+        enableCameraNoClip()
+    else
+        disableCameraNoClip()
+    end
+end)
+
+-- ==================== QUEST-AWARE FARM UI ====================
+Tabs.Quest:CreateSection("QUEST-AWARE FARM")
+
+local cachedQuestObjectives = {}
+
+local QuestTargetDropdown = Tabs.Quest:CreateDropdown("QuestTargetSelect", {
+    Title = "Quest Target",
+    Description = "Chọn mục tiêu quest muốn farm",
+    Values = {"(Nhấn Refresh để load)"},
+    Multi = false,
+    Default = "(Nhấn Refresh để load)"
+})
+
+Tabs.Quest:CreateButton({
+    Title = "Refresh Quest Targets",
+    Description = "Tải lại danh sách mục tiêu có thể farm",
+    Callback = function()
+        local objectives = getFarmableQuestObjectives()
+        cachedQuestObjectives = objectives
+        local values = {}
+        for idx, obj in ipairs(objectives) do
+            local typeLabel = obj.type:upper()
+            if typeLabel == "COLLECT_ORE" then typeLabel = "ORE" end
+            local display = string.format("[%s] %s (%d/%d)", 
+                typeLabel, obj.target or "?", 
+                obj.current or 0, obj.required or 0)
+            table.insert(values, display)
+        end
+        if #values == 0 then
+            values = {"Không có mục tiêu farmable"}
+        end
+        QuestTargetDropdown:SetValues(values)
+        Library:Notify({Title = "Quest Farm", Content = "Đã tải " .. #objectives .. " mục tiêu", Duration = 2})
+    end
+})
+
+local QuestProgressParagraph = Tabs.Quest:CreateParagraph("QuestFarmProgress", {
+    Title = "Quest Farm Progress",
+    Content = "Chọn target và bật Auto Quest Farm"
+})
+
+local AutoQuestFarmToggle = Tabs.Quest:CreateToggle("AutoQuestFarm", {
+    Title = "Auto Quest Farm",
+    Description = "Tự động farm theo mục tiêu quest đã chọn",
+    Default = false
+})
+
+local function startQuestAwareFarm(targetType, targetName)
+    if targetType == "kill" then
+        State.selectedMonsterType = targetName
+        if MonsterDropdown then MonsterDropdown:SetValue(targetName) end
+        if not State.isAutoMonsterFarmEnabled then
+            if Options.AutoMonsterFarm then
+                Options.AutoMonsterFarm:SetValue(true)
+            end
+        end
+        QuestProgressParagraph:SetContent("Đang farm: " .. targetName .. " (Monster)")
+    elseif targetType == "collect" then
+        local rockType = OreToRockMap[targetName]
+        if rockType then
+            State.selectedRockType = rockType
+            if FarmDropdown then FarmDropdown:SetValue(rockType) end
+            if not State.isAutoFarmEnabled then
+                if Options.AutoFarm then
+                    Options.AutoFarm:SetValue(true)
+                end
+            end
+            QuestProgressParagraph:SetContent("Đang farm: " .. rockType .. " (cho " .. targetName .. ")")
+        else
+            QuestProgressParagraph:SetContent("Không tìm thấy rock cho: " .. targetName)
+        end
+    elseif targetType == "mine" then
+        State.selectedRockType = targetName
+        if FarmDropdown then FarmDropdown:SetValue(targetName) end
+        if not State.isAutoFarmEnabled then
+            if Options.AutoFarm then
+                Options.AutoFarm:SetValue(true)
+            end
+        end
+        QuestProgressParagraph:SetContent("Đang farm: " .. targetName .. " (Rock)")
+    elseif targetType == "collect_ore" then
+        if not State.isAutoFarmEnabled then
+            if Options.AutoFarm then
+                Options.AutoFarm:SetValue(true)
+            end
+        end
+        QuestProgressParagraph:SetContent("Đang farm: Ore")
+    end
+end
+
+local function stopQuestAwareFarm()
+    if State.isAutoFarmEnabled and Options.AutoFarm then
+        Options.AutoFarm:SetValue(false)
+    end
+    if State.isAutoMonsterFarmEnabled and Options.AutoMonsterFarm then
+        Options.AutoMonsterFarm:SetValue(false)
+    end
+    QuestProgressParagraph:SetContent("Đã dừng farm")
+end
+
+AutoQuestFarmToggle:OnChanged(function()
+    State.isQuestAwareFarmEnabled = Options.AutoQuestFarm.Value
+    if State.isQuestAwareFarmEnabled then
+        local selected = Options.QuestTargetSelect.Value
+        if not selected or selected == "(Nhấn Refresh để load)" or selected == "Không có mục tiêu farmable" then
+            Library:Notify({Title = "Warning", Content = "Vui lòng chọn mục tiêu quest!", Duration = 3})
+            Options.AutoQuestFarm:SetValue(false)
+            return
+        end
+        
+        local typeMatch = selected:match("%[(%w+)%]")
+        local targetMatch = selected:match("%]%s*([^%(]+)")
+        
+        if typeMatch and targetMatch then
+            local targetType = typeMatch:lower()
+            if targetType == "ore" then targetType = "collect_ore" end
+            local targetName = targetMatch:gsub("%s+$", "")
+            
+            currentQuestType = targetType
+            currentQuestTarget = targetName
+            
+            startQuestAwareFarm(targetType, targetName)
+            enableCameraNoClip()
+        else
+            Library:Notify({Title = "Error", Content = "Không parse được target", Duration = 3})
+            Options.AutoQuestFarm:SetValue(false)
+        end
+    else
+        stopQuestAwareFarm()
+        disableCameraNoClip()
+        currentQuestType = nil
+        currentQuestTarget = nil
+    end
+end)
+
+task.spawn(function()
+    while true do
+        task.wait(3)
+        if State.isQuestAwareFarmEnabled and currentQuestTarget then
+            local objectives = getFarmableQuestObjectives()
+            local progressInfo = "Target: " .. (currentQuestTarget or "?") .. "\n\n"
+            local foundCurrent = false
+            for _, obj in ipairs(objectives) do
+                if obj.target == currentQuestTarget then
+                    progressInfo = progressInfo .. "Progress: " .. obj.current .. "/" .. obj.required .. "\n"
+                    foundCurrent = true
+                    if obj.current >= obj.required then
+                        progressInfo = progressInfo .. "Hoan thanh! Nhan Refresh de load target moi"
+                        stopQuestAwareFarm()
+                        Options.AutoQuestFarm:SetValue(false)
+                        Library:Notify({Title = "Quest Farm", Content = "Đã hoàn thành: " .. currentQuestTarget, Duration = 5})
+                    end
+                    break
+                end
+            end
+            if not foundCurrent then
+                progressInfo = progressInfo .. "Dang farm..."
+            end
+            QuestProgressParagraph:SetContent(progressInfo)
+        end
+    end
+end)
+
+-- ==================== COMBAT TAB ====================
+Tabs.Combat:AddSection("AUTO COMBAT")
+
+do -- Auto Combat Scope
+local function getEquippedWeapon()
+    local character = LocalPlayer.Character
+    if not character then return nil end
+    return character:FindFirstChild("Weapon")
+end
+
+local function activateWeaponAttack(isHeavy)
+    pcall(function()
+        local args = {"Weapon"}
+        if isHeavy then
+            args = {"Weapon", true}
+        end
+        ReplicatedStorage
+            :WaitForChild("Shared")
+            :WaitForChild("Packages")
+            :WaitForChild("Knit")
+            :WaitForChild("Services")
+            :WaitForChild("ToolService")
+            :WaitForChild("RF")
+            :WaitForChild("ToolActivated")
+            :InvokeServer(unpack(args))
+    end)
+end
+
+local function startBlockAction()
+    pcall(function()
+        ReplicatedStorage
+            :WaitForChild("Shared")
+            :WaitForChild("Packages")
+            :WaitForChild("Knit")
+            :WaitForChild("Services")
+            :WaitForChild("ToolService")
+            :WaitForChild("RF")
+            :WaitForChild("StartBlock")
+            :InvokeServer()
+    end)
+end
+
+local function stopBlockAction()
+    pcall(function()
+        ReplicatedStorage
+            :WaitForChild("Shared")
+            :WaitForChild("Packages")
+            :WaitForChild("Knit")
+            :WaitForChild("Services")
+            :WaitForChild("ToolService")
+            :WaitForChild("RF")
+            :WaitForChild("StopBlock")
+            :InvokeServer()
+    end)
+end
+
+local AutoAttackToggle = Tabs.Combat:CreateToggle("AutoAttack", {
+    Title = "Auto Attack",
+    Description = "Tự động tấn công khi cầm vũ khí",
+    Default = false
+})
+
+local AttackSpeedSlider = Tabs.Combat:CreateSlider("AttackSpeed", {
+    Title = "Attack Speed",
+    Description = "Điều chỉnh tốc độ tấn công (giây)",
+    Default = 0.3,
+    Min = 0.1,
+    Max = 2,
+    Rounding = 1
+})
+
+local HeavyAttackToggle = Tabs.Combat:CreateToggle("HeavyAttack", {
+    Title = "Use Heavy Attack",
+    Description = "Sử dụng đòn mạnh",
+    Default = false
+})
+
+AttackSpeedSlider:OnChanged(function(Value)
+    State.attackSpeed = Value
+end)
+
+AutoAttackToggle:OnChanged(function()
+    State.isAutoAttackEnabled = Options.AutoAttack.Value
+end)
+
+task.spawn(function()
+    while true do
+        task.wait(State.attackSpeed)
+        if State.isAutoAttackEnabled then
+            local weapon = getEquippedWeapon()
+            if weapon then
+                local isHeavy = Options.HeavyAttack and Options.HeavyAttack.Value or false
+                activateWeaponAttack(isHeavy)
+            end
+        end
+    end
+end)
+
+Tabs.Combat:AddSection("SMART AUTO BLOCK")
+
+local SmartAutoBlockToggle = Tabs.Combat:CreateToggle("SmartAutoBlock", {
+    Title = "Smart Auto Block",
+    Description = "Tự động block khi phát hiện quái tấn công(beta)",
+    Default = false
+})
+
+local BlockRangeSlider = Tabs.Combat:CreateSlider("BlockRange", {
+    Title = "Detection Range",
+    Description = "Khoảng cách phát hiện quái (studs)",
+    Default = 15,
+    Min = 5,
+    Max = 30,
+    Rounding = 0
+})
+
+local SmartBlockDurationSlider = Tabs.Combat:CreateSlider("SmartBlockDuration", {
+    Title = "Block Duration",
+    Description = "Thời gian block sau khi phát hiện (giây)",
+    Default = 0.5,
+    Min = 0.2,
+    Max = 2,
+    Rounding = 1
+})
+
+State.isSmartAutoBlockEnabled = false
+State.blockRange = 15
+State.smartBlockDuration = 0.5
+
+SmartAutoBlockToggle:OnChanged(function()
+    State.isSmartAutoBlockEnabled = Options.SmartAutoBlock.Value
+end)
+
+BlockRangeSlider:OnChanged(function(Value)
+    State.blockRange = Value
+end)
+
+SmartBlockDurationSlider:OnChanged(function(Value)
+    State.smartBlockDuration = Value
+end)
+
+-- Monitor monster animations for attack detection
+local function isMonsterAttacking(monster)
+    local humanoid = monster:FindFirstChildOfClass("Humanoid")
+    if not humanoid then return false end
+    
+    local animator = humanoid:FindFirstChildOfClass("Animator")
+    if not animator then return false end
+    
+    local playingTracks = animator:GetPlayingAnimationTracks()
+    for _, track in ipairs(playingTracks) do
+        local animName = track.Name:lower()
+        -- Check for attack-related animation names
+        if animName:find("attack") or animName:find("slash") or 
+           animName:find("swing") or animName:find("hit") or 
+           animName:find("punch") or animName:find("strike") or
+           animName:find("combat") then
+            return true
+        end
+        -- Also check animation priority - Action priority usually means attack
+        if track.Priority == Enum.AnimationPriority.Action then
+            return true
+        end
+    end
+    return false
+end
+
+local function findNearbyAttackingMonster(range)
+    local character = LocalPlayer.Character
+    if not character then return nil end
+    local hrp = character:FindFirstChild("HumanoidRootPart")
+    if not hrp then return nil end
+    
+    local playerPos = hrp.Position
+    local livingFolder = Workspace:FindFirstChild("Living")
+    if not livingFolder then return nil end
+    
+    for _, child in pairs(livingFolder:GetChildren()) do
+        if child ~= character and child:FindFirstChild("Humanoid") then
+            local monsterHrp = child:FindFirstChild("HumanoidRootPart")
+            if monsterHrp then
+                local distance = (monsterHrp.Position - playerPos).Magnitude
+                if distance <= range then
+                    if isMonsterAttacking(child) then
+                        return child
+                    end
+                end
+            end
+        end
+    end
+    return nil
+end
+
+-- Smart block loop - detect monster attacks
+local isCurrentlyBlocking = false
+local lastBlockTime = 0
+
+task.spawn(function()
+    while true do
+        task.wait(0.05) -- Check every 50ms for fast response
+        if State.isSmartAutoBlockEnabled then
+            local weapon = getEquippedWeapon()
+            if weapon then
+                local attackingMonster = findNearbyAttackingMonster(State.blockRange)
+                if attackingMonster and not isCurrentlyBlocking then
+                    -- Monster is attacking, block now!
+                    isCurrentlyBlocking = true
+                    lastBlockTime = tick()
+                    startBlockAction()
+                elseif isCurrentlyBlocking then
+                    -- Check if we should stop blocking
+                    if tick() - lastBlockTime >= State.smartBlockDuration then
+                        stopBlockAction()
+                        isCurrentlyBlocking = false
+                    end
+                end
+            else
+                if isCurrentlyBlocking then
+                    stopBlockAction()
+                    isCurrentlyBlocking = false
+                end
+            end
+        else
+            if isCurrentlyBlocking then
+                stopBlockAction()
+                isCurrentlyBlocking = false
+            end
+        end
+    end
+end)
+
+-- Additional: Block on HP decrease (backup detection)
+local lastHP = 0
+local function setupHPMonitor()
+    local character = LocalPlayer.Character
+    if not character then return end
+    
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if not humanoid then return end
+    
+    lastHP = humanoid.Health
+    
+    humanoid:GetPropertyChangedSignal("Health"):Connect(function()
+        if not State.isSmartAutoBlockEnabled then return end
+        if not getEquippedWeapon() then return end
+        
+        local newHP = humanoid.Health
+        if newHP < lastHP then
+            -- We took damage, block immediately for a short time
+            if not isCurrentlyBlocking then
+                isCurrentlyBlocking = true
+                lastBlockTime = tick()
+                startBlockAction()
+                task.delay(State.smartBlockDuration, function()
+                    if isCurrentlyBlocking and tick() - lastBlockTime >= State.smartBlockDuration - 0.1 then
+                        stopBlockAction()
+                        isCurrentlyBlocking = false
+                    end
+                end)
+            end
+        end
+        lastHP = newHP
+    end)
+end
+
+LocalPlayer.CharacterAdded:Connect(setupHPMonitor)
+if LocalPlayer.Character then
+    setupHPMonitor()
+end
+
+Tabs.Combat:AddSection("LEGACY AUTO BLOCK")
+
+local AutoBlockToggle = Tabs.Combat:CreateToggle("AutoBlock", {
+    Title = "Auto Block (Continuous)",  
+    Description = "Block liên tục",
+    Default = false
+})
+
+local BlockDurationSlider = Tabs.Combat:CreateSlider("BlockDuration", {
+    Title = "Block Duration",
+    Description = "Thời gian mỗi lần block (giây)",
+    Default = 0.5,
+    Min = 0.1,
+    Max = 3,
+    Rounding = 1
+})
+
+local BlockIntervalSlider = Tabs.Combat:CreateSlider("BlockInterval", {
+    Title = "Block Interval", 
+    Description = "Thời gian nghỉ giữa các lần block (giây)",
+    Default = 1,
+    Min = 0.5,
+    Max = 5,
+    Rounding = 1
+})
+
+BlockDurationSlider:OnChanged(function(Value)
+    State.blockDuration = Value
+end)
+
+AutoBlockToggle:OnChanged(function()
+    State.isAutoBlockEnabled = Options.AutoBlock.Value
+end)
+
+task.spawn(function()
+    local blockInterval = 1
+    while true do
+        task.wait(0.1)
+        if State.isAutoBlockEnabled and not State.isSmartAutoBlockEnabled then
+            local weapon = getEquippedWeapon()
+            if weapon then
+                startBlockAction()
+                task.wait(State.blockDuration)
+                stopBlockAction()
+                blockInterval = Options.BlockInterval and Options.BlockInterval.Value or 1
+                task.wait(blockInterval)
+            end
+        end
+    end
+end)
+end
+
+-- ==================== MICS TAB ====================
+local TpWalkToggle = Tabs.Mics:CreateToggle("TpWalk", {
+    Title = "Walk Speed",
+    Description = "Tăng tốc độ di chuyển",
+    Default = false
+})
+
+local TpWalkSlider = Tabs.Mics:CreateSlider("TpWalkSpeed", {
+    Title = "Walk Speed Multiplier",
+    Description = "Điều chỉnh tốc độ di chuyển (1-10)",
+    Default = 1,
+    Min = 1,
+    Max = 10,
+    Rounding = 1
+})
+
+TpWalkSlider:OnChanged(function(Value)
+    State.tpWalkSpeed = Value
+end)
+
+TpWalkToggle:OnChanged(function()
+    State.isTpWalkEnabled = Options.TpWalk.Value
+end)
+
+task.spawn(function()
+    local heartbeat = RunService.Heartbeat
+    while true do
+        local delta = heartbeat:Wait()
+        if State.isTpWalkEnabled then
+            local character = LocalPlayer.Character
+            if character then
+                local humanoid = character:FindFirstChildWhichIsA("Humanoid")
+                if humanoid and humanoid.MoveDirection.Magnitude > 0 then
+                    pcall(function()
+                        character:TranslateBy(humanoid.MoveDirection * State.tpWalkSpeed * delta * 10)
+                    end)
+                end
+            end
+        end
+    end
+end)
+
+local FullBrightToggle = Tabs.Mics:CreateToggle("FullBright", {
+    Title = "Full Bright",
+    Description = "Làm sáng toàn bộ map",
+    Default = false
+})
+
+FullBrightToggle:OnChanged(function()
+    State.isFullBrightEnabled = Options.FullBright.Value
+    if State.isFullBrightEnabled then
+        if not originalLightingSettings then
+            originalLightingSettings = {
+                Brightness = Lighting.Brightness,
+                ClockTime = Lighting.ClockTime,
+                FogEnd = Lighting.FogEnd,
+                GlobalShadows = Lighting.GlobalShadows,
+                OutdoorAmbient = Lighting.OutdoorAmbient
+            }
+        end
+        if fullBrightConnection then
+            fullBrightConnection:Disconnect()
+        end
+        fullBrightConnection = RunService.RenderStepped:Connect(function()
+            Lighting.Brightness = 2
+            Lighting.ClockTime = 14
+            Lighting.FogEnd = 100000
+            Lighting.GlobalShadows = false
+            Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
+        end)
+    else
+        if fullBrightConnection then
+            fullBrightConnection:Disconnect()
+            fullBrightConnection = nil
+        end
+        if originalLightingSettings then
+            Lighting.Brightness = originalLightingSettings.Brightness
+            Lighting.ClockTime = originalLightingSettings.ClockTime
+            Lighting.FogEnd = originalLightingSettings.FogEnd
+            Lighting.GlobalShadows = originalLightingSettings.GlobalShadows
+            Lighting.OutdoorAmbient = originalLightingSettings.OutdoorAmbient
+        end
+    end
+end)
+
+local NoFogToggle = Tabs.Mics:CreateToggle("NoFog", {
+    Title = "No Fog",
+    Description = "Xóa hiệu ứng sương mù",
+    Default = false
+})
+
+NoFogToggle:OnChanged(function()
+    State.isNoFogEnabled = Options.NoFog.Value
+    if State.isNoFogEnabled then
+        Lighting.FogEnd = 100000
+        for _, v in pairs(Lighting:GetDescendants()) do
+            if v:IsA("Atmosphere") then
+                v:Destroy()
+            end
+        end
+    end
+end)
+
+local FarmDropdown = Tabs.Farms:CreateDropdown("FarmSelect", {
+    Title = "Farm Select",
+    Description = "Chọn loại đá/quặng muốn farm",
+    Values = FarmTypes,
+    Multi = false,
+    Default = "Pebble"
+})
+
+FarmDropdown:OnChanged(function(Value)
+    State.selectedRockType = Value
+    currentRock = nil
+    if State.isHighlightEnabled then
+        updateHighlights()
+    end
+end)
+
+local AutoFarmToggle = Tabs.Farms:CreateToggle("AutoFarm", {
+    Title = "Auto Farm",
+    Description = "Farm đá/quặng đã chọn",
+    Default = false
+})
+
+AutoFarmToggle:OnChanged(function()
+    State.isAutoFarmEnabled = Options.AutoFarm.Value
+    local character = LocalPlayer.Character
+    if State.isAutoFarmEnabled then
+        enableCameraNoClip()
+        if character then
+            enableFly(character)
+            enableNoClip(character)
+            enablePlatformStand(character)
+            enableAntiJitter(character)
+        end
+    else
+        currentRock = nil
+        stopHoldPosition()
+        disableFly()
+        disableNoClip()
+        disableAntiJitter()
+        if character then
+            disablePlatformStand(character)
+        end
+        disableCameraNoClip()
+    end
+end)
+
+local HighlightToggle = Tabs.Farms:CreateToggle("HighlightESP", {
+    Title = "Highlight ESP",
+    Description = "Highlight cho Rock đã chọn",
+    Default = false
+})
+
+HighlightToggle:OnChanged(function()
+    State.isHighlightEnabled = Options.HighlightESP.Value
+    if State.isHighlightEnabled then
+        updateHighlights()
+    else
+        clearAllHighlights()
+    end
+end)
+
+task.spawn(function()
+    while true do
+        task.wait(0.1)
+        if State.isAutoFarmEnabled then
+            pcall(function()
+                local character = LocalPlayer.Character
+                if character then
+                    enablePlatformStand(character)
+                end
+                
+                if not isRockValid(currentRock) then
+                    stopHoldPosition()
+                    currentRock = findNearestRock()
+                    if currentRock then
+                        tweenToRock(currentRock)
+                        holdPositionBelowRock(currentRock)
+                        task.wait(0.2)
+                        equipTool()
+                        task.wait(0.1)
+                    end
+                end
+                if isRockValid(currentRock) then
+                    activatePickaxe()
+                end
+            end)
+        end
+    end
+end)
+
+
+
+-- ==================== FORGE TAB ====================
+local AutoForgeToggle = Tabs.Forge:CreateToggle("AutoForge", {
+    Title = "Auto Forge",
+    Description = "Tự động thực hiện các minigame rèn (Melt)",
+    Default = false
+})
+
+State.isAutoForgeEnabled = false
+
+AutoForgeToggle:OnChanged(function()
+    State.isAutoForgeEnabled = Options.AutoForge.Value
+end)
+
+local function getHammerMinigameUI()
+    local pGui = LocalPlayer:FindFirstChild("PlayerGui")
+    if not pGui then return nil end
+    local forgeGui = pGui:FindFirstChild("Forge")
+    if not forgeGui then return nil end
+    local hammer = forgeGui:FindFirstChild("HammerMinigame")
+    if hammer and hammer:IsA("GuiObject") then
+        return hammer
+    end
+    return nil
+end
+
+local clickedNotes = {} 
+local getMeltMinigameUI, getPourMinigameUI -- Pre-declare for local scope usage
+
+do -- Scope strictly for Minigame Logic to save registers
+    local function performHammerAction()
+        pcall(function()
+            local hammerUI = getHammerMinigameUI()
+            
+            -- Phase 1: Click Mold
+            local debris = Workspace:FindFirstChild("Debris")
+            if debris then
+                for _, child in pairs(debris:GetChildren()) do
+                    if child.Name == "Mold" and child:FindFirstChild("ClickDetector") then
+                         fireclickdetector(child.ClickDetector)
+                         task.wait(0.05) 
+                    end
+                end
+            end
+
+            -- Phase 2: Rhythm Game
+            if not hammerUI or not hammerUI.Visible then 
+                clickedNotes = {} 
+                return 
+            end
+            
+            for _, child in pairs(hammerUI:GetChildren()) do
+                -- child = Note (v_u_clone in source)
+                -- Structure: Note -> Frame -> Circle, Border
+                if child:IsA("GuiObject") and child.Name ~= "Timer" and child.Visible then
+                    if not clickedNotes[child] then
+                        local frame = child:FindFirstChild("Frame")
+                        if frame then
+                            local circle = frame:FindFirstChild("Circle")
+                            if circle and circle:IsA("ImageLabel") then
+                                -- Use UDim2 Scale values instead of AbsoluteSize for accuracy
+                                -- Circle tweens from initial size to (0,0) over Lifetime
+                                -- Perfect is at 25/44 of Lifetime = ~56.8% through
+                                -- At perfect, Circle.Size.X.Scale = 1 - 0.568 = ~0.432
+                                
+                                local circleScale = circle.Size.X.Scale
+                                
+                                -- Window: Click when scale is between 0.88 and 0.99
+                                -- User reported 0.75-0.95 was still ~0.5s too late
+                                if circleScale <= 0.99 and circleScale >= 0.88 then
+                                    clickedNotes[child] = true
+                                    
+                                    -- Method 1: Direct firesignal (most reliable, bypasses input lag)
+                                    local success = pcall(function()
+                                        if firesignal then
+                                            firesignal(child.MouseButton1Click)
+                                        elseif fireclickdetector then
+                                            -- Some executors rename it
+                                            child.MouseButton1Click:Fire()
+                                        end
+                                    end)
+                                    
+                                    -- Method 2: Fallback to VirtualInputManager
+                                    if not success then
+                                        local absPos = child.AbsolutePosition
+                                        local absSize = child.AbsoluteSize
+                                        local centerX = absPos.X + (absSize.X / 2)
+                                        local centerY = absPos.Y + (absSize.Y / 2)
+                                        local guiInset = game:GetService("GuiService"):GetGuiInset()
+                                        local trueY = centerY + guiInset.Y
+                                        VirtualInputManager:SendMouseButtonEvent(centerX, trueY, 0, true, game, 1)
+                                        VirtualInputManager:SendMouseButtonEvent(centerX, trueY, 0, false, game, 1)
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    end
+
+    function getMeltMinigameUI()
+        local playerGui = LocalPlayer:FindFirstChild("PlayerGui")
+        if not playerGui then return nil end
+        local forgeGui = playerGui:FindFirstChild("Forge")
+        if not forgeGui then return nil end
+        local melt = forgeGui:FindFirstChild("MeltMinigame")
+        if melt and melt:IsA("GuiObject") then
+            return melt
+        end
+        return nil
+    end
+
+    function getPourMinigameUI()
+        local pGui = LocalPlayer:FindFirstChild("PlayerGui")
+        if not pGui then return nil end
+        local fGui = pGui:FindFirstChild("Forge")
+        if not fGui then return nil end
+        local pour = fGui:FindFirstChild("PourMinigame")
+        if pour and pour:IsA("GuiObject") then
+            return pour
+        end
+        return nil
+    end
+
+    local function performMeltAction()
+        pcall(function()
+            local meltUI = getMeltMinigameUI()
+            if not meltUI or not meltUI.Visible then return end
+            
+            local heater = meltUI:FindFirstChild("Heater")
+            if not heater then return end
+            
+            local top = heater:FindFirstChild("Top")
+            local bottom = heater:FindFirstChild("Bottom")
+            
+            if top and bottom then
+                local guiInset = game:GetService("GuiService"):GetGuiInset()
+                local topPos = top.AbsolutePosition
+                local topSize = top.AbsoluteSize
+                local bottomPos = bottom.AbsolutePosition
+                
+                local startX = topPos.X + (topSize.X / 2)
+                local startY = topPos.Y + (topSize.Y / 2) + guiInset.Y
+                local endY = bottomPos.Y + guiInset.Y
+                
+                VirtualInputManager:SendMouseMoveEvent(startX, startY, game)
+                VirtualInputManager:SendMouseButtonEvent(startX, startY, 0, true, game, 1)
+                
+                local steps = 4
+                local stepY = (endY - startY) / steps
+                
+                for i = 1, steps do
+                    local currentTargetY = startY + (stepY * i)
+                    VirtualInputManager:SendMouseMoveEvent(startX, currentTargetY, game)
+                    task.wait(0.02)
+                end
+                
+                VirtualInputManager:SendMouseButtonEvent(startX, endY, 0, false, game, 1)
+                task.wait(0.05) 
+            end
+        end)
+    end
+
+    State.isPourHolding = false
+
+    local function performPourAction()
+        pcall(function()
+            local pourUI = getPourMinigameUI()
+            if not pourUI or not pourUI.Visible then 
+                if State.isPourHolding then
+                     VirtualInputManager:SendMouseButtonEvent(0, 0, 0, false, game, 1)
+                     State.isPourHolding = false
+                end
+                return 
+            end
+            
+            local frame = pourUI:FindFirstChild("Frame")
+            if not frame then return end
+            
+            local line = frame:FindFirstChild("Line")
+            local area = frame:FindFirstChild("Area")
+            
+            if line and area and line:IsA("GuiObject") and area:IsA("GuiObject") then
+                -- From source: Line.Position.Y.Scale moves between 0-1
+                -- Holding mouse: Line goes UP (Y decreases)
+                -- Releasing mouse: Line goes DOWN (Y increases)
+                -- Goal: Keep Line inside Area
+                
+                local lineScale = line.Position.Y.Scale
+                local areaTopScale = area.Position.Y.Scale
+                local areaBottomScale = areaTopScale + area.Size.Y.Scale
+                local areaCenterScale = (areaTopScale + areaBottomScale) / 2
+                
+                -- Click position for VIM (use frame center)
+                local absPos = frame.AbsolutePosition
+                local absSize = frame.AbsoluteSize
+                local centerX = absPos.X + (absSize.X / 2)
+                local centerY = absPos.Y + (absSize.Y / 2)
+                local guiInset = game:GetService("GuiService"):GetGuiInset()
+                local trueY = centerY + guiInset.Y
+                
+                -- Logic: 
+                -- If Line is BELOW area center (higher Y value) -> Hold to move UP
+                -- If Line is ABOVE area center (lower Y value) -> Release to move DOWN
+                if lineScale > areaCenterScale then
+                    -- Line is below center, need to hold to move up
+                    if not State.isPourHolding then
+                        VirtualInputManager:SendMouseMoveEvent(centerX, trueY, game)
+                        VirtualInputManager:SendMouseButtonEvent(centerX, trueY, 0, true, game, 1)
+                        State.isPourHolding = true
+                    end
+                else
+                    -- Line is above center, need to release to move down
+                    if State.isPourHolding then
+                        VirtualInputManager:SendMouseButtonEvent(centerX, trueY, 0, false, game, 1)
+                        State.isPourHolding = false
+                    end
+                end
+            end
+        end)
+    end
+
+    -- Minigame Loops
+    task.spawn(function()
+        while true do
+            task.wait(0.1)
+            if State.isAutoForgeEnabled then
+                performMeltAction()
+                performPourAction()
+            end
+        end
+    end)
+
+    task.spawn(function()
+        RunService.RenderStepped:Connect(function()
+            if State.isAutoForgeEnabled then
+                 performHammerAction()
+            end
+        end)
+    end)
+end
+
+task.spawn(function()
+    while true do
+        task.wait(2)
+        if State.isHighlightEnabled then
+            updateHighlights()
+        end
+    end
+end)
+
+SaveManager:SetLibrary(Library)
+InterfaceManager:SetLibrary(Library)
+SaveManager:IgnoreThemeSettings()
+SaveManager:SetIgnoreIndexes{}
+InterfaceManager:SetFolder("VxezeHub-TheForge")
+SaveManager:SetFolder("VxezeHub-TheForge/Configs")
+
+InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+SaveManager:BuildConfigSection(Tabs.Settings)
+
+Window:SelectTab(1)
