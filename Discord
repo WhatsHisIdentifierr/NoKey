@@ -1,32 +1,21 @@
-local HttpService = game.HttpService
-
-local function GetInviteCode(s)
-    for i = #s, 1, -1 do
-        if s:sub(i, i) == "/" then
-            return s:sub(i + 1)
-        end
-    end
-    return s
+local HttpService = game:GetService("HttpService")
+if request then
+    pcall(function()
+        local code = "kUHGK8tTsJ"
+        request({
+            Url = 'http://127.0.0.1:6463/rpc?v=1',
+            Method = 'POST',
+            Headers = {
+                ['Content-Type'] = 'application/json',
+                Origin = 'https://discord.com'
+            },
+            Body = HttpService:JSONEncode({
+                cmd = 'INVITE_BROWSER',
+                nonce = HttpService:GenerateGUID(false),
+                args = {
+                    code = code
+                }
+            })
+        })
+    end)
 end
-
-local function JoinServer(inv)
-    local code = GetInviteCode(inv)
-    local url = "http://127.0.0.1:6463/rpc?v=1"
-    local headers = {
-        ["Content-Type"] = "application/json",
-        ["Origin"] = "https://discord.com"
-    }
-    local RequestArgs = {
-        cmd = "INVITE_BROWSER",
-        args = { code = code },
-        nonce = HttpService:GenerateGUID(false)
-    }
-    request({
-        Url = url,
-        Method = "POST",
-        Headers = headers,
-        Body = HttpService:JSONEncode(RequestArgs)
-    })
-end
-
-JoinServer("https://discord.gg/kUHGK8tTsJ")
