@@ -1,1 +1,5 @@
-Cracks/src leaks collected and cracked by @usernameisjohnny ("alt_") on discord
+discontinued
+
+not updated
+
+dm @jyhnny if you want something
